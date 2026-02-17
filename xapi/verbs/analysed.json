@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/analysed",
+    "display": {
+      "en-US": "Analysed"
+    },
+    "definition": {
+      "en-US": "The learner examined data, results, or learning materials to identify patterns, insights, or conclusions"
+    }
+  }
+}

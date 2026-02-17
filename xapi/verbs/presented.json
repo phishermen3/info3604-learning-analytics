@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/presented",
+    "display": {
+      "en-US": "Presented"
+    },
+    "definition": {
+      "en-US": "The learner communicated information, findings, or ideas to an audience, orally or visually"
+    }
+  }
+}

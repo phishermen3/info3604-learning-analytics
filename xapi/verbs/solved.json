@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/solved",
+    "display": {
+      "en-US": "Solved"
+    },
+    "definition": {
+      "en-US": "The learner successfully found a solution to a problem, challenge, or task"
+    }
+  }
+}

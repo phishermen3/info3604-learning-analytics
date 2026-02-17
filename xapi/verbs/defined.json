@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/defined",
+    "display": {
+      "en-US": "Defined"
+    },
+    "definition": {
+      "en-US": "The learner clearly explained or established the meaning of a concept, term, or process"
+    }
+  }
+}

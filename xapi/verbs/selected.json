@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/selected",
+    "display": {
+      "en-US": "Selected"
+    },
+    "definition": {
+      "en-US": "The learner chose an option, item, or resource from a set of possibilities"
+    }
+  }
+}

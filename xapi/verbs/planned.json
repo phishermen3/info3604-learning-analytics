@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/planned",
+    "display": {
+      "en-US": "Planned"
+    },
+    "definition": {
+      "en-US": "The learner organized steps, resources, or strategies to achieve a goal or complete a task"
+    }
+  }
+}

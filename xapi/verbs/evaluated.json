@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/evaluated",
+    "display": {
+      "en-US": "Evaluated"
+    },
+    "definition": {
+      "en-US": "The learner assessed the quality, effectiveness, or relevance of a task, process, or outcome"
+    }
+  }
+}

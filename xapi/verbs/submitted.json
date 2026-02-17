@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/submitted",
+    "display": {
+      "en-US": "Submitted"
+    },
+    "definition": {
+      "en-US": "The learner delivered completed work, responses, or materials for review, grading, or approval"
+    }
+  }
+}

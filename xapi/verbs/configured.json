@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/configured",
+    "display": {
+      "en-US": "Configured"
+    },
+    "definition": {
+      "en-US": "The learner set up or adjusted a system, tool, or environment to meet specific requirements"
+    }
+  }
+}

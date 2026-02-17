@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/participated",
+    "display": {
+      "en-US": "Participated"
+    },
+    "definition": {
+      "en-US": "The learner actively engaged in an activity, discussion, or collaborative task"
+    }
+  }
+}

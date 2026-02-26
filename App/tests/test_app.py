@@ -50,7 +50,7 @@ class UserUnitTests(unittest.TestCase):
 # scope="class" would execute the fixture once and resued for all methods in the class
 @pytest.fixture(autouse=True, scope="module")
 def empty_db():
-    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
+    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db', 'SECRET_KEY': 'test-secret-key'})
     create_db()
     yield app.test_client()
     db.drop_all()

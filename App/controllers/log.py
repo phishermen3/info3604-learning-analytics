@@ -1,8 +1,8 @@
-import json
-import requests
-import uuid
+import json, requests, uuid, os
 from App.models import Log
 from App.database import db
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def load_json(filename):
     try:
@@ -12,8 +12,8 @@ def load_json(filename):
         return {}
 
 def create_log(verb, activity):
-    verbs = load_json('verbs.json')
-    activities = load_json('activities.json')
+    verbs = load_json(os.path.join(BASE_DIR, "xapi", "verbs.json"))
+    activities = load_json(os.path.join(BASE_DIR, "xapi", "activities.json"))
     
     if verb not in verbs:
         return {"error": "Invalid verb"}, 400

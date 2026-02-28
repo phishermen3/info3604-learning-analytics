@@ -1,4 +1,5 @@
 import json, requests, uuid, os
+from tincan import RemoteLRS, Statement
 from App.models import Log
 from App.database import db
 
@@ -105,3 +106,22 @@ def get_logs():
         })
         
     return response, 200
+
+def send_to_lrs(statement):
+    lrs_endpoint = os.getenv("LRS_ENDPOINT")
+    username = os.getenv("LRS_USERNAME")
+    password = os.getenv("LRS_PASSWORD")
+    
+    lrs = RemoteLRS(
+        endpoint=lrs_endpoint,
+        version='1.0.3',
+        username=username,
+        password=password
+    )
+    
+    response = lrs.save_statement(Statement(statement))
+    
+    if response.success:
+        return True, None
+    else:
+        return False, response.content

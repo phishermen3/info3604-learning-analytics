@@ -12,6 +12,10 @@ log_views = Blueprint('log_views', __name__, template_folder='../templates')
 def send_statement():
     data = request.get_json()
     statement, code = create_log(data.get("verb"), data.get("activity"))
+    
+    if code != 201:
+        return jsonify(statement), code
+        
     success, error = send_to_lrs(statement)
     
     if not success:

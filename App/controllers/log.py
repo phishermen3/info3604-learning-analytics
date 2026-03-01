@@ -1,9 +1,21 @@
-import json, requests, uuid, os
+import json, uuid, os
 from tincan import RemoteLRS, Statement
-from App.models import Log
-from App.database import db
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+lrs_endpoint = os.getenv("LRS_ENDPOINT")
+username = os.getenv("LRS_USERNAME")
+password = os.getenv("LRS_PASSWORD")
+
+lrs = RemoteLRS(
+        endpoint=lrs_endpoint,
+        version='1.0.3',
+        username=username,
+        password=password
+    )
 
 def load_json(filename):
     try:
@@ -26,11 +38,11 @@ def create_log(verb, activity):
     actor = "temp_user"
     verb_id = verbs[verb].get("id")
     verb_name = verbs[verb].get("display", {}).get("en-US")
-    activity_object = activities[activity]
+    activity = activities[activity]
     pedagogical_stage = verbs[verb].get("extensions", {}).get("https://yourdomain.com/xapi/extensions/pedagogical-stage")
 
 
-    context_data = {
+    context = {
         "contextActivities": {
 
             "parent": [
@@ -74,51 +86,62 @@ def create_log(verb, activity):
         }
     }
 
-    new_log = Log(
-        id=statement_id,
-        actor=actor,
-        verb_id=verb_id,
-        verb_name=verb_name,
-        object=activity_object,
-        context=context_data
-    )
+    statement = {
+        "id": statement_id,
+            "actor": {
+                "objectType": "Agent",
+                "account": {
+                    "homePage": "https://logstack.azurewebsites.net",
+                    "name": actor
+                }
+            },
+            "verb": {
+                "id": verb_id,
+                "display": {"en-US": verb_name}
+            },
+            "object": activity,
+            "context": context
+    }
 
-    db.session.add(new_log)
-    db.session.commit()
-
-    return new_log.get_json(), 201
+    return statement, 201
 
 def get_logs():
-    logs = Log.query.all()
-    response = []
+    query = {
+        "limit": 10,
+        "since": "2026-02-28T00:01:13Z"
+    }
     
-    for log in logs:
-        statement = log.get_json()
+    response = lrs.query_statements(query)
+    
+    if not response.success:
+        return response.content, 500
+    
+    results = []
+    
+    while True:
+        statements = response.content.statements
+    
+        for stmt in statements:
+            summary = f"({stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://yourapp.edu/extensions/pedagogical-stage']})"
+            
+            results.append({
+                "summary": summary,
+                "statement": stmt.to_json()
+            })
+            
+        more_url = response.content.more
         
-        activity_name = log.object["definition"]["name"]["en-US"]
-        stage = log.context["extensions"].get("https://yourapp.edu/extensions/pedagogical-stage")
+        if not more_url:
+            break
         
-        summary = f"{log.actor} {log.verb_name} {activity_name} (Stage: {stage})"
+        response = lrs.more_statements(more_url)
         
-        response.append({
-            "summary": summary,
-            "statement": statement
-        })
+        if not response.success:
+            return response.content, 500
         
-    return response, 200
+    return results, 200
 
 def send_to_lrs(statement):
-    lrs_endpoint = os.getenv("LRS_ENDPOINT")
-    username = os.getenv("LRS_USERNAME")
-    password = os.getenv("LRS_PASSWORD")
-    
-    lrs = RemoteLRS(
-        endpoint=lrs_endpoint,
-        version='1.0.3',
-        username=username,
-        password=password
-    )
-    
     response = lrs.save_statement(Statement(statement))
     
     if response.success:

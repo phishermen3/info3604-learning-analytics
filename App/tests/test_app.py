@@ -1,5 +1,6 @@
 import os, tempfile, pytest, logging, unittest
 from werkzeug.security import check_password_hash, generate_password_hash
+from unittest.mock import patch
 
 from App.main import create_app
 from App.database import db, create_db
@@ -10,7 +11,9 @@ from App.controllers import (
     login,
     get_user,
     get_user_by_username,
-    update_user
+    update_user,
+    create_log,
+    get_logs
 )
 
 
@@ -41,7 +44,40 @@ class UserUnitTests(unittest.TestCase):
         password = "mypass"
         user = User("bob", password)
         assert user.check_password(password)
-
+        
+    def test_create_log(self):
+        test_verbs = {
+            "analyzed": {
+                "id": "https://yourdomain.com/verbs/analyzed",
+                "display": { 
+                    "en-US": "analyzed" 
+                },
+                "extensions": {
+                    "https://yourdomain.com/xapi/extensions/pedagogical-stage": "Analyze"
+                }
+            }
+        }
+        
+        test_activities = {
+            "test-case": {
+                "objectType": "Activity",
+                "id": "https://yourapp/activity-types/test-case",
+                "definition": {
+                    "type": "https://yourapp/taxonomy/assessment",
+                    "name": { "en-US": "Test Case" },
+                    "description": { "en-US": "A test case created during project work" }
+                }
+            }
+        }
+        
+        with patch("App.controllers.log.load_json") as mock_load:
+            mock_load.side_effect = [test_verbs, test_activities]
+        
+        test_log, test_code = create_log("analyzed", "test-case")
+        assert test_code == 201
+        assert test_log["verb"]["display"]["en-US"] == "analyzed"
+        
+        
 '''
     Integration Tests
 '''
@@ -75,5 +111,9 @@ class UsersIntegrationTests(unittest.TestCase):
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
-        
+    
+    # Tests retrieving statements from LRS
+    def test_get_logs(self):
+        test_logs, test_code = get_logs()
+        assert test_code == 200
 

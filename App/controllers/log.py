@@ -10,7 +10,8 @@ lrs_endpoint = os.getenv("LRS_ENDPOINT")
 username = os.getenv("LRS_USERNAME")
 password = os.getenv("LRS_PASSWORD")
 
-lrs = RemoteLRS(
+def get_lrs():
+    return RemoteLRS(
         endpoint=lrs_endpoint,
         version='1.0.3',
         username=username,
@@ -111,6 +112,8 @@ def get_logs():
         "since": "2026-02-28T00:01:13Z"
     }
     
+    lrs = get_lrs()
+    
     response = lrs.query_statements(query)
     
     if not response.success:
@@ -122,7 +125,7 @@ def get_logs():
         statements = response.content.statements
     
         for stmt in statements:
-            summary = f"({stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://yourapp.edu/extensions/pedagogical-stage']})"
+            summary = f"{stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://yourapp.edu/extensions/pedagogical-stage']})"
             
             results.append({
                 "summary": summary,
@@ -142,6 +145,7 @@ def get_logs():
     return results, 200
 
 def send_to_lrs(statement):
+    lrs = get_lrs()
     response = lrs.save_statement(Statement(statement))
     
     if response.success:

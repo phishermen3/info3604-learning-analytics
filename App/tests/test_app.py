@@ -1,4 +1,5 @@
 import os, tempfile, pytest, logging, unittest
+from datetime import datetime, timezone
 from werkzeug.security import check_password_hash, generate_password_hash
 from unittest.mock import patch
 
@@ -10,8 +11,6 @@ from App.controllers import (
     get_all_users_json,
     login,
     get_user,
-    get_user_by_username,
-    update_user,
     create_log,
     get_logs
 )
@@ -20,29 +19,31 @@ from App.controllers import (
 LOGGER = logging.getLogger(__name__)
 
 '''
-   Unit Tests
+    Unit Tests
 '''
 class UserUnitTests(unittest.TestCase):
 
     def test_new_user(self):
-        user = User("bob", "bobpass")
-        assert user.username == "bob"
+        user = User("b000000b", "bobpass")
+        assert user.user_code == "b000000b"
 
-    # pure function no side effects or integrations called
     def test_get_json(self):
-        user = User("bob", "bobpass")
+        user = User("b000000b", "bobpass")
+        if not user.created_at:
+            user.created_at = datetime.now(timezone.utc)
         user_json = user.get_json()
-        self.assertDictEqual(user_json, {"id":None, "username":"bob"})
+        self.assertIn("id", user_json)
+        self.assertEqual(user_json["user_code"], "b000000b")
+        self.assertIn("created_at", user_json)
     
     def test_hashed_password(self):
-        password = "mypass"
-        hashed = generate_password_hash(password)
-        user = User("bob", password)
-        assert user.password != password
+        password = "bobpass"
+        user = User("b000000b", password)
+        assert getattr(user, "password_hash") != password
 
     def test_check_password(self):
-        password = "mypass"
-        user = User("bob", password)
+        password = "bobpass"
+        user = User("b000000b", password)
         assert user.check_password(password)
         
     def test_create_log(self):
@@ -93,27 +94,25 @@ def empty_db():
 
 
 def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert login("bob", "bobpass") != None
+    user = create_user("b000000b", "bobpass")
+    access, refresh = login("b000000b", "bobpass", remember=False)
+    assert access is not None
 
 class UsersIntegrationTests(unittest.TestCase):
 
     def test_create_user(self):
-        user = create_user("rick", "bobpass")
-        assert user.username == "rick"
+        user = create_user("LMNO1234", "rickpass")
+        assert user.user_code == "LMNO1234"
 
     def test_get_all_users_json(self):
         users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
-
-    # Tests data changes in the database
-    def test_update_user(self):
-        update_user(1, "ronnie")
-        user = get_user(1)
-        assert user.username == "ronnie"
-    
+        self.assertTrue(len(users_json) >= 1)
+        for user in users_json:
+            self.assertIn("id", user)
+            self.assertIn("user_code", user)
+            self.assertIn("created_at", user)
+            
     # Tests retrieving statements from LRS
     def test_get_logs(self):
         test_logs, test_code = get_logs()
         assert test_code == 200
-

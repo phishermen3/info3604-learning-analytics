@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/conducted",
+    "display": {
+      "en-US": "Conducted"
+    },
+    "definition": {
+      "en-US": "The learner led or carried out an activity, experiment, or session, taking responsibility for its execution"
+    }
+  }
+}

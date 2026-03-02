@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/validated",
+    "display": {
+      "en-US": "Validated"
+    },
+    "definition": {
+      "en-US": "The learner confirmed that a result, process, or system met expected standards or requirements"
+    }
+  }
+}

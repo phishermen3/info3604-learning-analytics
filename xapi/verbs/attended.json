@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/attended",
+    "display": {
+      "en-US": "Attended"
+    },
+    "definition": {
+      "en-US": "The learner was present for and participated in a scheduled class, lecture, workshop, or learning session"
+    }
+  }
+}

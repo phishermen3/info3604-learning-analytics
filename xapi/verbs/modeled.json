@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/modeled",
+    "display": {
+      "en-US": "Modeled"
+    },
+    "definition": {
+      "en-US": "The learner created a representation, simulation, or structure to explain a concept, process, or system"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/assigned",
+    "display": {
+      "en-US": "Assigned"
+    },
+    "definition": {
+      "en-US": "The learner allocated tasks, roles, or resources to themselves or others for completion"
+    }
+  }
+}

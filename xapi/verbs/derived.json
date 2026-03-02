@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/derived",
+    "display": {
+      "en-US": "Derived"
+    },
+    "definition": {
+      "en-US": "The learner obtained a result, conclusion, or formula from existing information or principles"
+    }
+  }
+}

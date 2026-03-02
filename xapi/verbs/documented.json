@@ -1,0 +1,11 @@
+{
+  "verb": {
+    "id": "https://github.com/JivanKheerai1/info3604-learning-analytics/xapi/verbs/documented",
+    "display": {
+      "en-US": "Documented"
+    },
+    "definition": {
+      "en-US": "The learner recorded information, processes, or results in a structured format for reference or assessment"
+    }
+  }
+}

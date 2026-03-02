@@ -1,0 +1,11 @@
+{
+    "test-case": {
+        "objectType": "Activity",
+        "id": "https://yourapp/activity-types/test-case",
+        "definition": {
+            "type": "https://yourapp/taxonomy/assessment",
+            "name": { "en-US": "Test Case" },
+            "description": { "en-US": "A test case created during project work" }
+        }
+    }
+}

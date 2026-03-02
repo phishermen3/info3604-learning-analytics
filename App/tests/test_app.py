@@ -1,6 +1,7 @@
 import os, tempfile, pytest, logging, unittest
 from datetime import datetime, timezone
 from werkzeug.security import check_password_hash, generate_password_hash
+from unittest.mock import patch
 
 from App.main import create_app
 from App.database import db, create_db
@@ -9,7 +10,9 @@ from App.controllers import (
     create_user,
     get_all_users_json,
     login,
-    get_user
+    get_user,
+    create_log,
+    get_logs
 )
 
 
@@ -42,7 +45,40 @@ class UserUnitTests(unittest.TestCase):
         password = "bobpass"
         user = User("b000000b", password)
         assert user.check_password(password)
-
+        
+    def test_create_log(self):
+        test_verbs = {
+            "analyzed": {
+                "id": "https://yourdomain.com/verbs/analyzed",
+                "display": { 
+                    "en-US": "analyzed" 
+                },
+                "extensions": {
+                    "https://yourdomain.com/xapi/extensions/pedagogical-stage": "Analyze"
+                }
+            }
+        }
+        
+        test_activities = {
+            "test-case": {
+                "objectType": "Activity",
+                "id": "https://yourapp/activity-types/test-case",
+                "definition": {
+                    "type": "https://yourapp/taxonomy/assessment",
+                    "name": { "en-US": "Test Case" },
+                    "description": { "en-US": "A test case created during project work" }
+                }
+            }
+        }
+        
+        with patch("App.controllers.log.load_json") as mock_load:
+            mock_load.side_effect = [test_verbs, test_activities]
+        
+        test_log, test_code = create_log("analyzed", "test-case")
+        assert test_code == 201
+        assert test_log["verb"]["display"]["en-US"] == "analyzed"
+        
+        
 '''
     Integration Tests
 '''
@@ -51,7 +87,7 @@ class UserUnitTests(unittest.TestCase):
 # scope="class" would execute the fixture once and resued for all methods in the class
 @pytest.fixture(autouse=True, scope="module")
 def empty_db():
-    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
+    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db', 'SECRET_KEY': 'test-secret-key'})
     create_db()
     yield app.test_client()
     db.drop_all()
@@ -75,3 +111,8 @@ class UsersIntegrationTests(unittest.TestCase):
             self.assertIn("id", user)
             self.assertIn("user_code", user)
             self.assertIn("created_at", user)
+            
+    # Tests retrieving statements from LRS
+    def test_get_logs(self):
+        test_logs, test_code = get_logs()
+        assert test_code == 200

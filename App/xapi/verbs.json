@@ -1,0 +1,11 @@
+{
+    "analyzed": {
+        "id": "https://yourdomain.com/verbs/analyzed",
+        "display": { 
+            "en-US": "analyzed" 
+        },
+        "extensions": {
+            "https://yourdomain.com/xapi/extensions/pedagogical-stage": "Analyze"
+        }
+    }
+}

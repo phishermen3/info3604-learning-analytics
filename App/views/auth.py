@@ -5,7 +5,8 @@ from flask_jwt_extended import (
     unset_jwt_cookies, 
     create_access_token,
     set_access_cookies,
-    set_refresh_cookies
+    set_refresh_cookies,
+    decode_token
 )
 
 from.index import index_views
@@ -15,12 +16,27 @@ from App.controllers import (
     signup
 )
 
-auth_views = Blueprint('auth_views', __name__, url_prefix='/auth', template_folder='../templates')
+auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 
 
 '''
 Page/Action Routes
 '''    
+
+@auth_views.route('/', methods=['GET'])
+def login_page():
+    refresh_cookie = request.cookies.get('refresh_token_cookie')
+    if refresh_cookie:
+        try:
+            decode_token(refresh_cookie)
+            return redirect(url_for('index_views.index_page'))
+        except:
+            pass
+    return render_template('login.html')
+
+@auth_views.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template('signup.html')
 
 @auth_views.route('/identify', methods=['GET'])
 @jwt_required()
@@ -30,12 +46,20 @@ def identify_page():
 @auth_views.route('/signup', methods=['POST'])
 def signup_action():    
     data = request.form
-    access_token, refresh_token = signup(data['password'])
-    response = redirect(request.referrer or url_for('index'))
+    password = data.get('password')
+    confirm = data.get('confirm_password')
+    if len(password) < 8:
+        return jsonify({"success": False, "message": "Password must be at least 8 characters long"}), 400
+    if password != confirm:
+        return jsonify({"success": False, "message": "Passwords do not match"}), 400
+    access_token, refresh_token, user_code = signup(password)
     if not access_token:
-        flash('Signup failed')
-        return response
+        return jsonify({"success": False, "message": "Signup failed"}), 500
     flash('Signup successful')
+    response = jsonify({
+        "success": True,
+        "user_code": user_code
+    })
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
     return response
@@ -45,18 +69,18 @@ def login_action():
     data = request.form
     remember = request.form.get('remember') == 'on'
     access_token, refresh_token = login(data['user_code'], data['password'], remember)
-    response = redirect(request.referrer or url_for('index'))
     if not access_token:
         flash('Login failed')
-        return response
+        return redirect(url_for('auth_views.login_page'))
     flash('Login successful')
+    response = redirect(url_for('index_views.index_page'))
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
     return response
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
-    response = redirect(request.referrer or url_for('index')) 
+    response = redirect(url_for('auth_views.login_page'))
     flash("Logged out!")
     unset_jwt_cookies(response)
     return response

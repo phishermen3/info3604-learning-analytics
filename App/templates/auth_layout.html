@@ -19,7 +19,7 @@
                 padding: 0;
                 margin: 0;
                 box-sizing: border-box;
-                font-family: 'poppins',sans-serif;
+                font-family: 'Poppins', sans-serif;
             }
 
             body{
@@ -151,9 +151,6 @@
         <div class="login-form">
             <h1>Project Logger</h1>  
             <div class="content">
-                {% if error %}
-                    <div style="color: red; text-align: center;">{{ error }}</div>
-                {% endif %}
                 {% block form_content %}{% endblock %}
             </div>
         </div>
@@ -168,7 +165,7 @@
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                M.toast({html: '{{message}}'})
+                    M.toast({html: '{{message}}'})
                 {% endfor %}
             {% endif %}
             {% endwith %}

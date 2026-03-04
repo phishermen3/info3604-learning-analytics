@@ -25,13 +25,6 @@ Page/Action Routes
 
 @auth_views.route('/', methods=['GET'])
 def login_page():
-    refresh_cookie = request.cookies.get('refresh_token_cookie')
-    if refresh_cookie:
-        try:
-            decode_token(refresh_cookie)
-            return redirect(url_for('index_views.index_page'))
-        except:
-            pass
     return render_template('login.html')
 
 @auth_views.route('/signup', methods=['GET'])
@@ -73,7 +66,7 @@ def login_action():
         flash('Login failed')
         return redirect(url_for('auth_views.login_page'))
     flash('Login successful')
-    response = redirect(url_for('index_views.index_page'))
+    response = redirect(url_for('index_views.home'))
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
     return response

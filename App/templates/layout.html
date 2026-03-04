@@ -1,70 +1,186 @@
 <!doctype html>
 <html>
-  <head>
-  
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}{% endblock %}</title>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="UTF-8">
 
-  </head>
-  <body>
-    
-      <nav class="purple">
-          <div class="nav-wrapper">
-              <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-              <ul id="nav-mobile" class="left">
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/users">Users Jinja</a></li>
-                  {% if is_authenticated %}
-                    <li><a href="/identify">Identify</a></li>
-                  {% endif %}
-                  <li><a href="/static/users">Users JS</a></li>
-              </ul>
-              {% if is_authenticated %}
-              <ul id="nav-mobile" class="right">
-                <li><a href="/logout">Logout</a></li>
-              </ul>
-              {% else %}
-              <form class="right navbar-form" method="POST" action="/login" style="display: flex; flex-wrap: nowrap; align-items: center; margin-right: 10px;">
-                  <div class="input-field" style="margin-right: 10px;">
-                      <input placeholder="username" value="bob" name="username" type="text" class="validate" required>
-                      <label for="username">username</label>
-                  </div>
-                  <div class="input-field" style="margin-right: 10px;">
-                      <input placeholder="password"value="bobpass" name="password" type="password" class="validate" required>
-                      <label for="password">Password</label>
-                  </div>
-                  <button type="submit" class="btn waves-effect waves-light">Login</button>
-              </form>
-              {% endif %}
-              
-          </div>
-      </nav>
-      <style>
-          .navbar-form label {
-              color: white !important;
-          }
-      </style>
+        <title>{% block title %}{% endblock %}</title>
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
+        <style>
+            .material-icons{
+                font-family: 'Material Icons' !important;
+                vertical-align: middle;
+            }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-       M.AutoInit();
+            nav.navbar, 
+            nav.navbar *{
+                font-family: 'Poppins', sans-serif;
+            }
 
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-              {% for message in messages %}
-              M.toast({html: '{{message}}'})
-              {% endfor %}
-          {% endif %}
-        {% endwith %}
-       
-    </script>
-  </body>
+            nav.navbar{
+                background-color: #fff;
+                color: #000;
+                box-shadow: none;
+                border-bottom: 3px solid #000;
+                height: 80px;
+                line-height: 80px;
+            }
+
+            nav.navbar .logo{
+                color: #000;
+                font-weight: 800;
+                padding-left: 20px;
+                font-size: 1.5rem;
+                text-decoration: none;
+            }
+
+            nav.navbar ul li{
+                display: flex;
+                align-items: center;
+                height: 80px;
+            }
+
+            .btn-nav{
+                border: 1px solid #000;
+                border-radius: 8px;
+                color: #000;
+                background-color: transparent;
+                height: 38px;
+                line-height: 38px;
+                padding: 0 20px;
+                text-transform: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                display: inline-block;
+                margin-left: 10px;
+                margin-right: 10px;
+                box-shadow: none;
+            }
+
+            .btn-nav:hover{
+                background-color: #f5f5f5;
+            }
+
+            .logout-icon{
+                color: #000;
+                background-color: transparent !important;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .main{
+                display: flex;
+                height: calc(100vh - 83px); 
+                overflow: hidden;
+                width: 100%;
+            }
+
+            .sidebar-wrapper{
+                width: 400px;
+                height: 100%;
+                background-color: #fff;
+                border-right: 3px solid #000;
+                transition: width 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                flex-shrink: 0;
+            }
+
+            .sidebar-control{
+                display: flex;
+                justify-content: flex-end;
+                padding: 10px 15px;
+            }
+
+            .sidebar-control i{
+                color: #000;
+                cursor: pointer;
+            }
+
+            .content{
+                flex-grow: 1;
+                overflow-y: auto;
+                padding: 30px;
+            }
+
+            .sidebar-wrapper.collapsed{
+                width: 60px;
+            }
+
+            .sidebar-wrapper.collapsed .sidebar-items{
+                visibility: hidden;
+                opacity: 0;
+            }
+        </style>
+
+        {% block styles %}{% endblock %}
+    </head>
+
+    <body>
+        <nav class="navbar">
+            <div class="nav-wrapper">
+                <a href="/app" class="logo left">Project Logger</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="#" class="btn-nav">Action Logs</a></li>
+                    <li><a href="#" class="btn-nav">About</a></li>
+                    <li><a href="/logout" class="logout-icon"><i class="material-icons">logout</i></a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <div class="sidebar-wrapper" id="sidebar">
+                <div class="sidebar-control">
+                    <a href="javascript:void(0)" onclick="toggleSidebar()">
+                        <i class="material-icons" id="toggleIcon">keyboard_double_arrow_left</i>
+                    </a>
+                </div>
+
+                <div class="sidebar-items">
+                    {% block sidebar_content %}{% endblock %}
+                </div>
+            </div>
+
+            <div class="content">{% block content %}{% endblock %}</div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        
+        <script>
+            M.AutoInit();
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    M.toast({html: '{{message}}'})
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            function toggleSidebar() {
+                const sidebar = document.getElementById("sidebar");
+                const icon = document.getElementById("toggleIcon");
+                
+                sidebar.classList.toggle("collapsed");
+                
+                if (sidebar.classList.contains("collapsed")) {
+                    icon.innerHTML = "keyboard_double_arrow_right";
+                } else {
+                    icon.innerHTML = "keyboard_double_arrow_left";
+                }
+            }
+        </script>
+
+        {% block scripts %}{% endblock %}
+    </body>
 </html>

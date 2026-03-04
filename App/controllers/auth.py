@@ -19,8 +19,8 @@ def signup(password):
     db.session.commit()
     access_token = create_access_token(identity=str(new_user.id), )
     refresh_token = create_refresh_token(identity=str(new_user.id))
-    return access_token, refresh_token
-  return None, None
+    return access_token, refresh_token, user_code
+  return None, None, None
 
 def login(user_code, password, remember=False):
   result = db.session.execute(db.select(User).filter_by(user_code=user_code))

@@ -1,0 +1,29 @@
+{% extends "auth_layout.html" %}
+{% block title %}Login{% endblock %}
+
+{{ super() }}
+
+{% block form_content %}
+    <h2>Log in</h2>
+    <form id="loginForm" method="POST" action="/login">
+        <div class="input-group">
+            <label for="user_code">User Code</label>
+            <input type="text" name="user_code" placeholder="Enter your user code" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="checkbox-container">
+            <label>
+                <input type="checkbox" name="remember" class="filled-in" />
+                <span>Stay signed in for a week</span>
+            </labe>
+        </div>
+
+        <button type="submit">Log in</button>
+    </form>
+    <p class="account">Don't have an account? <a href="/signup">Sign up</a></p>
+{% endblock %}

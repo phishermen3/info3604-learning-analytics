@@ -1,0 +1,168 @@
+{% extends "auth_layout.html" %}
+{% block title %}Sign up{% endblock %}
+
+{{ super() }}
+
+{% block styles %}
+    <style>
+        .modal-container{
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            opacity: 0;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .modal-container.show{
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .modal-card{
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 90%;
+            max-width: 525px;
+            text-align: center;
+        }
+
+        .modal-card h1{
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        .label-text{
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .user-code-box{
+            border: 1px solid #000;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .warning-text{
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .instruction-text{
+            font-size: 12px;
+            color: #667;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .modal-container button{
+                font-size: 16px;
+                color: #fff;
+                width: 100%;
+                background: #000;
+                border: none;
+                padding: 12px;
+                font-weight: 600;
+                border-radius: 30px;
+                cursor: pointer;
+                transition: 0.3s ease;
+                text-transform: none;
+            }
+
+            .modal-container button:hover{
+                background: #333;
+            }
+    </style>
+{% endblock %}
+
+{% block form_content %}
+    <h2>Sign up</h2>
+    <form id="signupForm" action="/signup" method="POST">
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" placeholder="Enter your password" minlength="8" required>
+        </div>
+
+        <div class="input-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Re-enter your password" minlength="8" required>
+        </div>
+
+        <button id="open" type="submit">Sign up</button>
+    </form>
+    <p class="account">Already have an account? <a href="/">Log in</a></p>
+{% endblock %}
+
+{% block modal_content %}
+    <div class="modal-container" id="modal_container">
+        <div class="modal-card">
+            <h1>Account Created Successfully</h1>
+
+            <p class="label-text">Your anonymous User Code:</p>
+        
+            <div class="user-code-box">
+                <span id="displayUserCode"></span>
+            </div>
+
+            <p class="warning-text">This code cannot be recovered if lost.</p>
+            <p class="instruction-text">Please store it somewhere safe together with your password.</p>
+
+            <button id="proceed">Proceed</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        const modal_container = document.getElementById('modal_container');
+        const displayUserCode = document.getElementById('displayUserCode');
+        const proceed = document.getElementById('proceed');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(signupForm);
+            try{
+                const response = await fetch("/signup", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+                if(response.ok){
+                    displayUserCode.textContent = data.user_code;
+                    modal_container.classList.add('show');
+                }
+                else{
+                    M.toast({
+                        html: data.message, 
+                        classes: 'red rounded',
+                        displayLength: 4000
+                    });
+                }
+            } catch(err){
+                M.toast({html: 'Server error. Please try again.', classes: 'red'});
+            }
+        });
+
+        proceed.addEventListener('click', () => {
+            modal_container.classList.remove('show');
+            window.location.href = "/index";
+        });
+    </script>
+{% endblock %}

@@ -1,11 +1,9 @@
 from __future__ import with_statement
-
 import logging
 from logging.config import fileConfig
-
 from flask import current_app
-
 from alembic import context
+from sqlalchemy import text
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -45,8 +43,9 @@ def run_migrations_offline():
 
     """
     url = config.get_main_option("sqlalchemy.url")
+    is_sqlite = url.startswith('sqlite')
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True
+        url=url, target_metadata=target_metadata, literal_binds=True, version_table_schema='flaskmvc' if not is_sqlite else None, include_schemas=True if not is_sqlite else False
     )
 
     with context.begin_transaction():
@@ -72,16 +71,21 @@ def run_migrations_online():
                 logger.info('No changes in schema detected.')
 
     connectable = current_app.extensions['migrate'].db.get_engine()
+    is_sqlite = connectable.dialect.name == 'sqlite'
 
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,
+            version_table_schema='flaskmvc' if not is_sqlite else None, 
+            include_schemas=True if not is_sqlite else False,
             **current_app.extensions['migrate'].configure_args
         )
 
         with context.begin_transaction():
+            if connection.dialect.name != 'sqlite':
+                connection.execute(text(f'SET search_path TO flaskmvc'))
             context.run_migrations()
 
 

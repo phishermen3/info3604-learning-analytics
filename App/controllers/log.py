@@ -41,31 +41,50 @@ def create_log(user_code, verb, activity):
     verb_id = verbs[verb].get("id")
     verb_name = verbs[verb].get("display", {}).get("en-US")
     activity = activities[activity]
-    pedagogical_stage = verbs[verb].get("extensions", {}).get("https://yourdomain.com/xapi/extensions/pedagogical-stage")
+    pedagogical_stage = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/pedagogical-stage")
+    problem_step = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/problem-step")
 
-    user = User.query.filter_by(user_code=user_code).first()
     
-    if not user:
-        return {"error": "User not found"}, 404
-    
-    membership = TeamMembership.query.filter_by(user_id=user.id).first()
-    
-    if not membership:
-        return {"error": "User is not a member of a team for this course"}, 400
-    
-    team = membership.team
-    course = team.course
 
     context = {
         "contextActivities": {
-            "parent": [team.get_context_parent()],
-            "grouping": [team.get_context_grouping()],
-            "category": [course.get_context_category()]
+            "parent": [
+                {
+                    "objectType": "Activity",
+                    "id": "https://logstack.azurewebsites.net/projects/wan/group-A",
+                    "definition": {
+                        "name": { "en-US": "WAN Project - Group A" },
+                        "description": { "en-US": "WAN Project instance for Group A" }
+                    }
+                }
+            ],
+
+            "grouping": [
+                {
+                    "objectType": "Activity",   
+                    "id": "https://logstack.azurewebsites.net/groups/group-A",
+                    "definition": {               
+                        "name": { "en-US": "Group A" },
+                        "description": { "en-US": "INFO 3607 Project Group A" }
+                    }
+                }
+            ],
+
+            "category": [
+                {
+                    "objectType": "Activity",
+                    "id": "https://logstack.azurewebsites.net/courses/INFO-3607",
+                    "definition": {
+                        "name": { "en-US": "INFO 3607" },
+                        "description": { "en-US": "Fundamentals of WAN Tech" }
+                    }
+                }
+            ]
         },
 
         "extensions": {
             "https://logstack.azurewebsites.net/extensions/pedagogical-stage": pedagogical_stage,
-            "https://logstack.azurewebsites.net/extensions/problem-step": "verification",
+            "https://logstack.azurewebsites.net/extensions/problem-step": problem_step,
             "https://logstack.azurewebsites.net/extensions/logging-mode": "pedagogy"
         }
     }
@@ -100,7 +119,7 @@ def get_logs(user_code):
     query = {
         "agent": agent,
         "limit": 10,
-        "since": "2026-02-28T00:01:13Z"
+        "since": "2026-03-05T00:00:00Z"
     }
     
     lrs = get_lrs()

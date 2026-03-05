@@ -1,16 +1,17 @@
 import json, uuid, os
-from tincan import RemoteLRS, Statement
+from App.models import User, TeamMembership
+from tincan import RemoteLRS, Statement, Agent
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-lrs_endpoint = os.getenv("LRS_ENDPOINT")
-username = os.getenv("LRS_USERNAME")
-password = os.getenv("LRS_PASSWORD")
-
 def get_lrs():
+    lrs_endpoint = os.getenv("LRS_ENDPOINT")
+    username = os.getenv("LRS_USERNAME")
+    password = os.getenv("LRS_PASSWORD")
+    
     return RemoteLRS(
         endpoint=lrs_endpoint,
         version='1.0.3',
@@ -25,7 +26,7 @@ def load_json(filename):
     except FileNotFoundError:
         return {}
 
-def create_log(verb, activity):
+def create_log(user_code, verb, activity):
     verbs = load_json(os.path.join(BASE_DIR, "xapi", "verbs.json"))
     activities = load_json(os.path.join(BASE_DIR, "xapi", "activities.json"))
     
@@ -36,20 +37,21 @@ def create_log(verb, activity):
         return {"error": "Invalid artefact"}, 400
     
     statement_id = str(uuid.uuid4())
-    actor = "temp_user"
+    actor = user_code
     verb_id = verbs[verb].get("id")
     verb_name = verbs[verb].get("display", {}).get("en-US")
     activity = activities[activity]
-    pedagogical_stage = verbs[verb].get("extensions", {}).get("https://yourdomain.com/xapi/extensions/pedagogical-stage")
+    pedagogical_stage = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/pedagogical-stage")
+    problem_step = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/problem-step")
 
+    
 
     context = {
         "contextActivities": {
-
             "parent": [
                 {
                     "objectType": "Activity",
-                    "id": "https://yourapp.edu/projects/wan/group-A",
+                    "id": "https://logstack.azurewebsites.net/projects/wan/group-A",
                     "definition": {
                         "name": { "en-US": "WAN Project - Group A" },
                         "description": { "en-US": "WAN Project instance for Group A" }
@@ -60,7 +62,7 @@ def create_log(verb, activity):
             "grouping": [
                 {
                     "objectType": "Activity",   
-                    "id": "https://yourapp.edu/groups/group-A",
+                    "id": "https://logstack.azurewebsites.net/groups/group-A",
                     "definition": {               
                         "name": { "en-US": "Group A" },
                         "description": { "en-US": "INFO 3607 Project Group A" }
@@ -71,7 +73,7 @@ def create_log(verb, activity):
             "category": [
                 {
                     "objectType": "Activity",
-                    "id": "https://yourapp.edu/courses/INFO-3607",
+                    "id": "https://logstack.azurewebsites.net/courses/INFO-3607",
                     "definition": {
                         "name": { "en-US": "INFO 3607" },
                         "description": { "en-US": "Fundamentals of WAN Tech" }
@@ -81,35 +83,43 @@ def create_log(verb, activity):
         },
 
         "extensions": {
-            "https://yourapp.edu/extensions/pedagogical-stage": pedagogical_stage,
-            "https://yourapp.edu/extensions/problem-step": "verification",
-            "https://yourapp.edu/extensions/logging-mode": "pedagogy"
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": pedagogical_stage,
+            "https://logstack.azurewebsites.net/extensions/problem-step": problem_step,
+            "https://logstack.azurewebsites.net/extensions/logging-mode": "pedagogy"
         }
     }
 
     statement = {
         "id": statement_id,
-            "actor": {
-                "objectType": "Agent",
-                "account": {
-                    "homePage": "https://logstack.azurewebsites.net",
-                    "name": actor
-                }
-            },
-            "verb": {
-                "id": verb_id,
-                "display": {"en-US": verb_name}
-            },
-            "object": activity,
-            "context": context
+        "actor": {
+            "objectType": "Agent",
+            "account": {
+                "homePage": "https://logstack.azurewebsites.net",
+                "name": actor
+            }
+        },
+        "verb": {
+            "id": verb_id,
+            "display": {"en-US": verb_name}
+        },
+        "object": activity,
+        "context": context
     }
 
     return statement, 201
 
-def get_logs():
+def get_logs(user_code):
+    agent = Agent(
+        account={
+            "homePage": "https://logstack.azurewebsites.net",
+            "name": user_code
+        }
+    )
+    
     query = {
+        "agent": agent,
         "limit": 10,
-        "since": "2026-02-28T00:01:13Z"
+        "since": "2026-03-05T00:00:00Z"
     }
     
     lrs = get_lrs()
@@ -125,7 +135,7 @@ def get_logs():
         statements = response.content.statements
     
         for stmt in statements:
-            summary = f"{stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://yourapp.edu/extensions/pedagogical-stage']})"
+            summary = f"{stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://logstack.azurewebsites.net/extensions/pedagogical-stage']})"
             
             results.append({
                 "summary": summary,

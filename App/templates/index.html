@@ -1,13 +1,224 @@
 {% extends "layout.html" %}
-{% block title %}Flask MVC App{% endblock %}
-{% block page %}Flask MVC App{% endblock %}
+{% block title %}Project Logger{% endblock %}
 
 {{ super() }}
 
+{% block styles %}
+    <style>
+        .form-card{
+            max-width:700px;
+            margin:auto;
+            background:#fafafa;
+            border:1px solid #ddd;
+            padding:25px;
+            border-radius:12px;
+        }
+
+        #log-form{
+            display:none;
+        }
+
+        .stage-title{
+            font-weight:600;
+            margin-top:20px;
+        }
+
+        .timeline-item{
+            margin-bottom:15px;
+        }
+
+        .log-card{
+            background:#f5f5f5;
+            padding:10px;
+            border-radius:6px;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar_content %}
+    <div style="padding:20px">
+        <a onclick="openForm()" class="btn black waves-effect" style="margin-bottom:20px;width:100%">
+            <i class="material-icons left">add</i>Add Log
+        </a>
+
+        <h6><b>Your Logs</b></h6>
+
+        <div id="timeline-container">
+            <p class="grey-text center">Loading...</p>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-    <h1>Flask MVC</h1>
-    {% if is_authenticated %}
-        <p> Welcome {{current_user.username}} </p>
-    {% endif %}
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+    <div id="log-form">
+        <div class="form-card">
+            <h5>Add New Action Log</h5>
+            <div id="verb-section"></div>
+            <div class="divider" style="margin:25px 0"></div>
+
+            <h6><b>Object</b></h6>
+
+            <div class="input-field">
+            <i class="material-icons prefix">search</i>
+            <input id="object-search" type="text" class="autocomplete">
+            <label for="object-search">Search activity</label>
+            </div>
+
+            <div class="right-align">
+            <button type="button" class="btn black waves-effect waves-light" onclick="submitLog()">Log Action</button>
+        </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let verbs = {};
+        let activities = {};
+
+        function openForm(){
+            document.getElementById("log-form").style.display = "block";
+        }
+
+        async function fetchData(){
+            const response = await fetch("/api/data");
+            const data = await response.json();
+
+            verbs = data.verbs;
+            activities = data.activities;
+
+            renderVerbs();
+            setupAutocomplete();
+        }
+
+        function renderVerbs(){
+            const container = document.getElementById("verb-section");
+            const stages = {};
+
+            Object.entries(verbs).forEach(([key, verb]) => {
+                let stage = verb.extensions["https://logstack.azurewebsites.net/extensions/pedagogical-stage"];
+
+                if(!Array.isArray(stage)){
+                    stage = [stage];
+                }
+
+                stage.forEach(s => {
+                    if(!stages[s]) stages[s] = [];
+
+                    stages[s].push({
+                        key:key,
+                        name:verb.display["en-US"]
+                    });
+                });
+            });
+
+            let html = "";
+
+            Object.entries(stages).forEach(([stage, items]) => {
+                html += `<div class="stage-title">${stage}</div><div class="row">`;
+
+                items.forEach(verb => {
+                    html += `
+                    <p class="col s4">
+                        <label>
+                            <input name="verb" type="radio" value="${verb.key}">
+                            <span>${verb.name}</span>
+                        </label>
+                    </p>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setupAutocomplete(){
+            const data = {};
+
+            Object.entries(activities).forEach(([key, activity])=>{
+                data[activity.definition.name["en-US"]] = null;
+            });
+
+            const elem = document.getElementById("object-search");
+
+            M.Autocomplete.init(elem, {
+                data:data,
+                onAutocomplete:(selected)=>{
+                    const key = Object.keys(activities).find(k =>
+                        activities[k].definition.name["en-US"] === selected
+                    );
+
+                    elem.dataset.key=key;
+                }
+            });
+        }
+
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        async function submitLog(){
+            const elem = document.getElementById("object-search");
+            const verb = document.querySelector('input[name="verb"]:checked')?.value;
+            const activity = document.getElementById("object-search").dataset.key;
+
+            if(!verb || !activity){
+                M.toast({html:"Select verb and object"});
+                return;
+            }
+
+            const csrf = getCookie("csrf_access_token");
+
+            const response = await fetch("/log", {
+                method:"POST",
+                credentials:"include",
+                headers:{
+                    "Content-Type":"application/json",
+                    "X-CSRF-TOKEN": csrf
+                },
+                body:JSON.stringify({verb:verb, activity:activity})
+            });
+
+            if(response.ok){
+                M.toast({html: "Action logged successfully!"});
+                
+                document.getElementById("log-form").style.display = "none";
+                
+                document.querySelectorAll('input[name="verb"]').forEach(rb => rb.checked = false);
+                elem.value = "";
+                delete elem.dataset.key;
+                
+                loadLogs(); 
+            } else {
+                M.toast({html: "Error saving log"});
+            }
+        }
+
+        async function loadLogs(){
+            const response = await fetch("/logs");
+            const logs = await response.json();
+
+            const container = document.getElementById("timeline-container");
+
+            if(logs.length===0){
+                container.innerHTML="<p class='grey-text'>No logs</p>";
+                return;
+            }
+
+            container.innerHTML=logs.map(l =>`
+                <div class="timeline-item">
+                    <div class="log-card">${l.summary}</div>
+                </div>
+            `).join("");
+        }
+
+        document.addEventListener("DOMContentLoaded", () =>{
+            fetchData();
+            loadLogs();
+        });
+    </script>
 {% endblock %}

@@ -73,10 +73,13 @@ class UserUnitTests(unittest.TestCase):
         
         with patch("App.controllers.log.load_json") as mock_load:
             mock_load.side_effect = [test_verbs, test_activities]
+            
+        user = create_user("temp_user", "temppass")
         
-        test_log, test_code = create_log("analyzed", "test-case")
+        test_log, test_code = create_log(user.user_code, "analyzed", "test-case")
         assert test_code == 201
         assert test_log["verb"]["display"]["en-US"] == "analyzed"
+        assert test_log["actor"]["account"]["name"] == "temp_user"
         
         
 '''
@@ -114,5 +117,6 @@ class UsersIntegrationTests(unittest.TestCase):
             
     # Tests retrieving statements from LRS
     def test_get_logs(self):
-        test_logs, test_code = get_logs()
+        user = create_user("newuser123", "supersecure")
+        test_logs, test_code = get_logs(user.user_code)
         assert test_code == 200

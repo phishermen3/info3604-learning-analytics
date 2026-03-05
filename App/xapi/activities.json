@@ -1,11 +1,191 @@
 {
-    "test-case": {
+    "access-rule": {
         "objectType": "Activity",
-        "id": "https://yourapp/activity-types/test-case",
+        "id": "https://logstack.azurewebsites.net/activity-types/access-rule",
         "definition": {
-            "type": "https://yourapp/taxonomy/assessment",
-            "name": { "en-US": "Test Case" },
-            "description": { "en-US": "A test case created during project work" }
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "access rule" },
+            "description": { "en-US": "A rule that defines permit or deny conditions for traffic based on specified criteria." }
+        }
+    },
+    "acl-entry": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/acl-entry",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "ACL entry" },
+            "description": { "en-US": "An individual statement within an access control list specifying filtering conditions and actions." }
+        }
+    },
+    "acl-policy": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/acl-policy",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "ACL policy" },
+            "description": { "en-US": "A structured collection of ACL entries governing traffic control behavior on a device or interface." }
+        }
+    },
+    "addressing-scheme": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/addressing-scheme",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "addressing scheme" },
+            "description": { "en-US": "A structured plan defining IP allocation, subnetting, and address distribution across the network." }
+        }
+    },
+    "appendix-command-log": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/appendix-command-log",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
+            "name": { "en-US": "appendix command log" },
+            "description": { "en-US": "A compiled record of executed commands included as supporting project documentation." }
+        }
+    },
+    "bgp-route": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/bgp-route",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
+            "name": { "en-US": "BGP route" },
+            "description": { "en-US": "A routing entry learned or advertised via the Border Gateway Protocol." }
+        }
+    },
+    "command": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/command",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/configuration-activity",
+            "name": { "en-US": "command" },
+            "description": { "en-US": "A CLI instruction executed on a device to configure, monitor, or troubleshoot." }
+        }
+    },
+    "configuration": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/configuration",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/configuration-activity",
+            "name": { "en-US": "configuration" },
+            "description": { "en-US": "The structured set of parameters and settings defining device behavior." }
+        }
+    },
+    "dhcp-lease": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dhcp-lease",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
+            "name": { "en-US": "DHCP lease" },
+            "description": { "en-US": "A temporary assignment of IP configuration information to a client device." }
+        }
+    },
+    "dhcp-relay": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dhcp-relay",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "DHCP relay" },
+            "description": { "en-US": "A mechanism that forwards DHCP requests between clients and remote DHCP servers." }
+        }
+    },
+    "dhcp-server": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dhcp-server",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "DHCP server" },
+            "description": { "en-US": "A service that dynamically assigns IP configuration parameters to clients." }
+        }
+    },
+    "dns-query": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dns-query",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
+            "name": { "en-US": "DNS query" },
+            "description": { "en-US": "A request sent to a DNS server to resolve a domain name." }
+        }
+    },
+    "dns-server": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dns-server",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "DNS server" },
+            "description": { "en-US": "A server that resolves domain names into IP addresses." }
+        }
+    },
+    "documentation-report": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/documentation-report",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
+            "name": { "en-US": "documentation report" },
+            "description": { "en-US": "A formal written report detailing project design, implementation, testing, and findings." }
+        }
+    },
+    "ebgp-session": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ebgp-session",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "EBGP session" },
+            "description": { "en-US": "A routing session established between BGP peers in different autonomous systems." }
+        }
+    },
+    "forum-discussion": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/forum-discussion",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/collaboration",
+            "name": { "en-US": "forum discussion" },
+            "description": { "en-US": "An asynchronous collaborative exchange of ideas related to project tasks." }
+        }
+    },
+    "frame-relay-map": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/frame-relay-map",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "frame relay map" },
+            "description": { "en-US": "A mapping configuration that associates Layer 3 addresses with Frame Relay DLCIs." }
+        }
+    },
+    "frame-relay-network": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/frame-relay-network",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "frame relay network" },
+            "description": { "en-US": "A WAN infrastructure using Frame Relay technology for virtual circuit communication." }
+        }
+    },
+    "ftp-server": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ftp-server",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
+            "name": { "en-US": "FTP server" },
+            "description": { "en-US": "A server that enables file transfer using the FTP protocol." }
+        }
+    },
+    "ftp-session": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ftp-session",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
+            "name": { "en-US": "FTP session" },
+            "description": { "en-US": "An active file transfer communication session between client and server." }
+        }
+    },
+    "gns3-project": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/gns3-project",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
+            "name": { "en-US": "GNS3 project" },
+            "description": { "en-US": "A simulation project environment created within GNS3 for network modeling and testing." }
         }
     }
 }

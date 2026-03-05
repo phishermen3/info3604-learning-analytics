@@ -187,5 +187,14 @@
             "name": { "en-US": "GNS3 project" },
             "description": { "en-US": "A simulation project environment created within GNS3 for network modeling and testing." }
         }
+    },
+    "test-case": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/test-case",
+        "definition": {
+            "type": "https://logstack.azurewebsites.net/taxonomy/assessment-artifact",
+            "name": { "en-US": "test case" },
+            "description": { "en-US": "A defined procedure specifying conditions and expected outcomes for system testing." }
+        }
     }
 }

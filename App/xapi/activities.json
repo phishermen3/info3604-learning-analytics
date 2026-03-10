@@ -3,7 +3,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/access-rule",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "access rule" },
             "description": { "en-US": "A rule that defines permit or deny conditions for traffic based on specified criteria." }
         }
@@ -12,7 +11,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/acl-entry",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "ACL entry" },
             "description": { "en-US": "An individual statement within an access control list specifying filtering conditions and actions." }
         }
@@ -21,7 +19,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/acl-policy",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "ACL policy" },
             "description": { "en-US": "A structured collection of ACL entries governing traffic control behavior on a device or interface." }
         }
@@ -30,7 +27,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/addressing-scheme",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "addressing scheme" },
             "description": { "en-US": "A structured plan defining IP allocation, subnetting, and address distribution across the network." }
         }
@@ -39,7 +35,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/appendix-command-log",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
             "name": { "en-US": "appendix command log" },
             "description": { "en-US": "A compiled record of executed commands included as supporting project documentation." }
         }
@@ -48,7 +43,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/bgp-route",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
             "name": { "en-US": "BGP route" },
             "description": { "en-US": "A routing entry learned or advertised via the Border Gateway Protocol." }
         }
@@ -57,7 +51,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/command",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/configuration-activity",
             "name": { "en-US": "command" },
             "description": { "en-US": "A CLI instruction executed on a device to configure, monitor, or troubleshoot." }
         }
@@ -66,7 +59,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/configuration",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/configuration-activity",
             "name": { "en-US": "configuration" },
             "description": { "en-US": "The structured set of parameters and settings defining device behavior." }
         }
@@ -75,7 +67,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/dhcp-lease",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
             "name": { "en-US": "DHCP lease" },
             "description": { "en-US": "A temporary assignment of IP configuration information to a client device." }
         }
@@ -84,7 +75,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/dhcp-relay",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "DHCP relay" },
             "description": { "en-US": "A mechanism that forwards DHCP requests between clients and remote DHCP servers." }
         }
@@ -93,7 +83,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/dhcp-server",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "DHCP server" },
             "description": { "en-US": "A service that dynamically assigns IP configuration parameters to clients." }
         }
@@ -102,7 +91,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/dns-query",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
             "name": { "en-US": "DNS query" },
             "description": { "en-US": "A request sent to a DNS server to resolve a domain name." }
         }
@@ -111,7 +99,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/dns-server",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "DNS server" },
             "description": { "en-US": "A server that resolves domain names into IP addresses." }
         }
@@ -120,7 +107,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/documentation-report",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
             "name": { "en-US": "documentation report" },
             "description": { "en-US": "A formal written report detailing project design, implementation, testing, and findings." }
         }
@@ -129,7 +115,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/ebgp-session",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "EBGP session" },
             "description": { "en-US": "A routing session established between BGP peers in different autonomous systems." }
         }
@@ -138,7 +123,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/forum-discussion",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/collaboration",
             "name": { "en-US": "forum discussion" },
             "description": { "en-US": "An asynchronous collaborative exchange of ideas related to project tasks." }
         }
@@ -147,7 +131,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/frame-relay-map",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "frame relay map" },
             "description": { "en-US": "A mapping configuration that associates Layer 3 addresses with Frame Relay DLCIs." }
         }
@@ -156,7 +139,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/frame-relay-network",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "frame relay network" },
             "description": { "en-US": "A WAN infrastructure using Frame Relay technology for virtual circuit communication." }
         }
@@ -165,7 +147,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/ftp-server",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/network-infrastructure",
             "name": { "en-US": "FTP server" },
             "description": { "en-US": "A server that enables file transfer using the FTP protocol." }
         }
@@ -174,7 +155,6 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/ftp-session",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/technical-observation",
             "name": { "en-US": "FTP session" },
             "description": { "en-US": "An active file transfer communication session between client and server." }
         }
@@ -183,18 +163,280 @@
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/gns3-project",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/project-artifact",
             "name": { "en-US": "GNS3 project" },
             "description": { "en-US": "A simulation project environment created within GNS3 for network modeling and testing." }
+        }
+    },
+    "gre-tunnel": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/gre-tunnel",
+        "definition": {
+            "name": { "en-US": "GRE tunnel" },
+            "description": { "en-US": "A virtual tunnel encapsulating packets to enable logical connectivity over an IP network." }
+        }
+    },
+    "hdlc-link": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/hdlc-link",
+        "definition": {
+            "name": { "en-US": "HDLC link" },
+            "description": { "en-US": "A point-to-point WAN link using High-Level Data Link Control encapsulation." }
+        }
+    },
+    "ip-address": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ip-address",
+        "definition": {
+            "name": { "en-US": "IP address" },
+            "description": { "en-US": "A unique logical identifier assigned to a network interface." }
+        }
+    },
+    "ip-range": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ip-range",
+        "definition": {
+            "name": { "en-US": "IP range" },
+            "description": { "en-US": "A contiguous set of IP addresses defined within a network scope." }
+        }
+    },
+    "nat-rule": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/nat-rule",
+        "definition": {
+            "name": { "en-US": "NAT rule" },
+            "description": { "en-US": "A configuration rule that translates private IP addresses to public addresses." }
+        }
+    },
+    "network-architecture": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/network-architecture",
+        "definition": {
+            "name": { "en-US": "network architecture" },
+            "description": { "en-US": "The overall structural and logical design blueprint of the network system." }
+        }
+    },
+    "network-diagram": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/network-diagram",
+        "definition": {
+            "name": { "en-US": "network diagram" },
+            "description": { "en-US": "A visual representation of network devices, links, and relationships." }
+        }
+    },
+    "network-link": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/network-link",
+        "definition": {
+            "name": { "en-US": "network link" },
+            "description": { "en-US": "A communication connection between two network nodes or devices." }
+        }
+    },
+    "ntp-server": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ntp-server",
+        "definition": {
+            "name": { "en-US": "NTP server" },
+            "description": { "en-US": "A server that provides time synchronization services to network devices." }
+        }
+    },
+    "ntp-synchronization": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ntp-synchronization",
+        "definition": {
+            "name": { "en-US": "NTP synchronization" },
+            "description": { "en-US": "The process of aligning device system time with an authoritative time source." }
+        }
+    },
+    "pat-rule": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/pat-rule",
+        "definition": {
+            "name": { "en-US": "PAT rule" },
+            "description": { "en-US": "A NAT rule that enables multiple internal devices to share a single public IP using port translation." }
+        }
+    },
+    "peer-contribution": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/peer-contribution",
+        "definition": {
+            "name": { "en-US": "peer contribution" },
+            "description": { "en-US": "A documented input or resource provided by a team member during collaboration." }
+        }
+    },
+    "peer-evaluation-form": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/peer-evaluation-form",
+        "definition": {
+            "name": { "en-US": "peer evaluation form" },
+            "description": { "en-US": "A structured assessment instrument used to evaluate peer performance." }
+        }
+    },
+    "ppp-chap-authentication": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ppp-chap-authentication",
+        "definition": {
+            "name": { "en-US": "PPP CHAP authentication" },
+            "description": { "en-US": "A PPP authentication method using Challenge Handshake Authentication Protocol." }
+        }
+    },
+    "ppp-link": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ppp-link",
+        "definition": {
+            "name": { "en-US": "PPP link" },
+            "description": { "en-US": "A point-to-point WAN connection using the PPP protocol." }
+        }
+    },
+    "ppp-pap-authentication": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ppp-pap-authentication",
+        "definition": {
+            "name": { "en-US": "PPP PAP authentication" },
+            "description": { "en-US": "A PPP authentication method using Password Authentication Protocol." }
+        }
+    },
+    "presentation": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/presentation",
+        "definition": {
+            "name": { "en-US": "presentation" },
+            "description": { "en-US": "A structured oral or visual delivery summarizing project outcomes or technical work." }
+        }
+    },
+    "question": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/question",
+        "definition": {
+            "name": { "en-US": "question" },
+            "description": { "en-US": "A structured inquiry posed to clarify, analyze, or evaluate technical concepts." }
+        }
+    },
+    "router-hop": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/router-hop",
+        "definition": {
+            "name": { "en-US": "router hop" },
+            "description": { "en-US": "A single routing step where a packet is forwarded from one router to the next." }
+        }
+    },
+    "screenshot": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/screenshot",
+        "definition": {
+            "name": { "en-US": "screenshot" },
+            "description": { "en-US": "A captured image showing system state, configuration output, or test results." }
+        }
+    },
+    "site-connection": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/site-connection",
+        "definition": {
+            "name": { "en-US": "site connection" },
+            "description": { "en-US": "A WAN connection linking geographically separate network sites." }
+        }
+    },
+    "submission-package": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/submission-package",
+        "definition": {
+            "name": { "en-US": "submission package" },
+            "description": { "en-US": "A compiled set of required artefacts submitted for project assessment." }
+        }
+    },
+    "subnet": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/subnet",
+        "definition": {
+            "name": { "en-US": "subnet" },
+            "description": { "en-US": "A logically segmented portion of an IP network defined by a subnet mask or prefix." }
         }
     },
     "test-case": {
         "objectType": "Activity",
         "id": "https://logstack.azurewebsites.net/activity-types/test-case",
         "definition": {
-            "type": "https://logstack.azurewebsites.net/taxonomy/assessment-artifact",
             "name": { "en-US": "test case" },
             "description": { "en-US": "A defined procedure specifying conditions and expected outcomes for system testing." }
+        }
+    },
+    "test-plan": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/test-plan",
+        "definition": {
+            "name": { "en-US": "test plan" },
+            "description": { "en-US": "A structured document outlining testing strategy, scope, and evaluation criteria." }
+        }
+    },
+    "test-result": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/test-result",
+        "definition": {
+            "name": { "en-US": "test result" },
+            "description": { "en-US": "Recorded outcomes obtained from executing a test case." }
+        }
+    },
+    "topology": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/topology",
+        "definition": {
+            "name": { "en-US": "topology" },
+            "description": { "en-US": "The physical or logical layout pattern of devices and connections in a network." }
+        }
+    },
+    "traceroute-result": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/traceroute-result",
+        "definition": {
+            "name": { "en-US": "traceroute result" },
+            "description": { "en-US": "The output data generated from a traceroute command." }
+        }
+    },
+    "traceroute-task": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/traceroute-task",
+        "definition": {
+            "name": { "en-US": "traceroute task" },
+            "description": { "en-US": "An assigned activity requiring the execution and analysis of a traceroute operation." }
+        }
+    },
+    "virtual-client": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/virtual-client",
+        "definition": {
+            "name": { "en-US": "virtual client" },
+            "description": { "en-US": "An end-user device that requests and consumes network services." }
+        }
+    },
+    "virtual-machine": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/virtual-machine",
+        "definition": {
+            "name": { "en-US": "virtual machine" },
+            "description": { "en-US": "A software-emulated computing system running within a host environment." }
+        }
+    },
+    "virtual-router": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/virtual-router",
+        "definition": {
+            "name": { "en-US": "virtual router" },
+            "description": { "en-US": "A software-based router instance operating in a virtualized environment." }
+        }
+    },
+    "virtual-switch": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/virtual-switch",
+        "definition": {
+            "name": { "en-US": "virtual switch" },
+            "description": { "en-US": "A software-defined switch facilitating traffic between virtual machines." }
+        }
+    },
+    "vpn-tunnel": {   
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/vpn-tunnel",
+        "definition": {
+            "name": { "en-US": "VPN tunnel" },
+            "description": { "en-US": "A secure virtual connection that encrypts and transports traffic across public networks." }
         }
     }
 }

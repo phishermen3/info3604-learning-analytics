@@ -1,6 +1,8 @@
-import os
+from App.controllers.log import load_course_registry
+from flask_login import current_user
 from flask import Blueprint, jsonify, request, current_app
 from flask_jwt_extended import jwt_required, current_user
+import os
 
 from App.controllers import (
     create_log,
@@ -33,11 +35,20 @@ def send_statement():
 @log_views.route('/logs', methods=['GET'])
 @jwt_required()
 def get_statements():
-    logs, code = get_logs(current_user.user_code)
+    course_id = request.args.get("course")
+    if not course_id:
+        return jsonify({"error": "Course ID required"}), 400
+    
+    logs, code = get_logs(current_user.user_code, course_id)
     return jsonify(logs), code
 
 @log_views.route('/api/data', methods=['GET'])
 def get_api_data():
-    verbs = load_json(os.path.join(BASE_DIR, "xapi", "verbs.json"))
-    activities = load_json(os.path.join(BASE_DIR, "xapi", "activities.json"))
+    course_id = request.args.get("course_id")
+
+    registry = load_course_registry(course_id)
+
+    verbs = registry.get("verbs", {})
+    activities = registry.get("activities", {})
+
     return jsonify({"verbs": verbs, "activities": activities})

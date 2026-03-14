@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, g
 from App.controllers import teamMembership as team_membership_controller 
 
-TeamMembership_bp = Blueprint("TeamMembership", __name__)
+teamMembership_views = Blueprint("TeamMembership", __name__)
 
-@TeamMembership_bp.route("/courses/<string:course_id>/<string:team_id>/membership", methods=["GET"])
+@teamMembership_views.route("/courses/<string:course_id>/<string:team_id>/membership", methods=["GET"])
 def check_membership(course_id, team_id):
     current_user = getattr(g, "current_user", None)
     

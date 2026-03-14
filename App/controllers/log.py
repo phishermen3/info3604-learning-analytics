@@ -1,12 +1,12 @@
-import json, uuid, os
-from App.models import User, TeamMembership, Course, Project, Team
+import json, uuid, os, base64
+from App.models import Course, Project, Team
 from tincan import RemoteLRS, Statement, Agent
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-COURSES_DIR = os.path.join(BASE_DIR, "App", "xapi")
+COURSES_DIR = os.path.join(BASE_DIR, "xapi")
 
 LOGSTACK_BASE = "https://logstack.azurewebsites.net"
 
@@ -40,22 +40,30 @@ def get_lrs():
     lrs_endpoint = os.getenv("LRS_ENDPOINT")
     username = os.getenv("LRS_USERNAME")
     password = os.getenv("LRS_PASSWORD")
+
+    if not lrs_endpoint or not username or not password:
+        raise ValueError("LRS configuration missing")
+
+    auth = base64.b64encode(f"{username}:{password}".encode()).decode()
     
     return RemoteLRS(
         endpoint=lrs_endpoint,
         version='1.0.3',
-        username=username,
-        password=password
+        auth=f"Basic {auth}"
     )
 
 def send_to_lrs(statement):
-    lrs = get_lrs()
-    response = lrs.save_statement(Statement(statement))
-    
-    if response.success:
-        return True, None
-    else:
-        return False, response.content
+    try:
+        lrs = get_lrs()
+        response = lrs.save_statement(Statement(statement))
+        
+        if response.success:
+            return True, None
+        else:
+            return False, response.content
+
+    except Exception as e:
+        return False, str(e)
 
 # -----------------------------------
 # Log Functions
@@ -92,7 +100,7 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
 
     return statement, 201
 
-def get_logs(user_code):
+def get_logs(user_code, course_id):
     agent = Agent(
         account={
             "homePage": LOGSTACK_BASE,
@@ -107,32 +115,48 @@ def get_logs(user_code):
     }
     
     lrs = get_lrs()
-    
     response = lrs.query_statements(query)
     
     if not response.success:
         return response.content, 500
     
     results = []
+    expected_course_id = f"{LOGSTACK_BASE}/courses/{course_id}"
     
     while True:
-        statements = response.content.statements
-    
-        for stmt in statements:
-            summary = f"{stmt.actor.account.name} {stmt.verb.display['en-US']} {stmt.object.definition.name['en-US']} (Stage: {stmt.context.extensions['https://logstack.azurewebsites.net/extensions/pedagogical-stage']})"
-            
-            results.append({
-                "summary": summary,
-                "statement": stmt.to_json()
-            })
-            
-        more_url = response.content.more
+        statements = response.content.statements or []
         
+        for stmt in statements:
+            stmt_course_id = getattr(stmt.object, "id", None)
+            if stmt_course_id != expected_course_id:
+                continue
+
+            exts = getattr(stmt.context, "extensions", {})
+            if not exts or f'{LOGSTACK_BASE}/extensions/pedagogical-stage' not in exts:
+                return {"error": "Statement missing pedagogical stage"}, 500
+
+            stage = exts[f'{LOGSTACK_BASE}/extensions/pedagogical-stage']
+
+            try:
+                summary = (
+                    f"{stmt.actor.account.name} "
+                    f"{stmt.verb.display['en-US']} "
+                    f"{stmt.object.definition.name['en-US']} "
+                    f"(Stage: {stage})"
+                )
+
+                results.append({
+                    "summary": summary,
+                    "statement": stmt.to_json()
+                })
+            except (AttributeError, KeyError):
+                return {"error": "Statement malformed"}, 500
+        
+        more_url = response.content.more
         if not more_url:
             break
         
         response = lrs.more_statements(more_url)
-        
         if not response.success:
             return response.content, 500
         

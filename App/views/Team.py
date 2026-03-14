@@ -1,9 +1,9 @@
 from App.controllers import team as team_controller
 from flask import Blueprint, request, jsonify, g
 
-team_bp = Blueprint("Team", __name__)
+team_views = Blueprint("Team", __name__)
 
-@team_bp.route("/courses/<string:course_id>/teams", methods=["POST"])
+@team_views.route("/courses/<string:course_id>/teams", methods=["POST"])
 def create_team(course_id):    
     current_user = getattr(g, "current_user", None)
     if not current_user or not current_user.is_authenticated:
@@ -19,7 +19,7 @@ def create_team(course_id):
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
 
-@team_bp.route("/teams/join", methods=["POST"])
+@team_views.route("/teams/join", methods=["POST"])
 def join_team():
     current_user = getattr(g, "current_user", None)
     if not current_user or not current_user.is_authenticated:

@@ -2,7 +2,6 @@ import json, uuid, os
 from App.models import User, TeamMembership, Course, Project, Team
 from tincan import RemoteLRS, Statement, Agent
 from dotenv import load_dotenv
-from utils import load_json
 
 load_dotenv()
 
@@ -78,7 +77,7 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
     verb = build_verb(verb_template)
 
     activity_template = activities[activity_name]
-    activity = build_activity(activity_template, course_id, project_id)
+    activity = build_activity(activity_template, course_id, team_id, project_id)
     
     actor = build_actor(user_code)
     context = build_context(course_id, team_id, project_id, pedagogical_stage, problem_step)
@@ -159,14 +158,14 @@ def build_verb(verb_template):
         "display": verb_template["display"]
     }
 
-def build_activity(activity_template, course_id, project_id):
+def build_activity(activity_template, course_id, team_id, project_id):
     activity_type = activity_template["id"].split("/")[-1]  
     instance_id = str(uuid.uuid4())
     definition = activity_template.get("definition", {})
 
     return {
         "objectType": "Activity",
-        "id": f"{LOGSTACK_BASE}/projects/{course_id}/{project_id}/{activity_type}/{instance_id}",
+        "id": f"{LOGSTACK_BASE}/projects/{course_id}/{team_id}/{project_id}/{activity_type}/{instance_id}",
         "definition": {
             "type": activity_template["id"],
             "name": definition.get("name"),
@@ -176,44 +175,29 @@ def build_activity(activity_template, course_id, project_id):
 
 
 def build_context(course_id, team_id, project_id, pedagogical_stage, problem_step):
-    project = get_project(project_id)
-    project_name = project["name"]
+    team = Team.query.get(team_id)
+    if not team:
+        raise ValueError("Invalid team ID")
 
-    team = project.team
-    team_name = team["name"]
+    project = Project.query.get(project_id)
+    if not project:
+        raise ValueError("Invalid project ID")
 
-    course = team.course
-    course_name = course["name"]
+    course = Course.query.get(course_id)
+    if not course:
+        raise ValueError("Invalid course ID")
     
     return {
         "contextActivities": {
-            "parent": [
-                {
-                    "objectType": "Activity",
-                    "id": f"{LOGSTACK_BASE}/projects/{project_id}",
-                    "definition": {
-                        "name": {"en-US": project_name},
-                        "description": {"en-US": f"Project instance for {team_name}"}
-                    }
-                }
-            ],
-            "grouping": [
-                {
-                    "objectType": "Activity",
-                    "id": f"{LOGSTACK_BASE}/groups/{team_id}",
-                    "definition": {
-                        "name": {"en-US": team_name},
-                        "description": {"en-US": f"Team {team_name} for {course_name} project"}
-                    }
-                }
-            ],
+            "parent": team.get_context_parent(),
+            "grouping": team.get_context_grouping(),
             "category": [
                 {
                     "objectType": "Activity",
                     "id": f"{LOGSTACK_BASE}/courses/{course_id}",
                     "definition": {
-                        "name": {"en-US": course_name},
-                        "description": {"en-US": course_name}
+                        "name": {"en-US": course.name},
+                        "description": {"en-US": f"{course.name} course at the University of the West Indies"}
                     }
                 }
             ]
@@ -224,6 +208,13 @@ def build_context(course_id, team_id, project_id, pedagogical_stage, problem_ste
             LOGGING_MODE_URL: "pedagogy"
         }
     }
+
+def load_json(filename):
+    try:
+        with open(filename, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
 
 # -----------------------------------
 # Getters

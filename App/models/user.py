@@ -3,12 +3,6 @@ from datetime import datetime, timezone
 from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
 
-user_courses = db.Table(
-    'user_courses',
-    db.Column('user_id', db.String(36), db.ForeignKey('users.id'), primary_key=True),
-    db.Column('course_id', db.String(8), db.ForeignKey('courses.id'), primary_key=True)
-)
-
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -17,7 +11,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
     memberships = db.relationship('TeamMembership', backref='user', lazy=True, cascade="all, delete-orphan")
-    enrolled_courses = db.relationship('Course', secondary=user_courses, backref='students')
+    enrolled_courses = db.relationship('CourseEnrollment', backref='user', cascade="all, delete-orphan")
 
     def __init__(self, user_code, password):
         self.user_code = user_code

@@ -1,11 +1,41 @@
 import json, uuid, os
-from App.models import User, TeamMembership
+from App.models import User, TeamMembership, Course, Project, Team
 from tincan import RemoteLRS, Statement, Agent
 from dotenv import load_dotenv
+from utils import load_json
 
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+COURSES_DIR = os.path.join(BASE_DIR, "courses")
+
+LOGSTACK_BASE = "https://logstack.azurewebsites.net"
+
+PEDAGOGICAL_STAGE_URL = f"{LOGSTACK_BASE}/extensions/pedagogical-stage"
+PROBLEM_STEP_URL = f"{LOGSTACK_BASE}/extensions/problem-step"
+LOGGING_MODE_URL = f"{LOGSTACK_BASE}/extensions/logging-mode"
+
+_cache = {}
+
+def load_course_registry(course_id):
+    if course_id in _cache:
+        return _cache[course_id]
+
+    course_path = os.path.join(COURSES_DIR, course_id)
+
+    verbs = load_json(os.path.join(course_path, "verbs.json"))
+    activities = load_json(os.path.join(course_path, "activities.json"))
+
+    _cache[course_id] = {
+        "verbs": verbs,
+        "activities": activities
+    }
+
+    return _cache[course_id]
+
+# -----------------------------------
+# LRS Functions
+# -----------------------------------
 
 def get_lrs():
     lrs_endpoint = os.getenv("LRS_ENDPOINT")
@@ -19,89 +49,44 @@ def get_lrs():
         password=password
     )
 
-def load_json(filename):
-    try:
-        with open(filename, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-def create_log(user_code, verb, activity):
-    verbs = load_json(os.path.join(BASE_DIR, "xapi", "verbs.json"))
-    activities = load_json(os.path.join(BASE_DIR, "xapi", "activities.json"))
+def send_to_lrs(statement):
+    lrs = get_lrs()
+    response = lrs.save_statement(Statement(statement))
     
-    if verb not in verbs:
+    if response.success:
+        return True, None
+    else:
+        return False, response.content
+
+# -----------------------------------
+# Log Functions
+# -----------------------------------
+
+def create_log(user_code, course_id, verb_name, activity_name, team_id, project_id, pedagogical_stage, problem_step):
+    registry = load_course_registry(course_id)
+    
+    verbs = registry.get("verbs", {})
+    activities = registry.get("activities", {})
+
+    if verb_name not in verbs:
         return {"error": "Invalid verb"}, 400
     
-    if activity not in activities:
+    if activity_name not in activities:
         return {"error": "Invalid artefact"}, 400
     
-    statement_id = str(uuid.uuid4())
-    actor = user_code
-    verb_id = verbs[verb].get("id")
-    verb_name = verbs[verb].get("display", {}).get("en-US")
-    activity = activities[activity]
-    pedagogical_stage = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/pedagogical-stage")
-    problem_step = verbs[verb].get("extensions", {}).get("https://logstack.azurewebsites.net/extensions/problem-step")
+    verb_template = verbs[verb_name]
+    verb = build_verb(verb_template)
 
+    activity_template = activities[activity_name]
+    activity = build_activity(activity_template, course_id, project_id)
     
-
-    context = {
-        "contextActivities": {
-            "parent": [
-                {
-                    "objectType": "Activity",
-                    "id": "https://logstack.azurewebsites.net/projects/wan/group-A",
-                    "definition": {
-                        "name": { "en-US": "WAN Project - Group A" },
-                        "description": { "en-US": "WAN Project instance for Group A" }
-                    }
-                }
-            ],
-
-            "grouping": [
-                {
-                    "objectType": "Activity",   
-                    "id": "https://logstack.azurewebsites.net/groups/group-A",
-                    "definition": {               
-                        "name": { "en-US": "Group A" },
-                        "description": { "en-US": "INFO 3607 Project Group A" }
-                    }
-                }
-            ],
-
-            "category": [
-                {
-                    "objectType": "Activity",
-                    "id": "https://logstack.azurewebsites.net/courses/INFO-3607",
-                    "definition": {
-                        "name": { "en-US": "INFO 3607" },
-                        "description": { "en-US": "Fundamentals of WAN Tech" }
-                    }
-                }
-            ]
-        },
-
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": pedagogical_stage,
-            "https://logstack.azurewebsites.net/extensions/problem-step": problem_step,
-            "https://logstack.azurewebsites.net/extensions/logging-mode": "pedagogy"
-        }
-    }
+    actor = build_actor(user_code)
+    context = build_context(course_id, team_id, project_id, pedagogical_stage, problem_step)
 
     statement = {
-        "id": statement_id,
-        "actor": {
-            "objectType": "Agent",
-            "account": {
-                "homePage": "https://logstack.azurewebsites.net",
-                "name": actor
-            }
-        },
-        "verb": {
-            "id": verb_id,
-            "display": {"en-US": verb_name}
-        },
+        "id": str(uuid.uuid4()),
+        "actor": actor,
+        "verb": verb,
         "object": activity,
         "context": context
     }
@@ -111,7 +96,7 @@ def create_log(user_code, verb, activity):
 def get_logs(user_code):
     agent = Agent(
         account={
-            "homePage": "https://logstack.azurewebsites.net",
+            "homePage": LOGSTACK_BASE,
             "name": user_code
         }
     )
@@ -154,11 +139,113 @@ def get_logs(user_code):
         
     return results, 200
 
-def send_to_lrs(statement):
-    lrs = get_lrs()
-    response = lrs.save_statement(Statement(statement))
+
+# -----------------------------------
+# Log Helpers
+# -----------------------------------
+
+def build_actor(user_code):
+    return {
+        "objectType": "Agent",
+        "account": {
+            "homePage": LOGSTACK_BASE,
+            "name": user_code
+        }
+    }
+
+def build_verb(verb_template):
+    return {
+        "id": verb_template["id"],
+        "display": verb_template["display"]
+    }
+
+def build_activity(activity_template, course_id, project_id):
+    activity_type = activity_template["id"].split("/")[-1]  
+    instance_id = str(uuid.uuid4())
+    definition = activity_template.get("definition", {})
+
+    return {
+        "objectType": "Activity",
+        "id": f"{LOGSTACK_BASE}/projects/{course_id}/{project_id}/{activity_type}/{instance_id}",
+        "definition": {
+            "type": activity_template["id"],
+            "name": definition.get("name"),
+            "description": definition.get("description")
+        }
+    }
+
+
+def build_context(course_id, team_id, project_id, pedagogical_stage, problem_step):
+    project = get_project(project_id)
+    project_name = project["name"]
+
+    team = project.team
+    team_name = team["name"]
+
+    course = team.course
+    course_name = course["name"]
     
-    if response.success:
-        return True, None
+    return {
+        "contextActivities": {
+            "parent": [
+                {
+                    "objectType": "Activity",
+                    "id": f"{LOGSTACK_BASE}/projects/{project_id}",
+                    "definition": {
+                        "name": {"en-US": project_name},
+                        "description": {"en-US": f"Project instance for {team_name}"}
+                    }
+                }
+            ],
+            "grouping": [
+                {
+                    "objectType": "Activity",
+                    "id": f"{LOGSTACK_BASE}/groups/{team_id}",
+                    "definition": {
+                        "name": {"en-US": team_name},
+                        "description": {"en-US": f"Team {team_name} for {course_name} project"}
+                    }
+                }
+            ],
+            "category": [
+                {
+                    "objectType": "Activity",
+                    "id": f"{LOGSTACK_BASE}/courses/{course_id}",
+                    "definition": {
+                        "name": {"en-US": course_name},
+                        "description": {"en-US": course_name}
+                    }
+                }
+            ]
+        },
+        "extensions": {
+            PEDAGOGICAL_STAGE_URL: pedagogical_stage,
+            PROBLEM_STEP_URL: problem_step,
+            LOGGING_MODE_URL: "pedagogy"
+        }
+    }
+
+# -----------------------------------
+# Getters
+# -----------------------------------
+
+def get_course(course_id):
+    course = Course.query.get(course_id)
+    if course:
+        return {"name": course.name}
     else:
-        return False, response.content
+        raise ValueError("Invalid course ID") 
+
+def get_project(project_id):
+    project = Project.query.get(project_id)
+    if project:
+        return {"name": project.name}
+    else:
+        raise ValueError("Invalid project ID") 
+
+def get_team(team_id):
+    team = Team.query.get(team_id)
+    if team:
+        return {"name": team.name}
+    else:
+        raise ValueError("Invalid team ID") 

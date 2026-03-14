@@ -19,7 +19,6 @@ class User(db.Model):
     memberships = db.relationship('TeamMembership', backref='user', lazy=True, cascade="all, delete-orphan")
     enrolled_courses = db.relationship('Course', secondary=user_courses, backref='students')
 
-
     def __init__(self, user_code, password):
         self.user_code = user_code
         self.set_password(password)

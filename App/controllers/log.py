@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-COURSES_DIR = os.path.join(BASE_DIR, "courses")
+COURSES_DIR = os.path.join(BASE_DIR, "App", "xapi")
 
 LOGSTACK_BASE = "https://logstack.azurewebsites.net"
 

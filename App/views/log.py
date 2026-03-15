@@ -26,6 +26,7 @@ def dashboard():
 def send_statement():
     data = request.get_json()
     user_code = current_user.user_code
+
     statement, code = create_log(
         user_code, 
         data.get("course_id"),

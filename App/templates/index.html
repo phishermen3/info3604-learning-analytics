@@ -251,7 +251,7 @@
         let verbs = {};
         let activities = {};
         let selectedPedagogicalStage = null;
-        let selectedProblemStage = null;
+        let selectedProblemStep = null;
         
 
         function openForm(){
@@ -314,6 +314,8 @@
             problem_steps = data.problem_steps;
             stages = data.stages;
 
+            console.log(problem_steps)
+
             renderVerbs();
             setupAutocomplete();
 
@@ -347,7 +349,7 @@
         function renderStages(containerId, items){
             const container = document.getElementById(containerId);
             container.innerHTML = items.map(s => `
-                <div class="stage-btn" onclick="selectStage(this,'${containerId}')">
+                <div class="stage-btn" data-value="${s}" onclick="selectStage(this,'${containerId}')">
                     ${s}
                 </div>
             `).join("");
@@ -359,12 +361,14 @@
 
             el.classList.add("active");
 
+            const value = el.dataset.value;
+
             if(group === "peda-stage"){
-                selectedPedagogicalStage = el.textContent.trim();
+                selectedPedagogicalStage = value;
             }
 
             if(group === "step-stage"){
-                selectedProblemStage = el.textContent.trim();
+                selectedProblemStep = value;
             }
         }
 
@@ -421,7 +425,7 @@
                     team_id: currentTeamId,
                     project_id: currentProjectId,
                     pedagogical_stage: selectedPedagogicalStage,
-                    problem_stage: selectedProblemStage
+                    problem_step: selectedProblemStep
                 })
             });
 
@@ -434,7 +438,7 @@
                 delete elem.dataset.key;
 
                 selectedPedagogicalStage = null;
-                selectedProblemStage = null;
+                selectedProblemStep = null;
 
                 document.querySelectorAll(".stage-btn").forEach(btn => btn.classList.remove("active"));
                 

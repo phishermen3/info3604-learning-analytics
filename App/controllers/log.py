@@ -87,11 +87,11 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
     if activity_name not in activities:
         return {"error": "Invalid activity"}, 400
     
-    if problem_step not in problem_steps:
-        return {"error": "Invalid problem step"}, 400
-    
     if pedagogical_stage not in stages:
         return {"error": "Invalid pedagogical stage"}, 400
+    
+    if problem_step not in problem_steps:
+        return {"error": "Invalid problem step"}, 400
     
     verb_template = verbs[verb_name]
     verb = build_verb(verb_template)

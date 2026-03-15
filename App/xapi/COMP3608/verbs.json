@@ -12,6 +12,7 @@
             "https://logstack.azurewebsites.net/extensions/problem-step": "Problem Definition"
         }
     },
+    
     "attempted": {
         "id": "https://logstack.azurewebsites.net/verbs/attempted",
         "display": { 

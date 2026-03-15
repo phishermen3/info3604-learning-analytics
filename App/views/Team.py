@@ -17,7 +17,7 @@ def create_team(course_id):
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
 
-@team_views.route("/teams/join", methods=["POST"])
+@team_views.route("/api/join-team", methods=["POST"])
 @jwt_required(locations=["cookies"])
 def join_team():    
     data = request.get_json() or {}

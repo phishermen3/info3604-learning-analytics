@@ -40,3 +40,21 @@ def initialize():
     db.session.commit()
 
 
+
+    steve = create_user('steve', 'stevepass')
+    enrollment = CourseEnrollment(user_id=steve.id, course_id="COMP3608")
+    db.session.add(enrollment)
+
+    team = Team(course_id="COMP3608", team_code="teamteam", created_by=steve.id)
+    db.session.add(team)
+    db.session.flush()
+
+    membership = TeamMembership(user_id=steve.id, team_id=team.id)
+    db.session.add(membership)
+
+    project = Project(team_id=team.id)
+    db.session.add(project)
+
+    db.session.commit()
+
+

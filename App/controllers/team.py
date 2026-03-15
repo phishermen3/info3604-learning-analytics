@@ -45,13 +45,9 @@ def join_team(team_code):
     if not team:
         raise ValueError("Invalid team code")
     
-    existing = TeamMembership.query.join(Team).filter(
-        TeamMembership.user_id == current_user.id,
-        Team.course_id == team.course_id
-    ).first()
-
-    if existing:
-        raise ValueError("User already belongs to a team in this course")
+    for membership in current_user.memberships:
+        if membership.team.course_id == team.course_id:
+            raise ValueError("User already belongs to a team in this course")
     
     if len(team.memberships) >= MAX_TEAM_SIZE:
         raise ValueError("Team is full")

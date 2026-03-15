@@ -533,6 +533,7 @@
         }
 
         async function joinTeamByCode(){
+            const csrf = getCookie("csrf_access_token");
             const code = document.getElementById("team-code").value.trim();
             if(!code){
                 M.toast({html:"Please enter a team code"});
@@ -541,8 +542,10 @@
 
             const response = await fetch("/api/join-team",{
                 method:"POST",
+                credentials:"include",
                 headers:{
-                    "Content-Type":"application/json"
+                    "Content-Type":"application/json",
+                    "X-CSRF-TOKEN": csrf
                 },
                 body: JSON.stringify({
                     team_code: code,

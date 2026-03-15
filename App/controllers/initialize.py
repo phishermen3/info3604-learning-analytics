@@ -9,13 +9,19 @@ def initialize():
     # Create Bob
     bob = create_user('bob', 'bobpass')
 
-    # Create course
-    course = Course(id="INFO3607", name="WAN Fundamentals")
+    # Create courses
+    course = Course(id="INFO3607", name="Fundamentals of WAN Technologies")
+    db.session.add(course)
+
+    course = Course(id="COMP3608", name="Intelligent Systems")
     db.session.add(course)
     db.session.flush()
     
     # Enroll Bob in a course
     enrollment = CourseEnrollment(user_id=bob.id, course_id="INFO3607")
+    db.session.add(enrollment)
+
+    enrollment = CourseEnrollment(user_id=bob.id, course_id="COMP3608")
     db.session.add(enrollment)
 
     # Create a team for the course

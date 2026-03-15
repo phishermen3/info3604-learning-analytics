@@ -1,7 +1,7 @@
 import random, string
 from App.models import Team, Course, TeamMembership, Project
 from App.database import db
-from flask import g
+from flask_jwt_extended import jwt_required, current_user
 
 MAX_TEAM_SIZE = 4
 
@@ -17,7 +17,7 @@ def create_team(course_id):
         raise ValueError("Course not found")   
 
     existing = TeamMembership.query.join(Team).filter(
-        TeamMembership.user_id == g.current_user.id,
+        TeamMembership.user_id == current_user.id,
         Team.course_id == course_id
     ).first()
 
@@ -26,11 +26,11 @@ def create_team(course_id):
     
     team_code = generate_code()
     
-    team = Team(course_id=course_id, team_code=team_code, created_by=g.current_user.id)
+    team = Team(course_id=course_id, team_code=team_code, created_by=current_user.id)
     db.session.add(team)
     db.session.flush()   
 
-    membership = TeamMembership(user_id=g.current_user.id, team_id=team.id)
+    membership = TeamMembership(user_id=current_user.id, team_id=team.id)
     db.session.add(membership)
 
     project = Project(team_id=team.id)
@@ -46,7 +46,7 @@ def join_team(team_code):
         raise ValueError("Invalid team code")
     
     existing = TeamMembership.query.join(Team).filter(
-        TeamMembership.user_id == g.current_user.id,
+        TeamMembership.user_id == current_user.id,
         Team.course_id == team.course_id
     ).first()
 
@@ -56,7 +56,7 @@ def join_team(team_code):
     if len(team.memberships) >= MAX_TEAM_SIZE:
         raise ValueError("Team is full")
 
-    membership = TeamMembership(user_id=g.current_user.id, team_id=team.id)
+    membership = TeamMembership(user_id=current_user.id, team_id=team.id)
     db.session.add(membership)
     db.session.commit()
     

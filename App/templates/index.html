@@ -5,6 +5,44 @@
 
 {% block styles %}
     <style>
+        #page-layout{
+            display:flex;
+            height:100%;
+        }
+
+        /* LOG LIST */
+        #logs-panel{
+            width:100%;
+            transition:all .3s ease;
+        }
+
+        /* FORM PANEL */
+        #log-form-panel{
+            width:0;
+            overflow-y:auto;
+            transition:all .3s ease;
+        }
+
+        .form-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        /* when form open */
+        .form-open #logs-panel{
+            width:35%;
+        }
+
+        .form-open #log-form-panel{
+            width:65%;
+            padding:25px;
+        }
+
+        .form-card{
+            max-width:700px;
+        }
+
         .form-card{
             max-width:700px;
             margin:auto;
@@ -12,10 +50,6 @@
             border:1px solid #ddd;
             padding:25px;
             border-radius:12px;
-        }
-
-        #log-form{
-            display:none;
         }
 
         .stage-title{
@@ -32,56 +66,247 @@
             padding:10px;
             border-radius:6px;
         }
+
+        /* header layout */
+        .logs-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .course-dropdown{
+            width:200px;
+        }
+
+        /* stage buttons */
+        .stage-row{
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-bottom:20px;
+        }
+
+        .stage-btn{
+            border:1px solid #ddd;
+            padding:8px 14px;
+            border-radius:20px;
+            cursor:pointer;
+        }
+
+        .stage-btn.active{
+            background:black;
+            color:white;
+        }
     </style>
 {% endblock %}
 
 {% block sidebar_content %}
-    <div style="padding:20px">
-        <a onclick="openForm()" class="btn black waves-effect" style="margin-bottom:20px;width:100%">
-            <i class="material-icons left">add</i>Add Log
-        </a>
-
-        <h6><b>Your Logs</b></h6>
-
-        <div id="timeline-container">
-            <p class="grey-text center">Loading...</p>
-        </div>
-    </div>
+    
 {% endblock %}
 
 {% block content %}
-    <div id="log-form">
-        <div class="form-card">
-            <h5>Add New Action Log</h5>
-            <div id="verb-section"></div>
-            <div class="divider" style="margin:25px 0"></div>
+    <div id="page-layout">
 
-            <h6><b>Object</b></h6>
+        <!-- LOG LIST -->
+        <div id="logs-panel">
+            <div style="padding:20px">
 
-            <div class="input-field">
-            <i class="material-icons prefix">search</i>
-            <input id="object-search" type="text" class="autocomplete">
-            <label for="object-search">Search activity</label>
+                <div class="logs-header">
+                    <h6><b>Your Logs</b></h6>
+
+                    <div class="input-field course-dropdown">
+                        <select id="course-select"></select>
+                        <label>Select Course</label>
+                    </div>
+                </div>
+
+                <a onclick="openForm()" class="btn black waves-effect" style="margin-bottom:20px;width:100%">
+                    <i class="material-icons left">add</i>Add Log
+                </a>
+
+                <div id="timeline-container">
+                    <p class="grey-text center">Loading...</p>
+                </div>
+
+                <div id="team-modal" class="modal">
+                    <div class="modal-content">
+                        <h5>Project Team Setup</h5>
+
+                        <!-- Toggle -->
+                        <div class="row">
+                            <div class="col s12 center">
+                                <a href="#!" id="join-tab" class="btn-flat active" onclick="showJoinTeam()">Join Team</a>
+                                |
+                                <a href="#!" id="create-tab" class="btn-flat" onclick="showCreateTeam()">Create Team</a>
+                            </div>
+                        </div>
+
+                        <!-- JOIN TEAM PANEL -->
+                        <div id="join-team-panel">
+
+                            <p>Enter the team code provided by your teammates.</p>
+
+                            <div class="input-field">
+                                <input id="team-code" type="text">
+                                <label for="team-code">Team Code</label>
+                            </div>
+
+                            <div class="center">
+                                <button class="btn" onclick="joinTeamByCode()">
+                                    Join Team
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- CREATE TEAM PANEL -->
+                        <div id="create-team-panel" style="display:none;">
+
+                            <p>Create a new team for this course.</p>
+
+                            <div class="input-field">
+                                <input id="generated-team-code" type="text" readonly>
+                                <label for="generated-team-code">Your Team Code</label>
+                            </div>
+
+                            <div class="center" style="margin-bottom:15px">
+                                <button class="btn grey lighten-1 black-text" onclick="copyTeamCode()">
+                                    Copy Code
+                                </button>
+                            </div>
+
+                            <p class="grey-text center">
+                                Share this code with your teammates.
+                            </p>
+
+                            <div class="center" style="margin-top:20px">
+                                <button class="btn black waves-effect" onclick="generateTeamCode()">
+                                    Generate Team Code
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <a href="#!" class="modal-close btn-flat">Cancel</a>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="right-align">
-            <button type="button" class="btn black waves-effect waves-light" onclick="submitLog()">Log Action</button>
         </div>
+
+        <!-- LOG FORM -->
+        <div id="log-form-panel">
+            <div class="form-card">
+
+                <div class="form-header">
+                    <h5>Add New Action Log</h5>
+
+                    <a onclick="closeForm()" class="btn-flat">
+                        <i class="material-icons">close</i>
+                    </a>
+                </div>
+                
+                <!-- OBJECT-VERB SELECTION-->
+                <h6><b>Object</b></h6>
+                <div class="input-field">
+                    <i class="material-icons prefix">search</i>
+                    <input id="object-search" type="text" class="autocomplete">
+                    <label for="object-search">Search activity</label>
+                </div>
+
+                <div class="divider" style="margin:25px 0"></div>
+
+                <h6><b>Verb</b></h6>
+                <div id="verb-section" class="row"></div>
+
+                <!-- PEDAGOGICAL STAGE SELECTION-->
+                <h6><b>Pedagogical Stage</b></h6>
+                <div id="peda-stage" class="stage-row"></div>
+
+                <!-- PROBLEM STEP SELECTION -->
+                <h6><b>Problem Step</b></h6>
+                <div id="step-stage" class="stage-row"></div>
+
+                <div class="right-align">
+                    <button type="button" class="btn black waves-effect waves-light" onclick="submitLog()">
+                        Log Action
+                    </button>
+                </div>
+
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
     <script>
+        const currentUserCode = "{{ current_user_id }}";
+        let currentCourse = null;
+        let currentTeamId = null;
+        let currentProjectId = null;
+
         let verbs = {};
         let activities = {};
+        let selectedPedagogicalStage = null;
+        let selectedProblemStage = null;
+        
 
         function openForm(){
-            document.getElementById("log-form").style.display = "block";
+            document.getElementById("page-layout").classList.add("form-open");
         }
 
-        async function fetchData(){
-            const response = await fetch("/api/data");
+        function closeForm(){
+            document.getElementById("page-layout").classList.remove("form-open");
+        }
+
+        async function loadCourses(){
+            // fetch all courses
+            const allCourseResponse = await fetch("/courses");
+            const courses = await allCourseResponse.json();
+
+            //fetch all enrolled courses
+            const enrolledCourseResponse = await fetch("/api/enrolled-courses");
+            const enrolledCourses = await enrolledCourseResponse.json();
+
+            const select = document.getElementById("course-select"); 
+
+            let html = ``;
+            courses.forEach(c=>{
+                html += `<option value="${c.id}">${c.name}</option>`;
+            });
+            select.innerHTML = html;
+            M.FormSelect.init(select);
+
+            //auto select an enrolled course
+            currentCourse = enrolledCourses[0].id;
+            select.value = currentCourse;
+            M.FormSelect.init(select);
+            await onCourseChange(currentCourse);
+
+            select.addEventListener("change", async (e)=>{
+                await onCourseChange(e.target.value);
+            });
+        }
+
+        async function onCourseChange(courseId) {
+            currentCourse = courseId;
+
+            await fetchData(currentCourse);
+
+            const infoResp = await fetch(`/api/course-info?course_id=${currentCourse}`);
+            const infoData = await infoResp.json();
+
+            currentTeamId = infoData.team_id;
+            currentProjectId = infoData.project_id;
+
+            loadLogs();
+        }
+
+        async function fetchData(courseId){
+            const response = await fetch(`/api/data?course_id=${courseId}`);
             const data = await response.json();
 
             verbs = data.verbs;
@@ -89,49 +314,68 @@
 
             renderVerbs();
             setupAutocomplete();
+
+            renderStages("peda-stage", [
+                "Planning",
+                "Exploration",
+                "Construction",
+                "Testing",
+                "Reflection"
+            ]);
+
+            renderStages("step-stage", [
+                "Understanding",
+                "Design",
+                "Implementation",
+                "Debugging"
+            ]);
         }
 
         function renderVerbs(){
             const container = document.getElementById("verb-section");
-            const stages = {};
-
-            Object.entries(verbs).forEach(([key, verb]) => {
-                let stage = verb.extensions["https://logstack.azurewebsites.net/extensions/pedagogical-stage"];
-
-                if(!Array.isArray(stage)){
-                    stage = [stage];
-                }
-
-                stage.forEach(s => {
-                    if(!stages[s]) stages[s] = [];
-
-                    stages[s].push({
-                        key:key,
-                        name:verb.display["en-US"]
-                    });
-                });
-            });
-
             let html = "";
 
-            Object.entries(stages).forEach(([stage, items]) => {
-                html += `<div class="stage-title">${stage}</div><div class="row">`;
+            if (!verbs || Object.keys(verbs).length === 0) {
+                container.innerHTML = "<p class='grey-text'>No verbs found</p>";
+                return;
+            }
 
-                items.forEach(verb => {
-                    html += `
+            Object.entries(verbs).forEach(([key, verb]) => {
+                html += `
                     <p class="col s4">
                         <label>
-                            <input name="verb" type="radio" value="${verb.key}">
-                            <span>${verb.name}</span>
+                            <input name="verb" type="radio" value="${key}">
+                            <span>${verb.display["en-US"]}</span>
                         </label>
                     </p>
-                    `;
-                });
-
-                html += `</div>`;
+                `;
             });
 
             container.innerHTML = html;
+        }
+
+        function renderStages(containerId, items){
+            const container = document.getElementById(containerId);
+            container.innerHTML = items.map(s => `
+                <div class="stage-btn" onclick="selectStage(this,'${containerId}')">
+                    ${s}
+                </div>
+            `).join("");
+        }
+
+        function selectStage(el, group){
+            document.querySelectorAll(`#${group} .stage-btn`)
+                .forEach(btn => btn.classList.remove("active"));
+
+            el.classList.add("active");
+
+            if(group === "peda-stage"){
+                selectedPedagogicalStage = el.textContent.trim();
+            }
+
+            if(group === "step-stage"){
+                selectedProblemStage = el.textContent.trim();
+            }
         }
 
         function setupAutocomplete(){
@@ -180,45 +424,192 @@
                     "Content-Type":"application/json",
                     "X-CSRF-TOKEN": csrf
                 },
-                body:JSON.stringify({verb:verb, activity:activity})
+                body:JSON.stringify({
+                    course_id: currentCourse,
+                    verb_name: verb, 
+                    activity_name: activity,
+                    team_id: currentTeamId,
+                    project_id: currentProjectId,
+                    pedagogical_stage: selectedPedagogicalStage,
+                    problem_stage: selectedProblemStage
+                })
             });
 
             if(response.ok){
                 M.toast({html: "Action logged successfully!"});
-                
-                document.getElementById("log-form").style.display = "none";
+                closeForm();
                 
                 document.querySelectorAll('input[name="verb"]').forEach(rb => rb.checked = false);
                 elem.value = "";
                 delete elem.dataset.key;
+
+                selectedPedagogicalStage = null;
+                selectedProblemStage = null;
+
+                document.querySelectorAll(".stage-btn").forEach(btn => btn.classList.remove("active"));
                 
                 loadLogs(); 
             } else {
-                M.toast({html: "Error saving log"});
+                const data = await response.json();
+                M.toast({html: data.error || "Error saving log"});
             }
         }
 
         async function loadLogs(){
-            const response = await fetch("/logs");
-            const logs = await response.json();
+            if(!currentCourse) return;
 
             const container = document.getElementById("timeline-container");
+            
+            // show loading state immediately
+            container.innerHTML = "<p class='grey-text center'>Loading...</p>";
+
+            // Fetch course info (team and project)
+            const infoResp = await fetch(`/api/course-info?course_id=${currentCourse}`);
+            const infoData = await infoResp.json();
+
+            currentTeamId = infoData.team_id;
+            currentProjectId = infoData.project_id;
+
+            // If user is enrolled but not part of a team
+            if(currentTeamId === null){
+                container.innerHTML = `
+                    <p class='grey-text center'>
+                        You are not part of a team yet. 
+                        <a href="#!" onclick="openJoinTeamModal('${currentCourse}')">
+                            Join a team now!
+                        </a>
+                    </p>
+                `;
+
+                // hide the "Add Log" button
+                document.querySelector("a[onclick='openForm()']").style.display = "none";
+                return;
+            } else {
+                // show "Add Log" button
+                document.querySelector("a[onclick='openForm()']").style.display = "block";
+            }
+
+            // Fetch logs
+            const response = await fetch(`/logs?course=${currentCourse}`);
+            const logs = await response.json();
 
             if(logs.length===0){
                 container.innerHTML="<p class='grey-text'>No logs</p>";
                 return;
             }
-
+            
+            // Render logs
             container.innerHTML=logs.map(l =>`
                 <div class="timeline-item">
-                    <div class="log-card">${l.summary}</div>
+                    <div class="log-card"> I ${l.verb_name} a ${l.activity_name}</div>
                 </div>
             `).join("");
         }
 
         document.addEventListener("DOMContentLoaded", () =>{
-            fetchData();
-            loadLogs();
+            loadCourses();
         });
+
+
+        function showJoinTeam(){
+            document.getElementById("join-team-panel").style.display = "block";
+            document.getElementById("create-team-panel").style.display = "none";
+
+            document.getElementById("join-tab").classList.add("active");
+            document.getElementById("create-tab").classList.remove("active");
+        }
+
+        function showCreateTeam(){
+            document.getElementById("join-team-panel").style.display = "none";
+            document.getElementById("create-team-panel").style.display = "block";
+
+            document.getElementById("join-tab").classList.remove("active");
+            document.getElementById("create-tab").classList.add("active");
+        }
+
+        async function openJoinTeamModal(courseId){
+            const modal = M.Modal.getInstance(document.getElementById("team-modal"));
+
+            document.getElementById("team-code").value = "";
+            document.getElementById("generated-team-code").value = "";
+
+            showJoinTeam();
+            M.updateTextFields();
+            modal.open();
+        }
+
+        async function joinTeamByCode(){
+            const code = document.getElementById("team-code").value.trim();
+            if(!code){
+                M.toast({html:"Please enter a team code"});
+                return;
+            }
+
+            const response = await fetch("/api/join-team",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    team_code: code,
+                    course_id: currentCourse
+                })
+            });
+
+            const data = await response.json();
+
+            if(response.ok){
+                M.toast({html:"Joined team successfully!"});
+                const modal = M.Modal.getInstance(document.getElementById("team-modal"));
+                modal.close();
+                loadLogs();
+            }else{
+                M.toast({html:data.error || "Invalid team code"});
+            }
+        }
+
+        async function generateTeamCode(){
+            const csrf = getCookie("csrf_access_token");
+            const response = await fetch(`/courses/${currentCourse}/teams`,{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "X-CSRF-TOKEN": csrf
+                }
+            });
+
+            const data = await response.json();
+
+            if(response.ok){
+                document.getElementById("generated-team-code").value = data.team_code;
+                M.updateTextFields();
+                M.toast({html:"Team created! Share the code with teammates."});
+                loadLogs();
+            } else {
+                M.toast({html:data.error || "Failed to create team"});
+            }
+        }
+
+        function copyTeamCode(){
+            const input = document.getElementById("generated-team-code");
+
+            if(!input.value){
+                M.toast({html:"Generate a team code first"});
+                return;
+            }
+
+            input.select();
+            input.setSelectionRange(0, 99999);
+
+            navigator.clipboard.writeText(input.value);
+
+            M.toast({html:"Team code copied!"});
+        }
+
+        document.addEventListener("DOMContentLoaded", function(){
+            const modals = document.querySelectorAll(".modal");
+            M.Modal.init(modals);
+        });
+
     </script>
 {% endblock %}

@@ -1,14 +1,12 @@
 from App.controllers import team as team_controller
-from flask import Blueprint, request, jsonify, g
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, current_user
 
 team_views = Blueprint("Team", __name__)
 
 @team_views.route("/courses/<string:course_id>/teams", methods=["POST"])
-def create_team(course_id):    
-    current_user = getattr(g, "current_user", None)
-    if not current_user or not current_user.is_authenticated:
-        return jsonify({"error": "Authentication required"}), 401
-    
+@jwt_required(locations=["cookies"])
+def create_team(course_id):        
     try:
         team = team_controller.create_team(course_id)
         return jsonify({
@@ -20,11 +18,8 @@ def create_team(course_id):
         return jsonify({"error": str(e)}), 404
 
 @team_views.route("/teams/join", methods=["POST"])
-def join_team():
-    current_user = getattr(g, "current_user", None)
-    if not current_user or not current_user.is_authenticated:
-        return jsonify({"error": "Authentication required"}), 401
-    
+@jwt_required(locations=["cookies"])
+def join_team():    
     data = request.get_json() or {}
     team_code = data.get("team_code")
     

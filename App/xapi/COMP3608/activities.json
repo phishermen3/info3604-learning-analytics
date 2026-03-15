@@ -1,0 +1,452 @@
+{
+    "algorithm": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/algorithm",
+        "definition": {
+            "name": { "en-US": "algorithm" },
+            "description": { "en-US": "A defined computational procedure used to solve a problem or perform a task." }
+        }
+    },
+
+    "analysis": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/analysis",
+        "definition": {
+            "name": { "en-US": "analysis" },
+            "description": { "en-US": "The process of examining data, results, or systems to draw meaningful conclusions." }
+        }
+    },
+
+    "approach": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/approach",
+        "definition": {
+            "name": { "en-US": "approach" },
+            "description": { "en-US": "A chosen method or strategy used to address a problem." }
+        }
+    },
+
+    "benefit": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/benefit",
+        "definition": {
+            "name": { "en-US": "benefit" },
+            "description": { "en-US": "A positive outcome or advantage gained from solving a problem or implementing a solution." }
+        }
+    },
+
+    "challenge": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/challenge",
+        "definition": {
+            "name": { "en-US": "challenge" },
+            "description": { "en-US": "A difficulty or obstacle encountered during problem solving or project development." }
+        }
+    },
+
+    "conclusion": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/conclusion",
+        "definition": {
+            "name": { "en-US": "conclusion" },
+            "description": { "en-US": "A final judgement or interpretation derived from analysis or experimentation." }
+        }
+    },
+
+    "data-source": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/data-source",
+        "definition": {
+            "name": { "en-US": "data source" },
+            "description": { "en-US": "The origin or provider from which data is obtained." }
+        }
+    },
+
+    "dataset": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/dataset",
+        "definition": {
+            "name": { "en-US": "dataset" },
+            "description": { "en-US": "A structured collection of data used for analysis, training, or evaluation." }
+        }
+    },
+
+    "design-choice": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/design-choice",
+        "definition": {
+            "name": { "en-US": "design choice" },
+            "description": { "en-US": "A decision made during system or experiment design that influences the solution." }
+        }
+    },
+
+    "error": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/error",
+        "definition": {
+            "name": { "en-US": "error" },
+            "description": { "en-US": "A mistake, fault, or unexpected issue affecting results or system performance." }
+        }
+    },
+
+    "experiment": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/experiment",
+        "definition": {
+            "name": { "en-US": "experiment" },
+            "description": { "en-US": "A structured test conducted to evaluate a hypothesis, model, or approach." }
+        }
+    },
+
+    "experimental-design": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/experimental-design",
+        "definition": {
+            "name": { "en-US": "experimental design" },
+            "description": { "en-US": "The plan outlining how experiments will be conducted and evaluated." }
+        }
+    },
+
+    "goal": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/goal",
+        "definition": {
+            "name": { "en-US": "goal" },
+            "description": { "en-US": "A desired outcome or milestone set to guide project progress." }
+        }
+    },
+
+    "graph": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/graph",
+        "definition": {
+            "name": { "en-US": "graph" },
+            "description": { "en-US": "A visual representation of data relationships using plotted points or lines." }
+        }
+    },
+
+    "impact": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/impact",
+        "definition": {
+            "name": { "en-US": "impact" },
+            "description": { "en-US": "The effect or influence that solving the problem or implementing a solution produces." }
+        }
+    },
+
+    "information": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/information",
+        "definition": {
+            "name": { "en-US": "information" },
+            "description": { "en-US": "Processed or interpreted data that provides meaning or insight." }
+        }
+    },
+
+    "insight": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/insight",
+        "definition": {
+            "name": { "en-US": "insight" },
+            "description": { "en-US": "A meaningful understanding or realization derived from analysis or results." }
+        }
+    },
+
+    "leaderboard-score": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/leaderboard-score",
+        "definition": {
+            "name": { "en-US": "leaderboard score" },
+            "description": { "en-US": "A performance ranking or score obtained on a competition leaderboard." }
+        }
+    },
+
+    "machine-learning-model": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/machine-learning-model",
+        "definition": {
+            "name": { "en-US": "machine learning model" },
+            "description": { "en-US": "A computational model trained on data to make predictions or classifications." }
+        }
+    },
+
+    "mathematical-model": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/mathematical-model",
+        "definition": {
+            "name": { "en-US": "mathematical model" },
+            "description": { "en-US": "A mathematical representation of a system, relationship, or process." }
+        }
+    },
+
+    "meeting": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/meeting",
+        "definition": {
+            "name": { "en-US": "meeting" },
+            "description": { "en-US": "A scheduled discussion where team members review progress or make decisions." }
+        }
+    },
+
+    "metric": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/metric",
+        "definition": {
+            "name": { "en-US": "metric" },
+            "description": { "en-US": "A measurable standard used to evaluate performance or results." }
+        }
+    },
+
+    "narrative": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/narrative",
+        "definition": {
+            "name": { "en-US": "narrative" },
+            "description": { "en-US": "A structured explanation that communicates the story and context of the project." }
+        }
+    },
+
+    "objective": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/objective",
+        "definition": {
+            "name": { "en-US": "objective" },
+            "description": { "en-US": "A clearly defined aim that the project or experiment seeks to achieve." }
+        }
+    },
+
+    "optimization-model": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/optimization-model",
+        "definition": {
+            "name": { "en-US": "optimization model" },
+            "description": { "en-US": "A model designed to identify the best solution according to defined criteria." }
+        }
+    },
+
+    "performance-indicator": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/performance-indicator",
+        "definition": {
+            "name": { "en-US": "performance indicator" },
+            "description": { "en-US": "A measurable value used to assess how effectively a system or model performs." }
+        }
+    },
+
+    "presentation": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/presentation",
+        "definition": {
+            "name": { "en-US": "presentation" },
+            "description": { "en-US": "A structured delivery of project findings to an audience." }
+        }
+    },
+
+    "problem": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/problem",
+        "definition": {
+            "name": { "en-US": "problem" },
+            "description": { "en-US": "A question or challenge requiring analysis and solution." }
+        }
+    },
+
+    "problem-statement": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/problem-statement",
+        "definition": {
+            "name": { "en-US": "problem statement" },
+            "description": { "en-US": "A clear description of the issue being addressed and its context." }
+        }
+    },
+
+    "progress": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/progress",
+        "definition": {
+            "name": { "en-US": "progress" },
+            "description": { "en-US": "Measurable advancement toward completing project goals." }
+        }
+    },
+
+    "project-management-platform": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/project-management-platform",
+        "definition": {
+            "name": { "en-US": "project management platform" },
+            "description": { "en-US": "A digital system used to organize tasks, collaboration, and project tracking." }
+        }
+    },
+
+    "project-tool": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/project-tool",
+        "definition": {
+            "name": { "en-US": "project tool" },
+            "description": { "en-US": "A software tool used to support development, analysis, or collaboration." }
+        }
+    },
+
+    "report": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/report",
+        "definition": {
+            "name": { "en-US": "report" },
+            "description": { "en-US": "A written document describing the methods, results, and conclusions of a project." }
+        }
+    },
+
+    "repository": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/repository",
+        "definition": {
+            "name": { "en-US": "repository" },
+            "description": { "en-US": "A centralized storage location for project files, code, and version history." }
+        }
+    },
+
+    "result": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/result",
+        "definition": {
+            "name": { "en-US": "result" },
+            "description": { "en-US": "An outcome produced by analysis, experimentation, or model evaluation." }
+        }
+    },
+
+    "sensitivity-analysis": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/sensitivity-analysis",
+        "definition": {
+            "name": { "en-US": "sensitivity analysis" },
+            "description": { "en-US": "An evaluation of how changes in input variables affect outcomes or performance." }
+        }
+    },
+
+    "solution": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/solution",
+        "definition": {
+            "name": { "en-US": "solution" },
+            "description": { "en-US": "A method or system developed to address the identified problem." }
+        }
+    },
+
+    "strength": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/strength",
+        "definition": {
+            "name": { "en-US": "strength" },
+            "description": { "en-US": "A positive attribute or advantage of a method, model, or approach." }
+        }
+    },
+
+    "ta-check-in": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/ta-check-in",
+        "definition": {
+            "name": { "en-US": "ta check-in" },
+            "description": { "en-US": "A scheduled review with a teaching assistant to discuss project progress and challenges." }
+        }
+    },
+
+    "table": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/table",
+        "definition": {
+            "name": { "en-US": "table" },
+            "description": { "en-US": "A structured arrangement of data organized into rows and columns." }
+        }
+    },
+
+    "task": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/task",
+        "definition": {
+            "name": { "en-US": "task" },
+            "description": { "en-US": "A specific piece of work assigned as part of the project." }
+        }
+    },
+
+    "task-distribution": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/task-distribution",
+        "definition": {
+            "name": { "en-US": "task distribution" },
+            "description": { "en-US": "The allocation of tasks among team members." }
+        }
+    },
+
+    "team-discussion": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/team-discussion",
+        "definition": {
+            "name": { "en-US": "team discussion" },
+            "description": { "en-US": "A collaborative conversation among team members to share ideas or solve issues." }
+        }
+    },
+
+    "teamwork": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/teamwork",
+        "definition": {
+            "name": { "en-US": "teamwork" },
+            "description": { "en-US": "Collaborative effort by a group to achieve shared project goals." }
+        }
+    },
+
+    "test-dataset": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/test-dataset",
+        "definition": {
+            "name": { "en-US": "test dataset" },
+            "description": { "en-US": "A dataset used to evaluate the performance of a trained model." }
+        }
+    },
+
+    "tradeoff": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/tradeoff",
+        "definition": {
+            "name": { "en-US": "tradeoff" },
+            "description": { "en-US": "A compromise where improving one aspect of a solution reduces another." }
+        }
+    },
+
+    "training-dataset": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/training-dataset",
+        "definition": {
+            "name": { "en-US": "training dataset" },
+            "description": { "en-US": "A dataset used to train a machine learning model." }
+        }
+    },
+
+    "user-need": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/user-need",
+        "definition": {
+            "name": { "en-US": "user need" },
+            "description": { "en-US": "A requirement or expectation that a solution should address for its intended users." }
+        }
+    },
+
+    "visualization": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/visualization",
+        "definition": {
+            "name": { "en-US": "visualization" },
+            "description": { "en-US": "A graphical representation used to communicate data or results clearly." }
+        }
+    },
+
+    "weakness": {
+        "objectType": "Activity",
+        "id": "https://logstack.azurewebsites.net/activity-types/weakness",
+        "definition": {
+            "name": { "en-US": "weakness" },
+            "description": { "en-US": "A limitation or disadvantage of a method, model, or approach." }
+        }
+    }
+
+}

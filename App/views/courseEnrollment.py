@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from App.controllers import courseEnrollment as course_enrollment_controller 
 
 courseEnrollment_views = Blueprint("CourseEnrollment", __name__)
@@ -25,4 +25,14 @@ def get_course_info():
     if not team or not project:
         return jsonify({"team_id": None, "project_id": None}), 200
 
-    return jsonify({"team_id": team.id, "project_id": project.id})
+    return jsonify({"team_id": team.id, "project_id": project.id}), 200
+
+@courseEnrollment_views.route("/api/enrolled-courses", methods=["GET"])
+@jwt_required()
+def get_enrolled_courses():
+    courses = course_enrollment_controller.get_enrolled_courses()
+
+    if not courses:
+        return jsonify([]), 200
+
+    return jsonify(courses), 200

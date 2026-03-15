@@ -41,3 +41,8 @@ def get_course_info(course_id):
     project = Project.query.filter_by(team_id=team.id).first()
 
     return team, project
+
+def get_enrolled_courses():
+    user = current_user
+    enrolled_courses = CourseEnrollment.query.filter_by(user_id=user.id).all()
+    return [{"id": ec.course.id} for ec in enrolled_courses] 

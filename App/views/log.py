@@ -56,7 +56,6 @@ def get_statements():
         return jsonify({"error": "Course ID required"}), 400
     
     logs, code = get_logs(current_user.user_code, course_id)
-    print(f"STATEMENTS: {logs}")
     return jsonify(logs), code
 
 @log_views.route('/api/data', methods=['GET'])

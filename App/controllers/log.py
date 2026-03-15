@@ -24,10 +24,14 @@ def load_course_registry(course_id):
 
     verbs = load_json(os.path.join(course_path, "verbs.json"))
     activities = load_json(os.path.join(course_path, "activities.json"))
+    problem_steps = load_json(os.path.join(course_path, "steps.json"))
+    stages = load_json(os.path.join(COURSES_DIR, "stages.json"))
 
     _cache[course_id] = {
         "verbs": verbs,
-        "activities": activities
+        "activities": activities,
+        "problem_steps": problem_steps,
+        "stages": stages
     }
 
     return _cache[course_id]
@@ -74,12 +78,20 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
     
     verbs = registry.get("verbs", {})
     activities = registry.get("activities", {})
+    problem_steps = registry.get("problem_steps", {})
+    stages = registry.get("stages", {})
 
     if verb_name not in verbs:
         return {"error": "Invalid verb"}, 400
     
     if activity_name not in activities:
-        return {"error": "Invalid artefact"}, 400
+        return {"error": "Invalid activity"}, 400
+    
+    if problem_step not in problem_steps:
+        return {"error": "Invalid problem step"}, 400
+    
+    if pedagogical_stage not in stages:
+        return {"error": "Invalid pedagogical stage"}, 400
     
     verb_template = verbs[verb_name]
     verb = build_verb(verb_template)

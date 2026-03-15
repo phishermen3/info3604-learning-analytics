@@ -311,24 +311,14 @@
 
             verbs = data.verbs;
             activities = data.activities;
+            problem_steps = data.problem_steps;
+            stages = data.stages;
 
             renderVerbs();
             setupAutocomplete();
 
-            renderStages("peda-stage", [
-                "Planning",
-                "Exploration",
-                "Construction",
-                "Testing",
-                "Reflection"
-            ]);
-
-            renderStages("step-stage", [
-                "Understanding",
-                "Design",
-                "Implementation",
-                "Debugging"
-            ]);
+            renderStages("peda-stage", stages);
+            renderStages("step-stage", problem_steps);
         }
 
         function renderVerbs(){

@@ -10,8 +10,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
-    created_teams = db.relationship('Team', backref='leader', lazy=True, cascade="all")
     memberships = db.relationship('TeamMembership', backref='user', lazy=True, cascade="all, delete-orphan")
+    enrolled_courses = db.relationship('CourseEnrollment', backref='user', cascade="all, delete-orphan")
 
     def __init__(self, user_code, password):
         self.user_code = user_code
@@ -21,7 +21,8 @@ class User(db.Model):
         return{
             'id': self.id,
             'user_code': self.user_code,
-            'created_at': self.created_at.isoformat()
+            'created_at': self.created_at.isoformat(),
+            'enrolled_courses': [c.id for c in self.enrolled_courses]
         }
 
     def set_password(self, password):
@@ -29,4 +30,3 @@ class User(db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-

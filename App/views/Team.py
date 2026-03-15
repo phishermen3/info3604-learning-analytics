@@ -1,53 +1,39 @@
-from flask import Blueprint, request, render_template, jsonify
-from types import SimpleNamespace
-import random, string
+from App.controllers import team as team_controller
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, current_user
 
-team_bp = Blueprint("Team", __name__)
+team_views = Blueprint("Team", __name__)
 
-courses = {1: "Test Course"}
-teams = {}
+@team_views.route("/courses/<string:course_id>/teams", methods=["POST"])
+@jwt_required(locations=["cookies"])
+def create_team(course_id):        
+    try:
+        team = team_controller.create_team(course_id)
+        return jsonify({
+            "team_id": team.id,
+            "team_code": team.team_code,
+            "course_id": team.course_id
+        }), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
 
-def generate_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-
-@team_bp.route("/courses/<int:course_id>/teams", methods=["POST"])
-def create_team(course_id: int):
-    current_user = getattr(create_team, "current_user", SimpleNamespace(is_authenticated=False, id=None))
-    
-    if course_id not in courses:
-        return jsonify({"error": "Course not found"}), 404
-    
+@team_views.route("/api/join-team", methods=["POST"])
+@jwt_required(locations=["cookies"])
+def join_team():    
     data = request.get_json() or {}
-    team_name = data.get("team_name")
+    team_code = data.get("team_code")
     
-    if not team_name:
-        return jsonify({"error": "team_name is required"}), 400
-    
-    team_id = len(teams) + 1
-    team_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    teams[team_id] = {"id": team_id, "name": team_name, "course": course_id, "code": team_code}
-    
-    return jsonify({
-        "team id": team_id,
-        "team code": team_code,
-        "course": course_id
-    }), 201
-
-@team_bp.route("/teams/join", methods=["POST"])
-def join_team():
-    current_user = getattr(join_team, "current_user", SimpleNamespace(is_authenticated=False, id=None))
-    
-    if not current_user or not current_user.is_authenticated:
-        return jsonify({"error": "Authentication required"}), 401
-    
-    data = request.get_json() or {}
-    code = data.get("team_code")
-    
-    if not code:
+    if not team_code:
         return jsonify({"error": "team_code is required"}), 400
     
-    for team in teams.values():
-        if team["code"] == code:
-            return jsonify({"message": f"Joined team {team['name']}"}), 200
-    
-    return jsonify({"error": "Team code invalid"}), 404
+    try:
+        team = team_controller.join_team(team_code)
+        return jsonify({
+            "message": f"Joined team {team.team_code}",
+            "team_id": team.id,
+            "team_code": team.team_code
+        }), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 401
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404

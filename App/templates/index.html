@@ -5,6 +5,7 @@
 
 {% block styles %}
     <style>
+
         #page-layout{
             display:flex;
             height:100%;
@@ -75,7 +76,7 @@
         }
 
         .course-dropdown{
-            width:200px;
+            width:275px;
         }
 
         /* stage buttons */
@@ -97,6 +98,123 @@
             background:black;
             color:white;
         }
+
+        .course-dropdown input.select-dropdown {
+            color: #fff;
+        }
+
+        .course-dropdown .caret {
+            color: #fff;
+        }
+
+        .dropdown-content li > span {
+            color: #fff;          /* text color in dropdown */
+            background-color: #27293d; /* background of dropdown items */
+        }
+
+        .dropdown-content li.active > span {
+            background-color: #474964;
+            color: #fff;
+        }
+
+        .add-log-node{
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        .add-log-btn{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1d8cf8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0; 
+            transition:all .2s ease;
+            margin-left: 2px;
+            z-index: 1;
+        }
+
+        .add-log-btn:hover{
+            transform:scale(1.1);
+            background:#1d8cf8;
+        }
+
+        .timeline{
+            position:relative;
+            padding-left:80px;
+            padding-top:50px;
+            color: white;
+        }
+
+        .timeline:before{
+            content:'';
+            position:absolute;
+            left:25px;
+            top:0;
+            width:4px;
+            height:100%;
+            background:#222a42;
+        }
+
+        .timeline-container{
+            position:relative;
+            margin-bottom:30px;
+        }
+
+        .timeline-icon{
+            position:absolute;
+            left:-73px;
+            top:0;
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#4f537b;
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow: 1px 3px 9px rgba(0,0,0, .1);
+        }
+
+        .timeline-body{
+            background:#27293d;
+            border-radius:6px;
+            padding:15px;
+            color: white;
+            box-shadow: 1px 3px 9px rgba(0,0,0, .1);
+        }
+
+        .timeline-body:before{
+            content:'';
+            position:absolute;
+            left:-10px;
+            top:15px;
+            width:20px;
+            height:20px;
+            background:#222a42;
+            transform:rotate(45deg);
+        }
+
+        .timeline-title{
+            margin-bottom:8px;
+        }
+
+        .timeline-subtitle{
+            font-size:12px;
+            color:#888;
+            margin-top:10px;
+        }
+
+        .grey-text{
+            margin:0px;
+        }
     </style>
 {% endblock %}
 
@@ -112,21 +230,20 @@
             <div style="padding:20px">
 
                 <div class="logs-header">
-                    <h6><b>Your Logs</b></h6>
+                    <h6 style="color: #fff"><b>Your Logs</b></h6>
 
                     <div class="input-field course-dropdown">
                         <select id="course-select"></select>
-                        <label>Select Course</label>
                     </div>
                 </div>
 
-                <a onclick="openForm()" class="btn black waves-effect" style="margin-bottom:20px;width:100%">
-                    <i class="material-icons left">add</i>Add Log
-                </a>
-
-                <div id="timeline-container">
-                    <p class="grey-text center">Loading...</p>
+                <div class="add-log-node">
+                    <div class="add-log-btn" onclick="openForm()">
+                        <i class="material-icons">add</i>
+                    </div>
                 </div>
+
+                <div id="timeline-container" class="timeline"></div>
 
                 <div id="team-modal" class="modal">
                     <div class="modal-content">
@@ -476,11 +593,16 @@
                 `;
 
                 // hide the "Add Log" button
-                document.querySelector("a[onclick='openForm()']").style.display = "none";
-                return;
+                const addBtn = document.querySelector("a[onclick='openForm()']");
+                if(addBtn){
+                    addBtn.style.display = "none";
+                }
             } else {
                 // show "Add Log" button
-                document.querySelector("a[onclick='openForm()']").style.display = "block";
+                const addBtn = document.querySelector("a[onclick='openForm()']");
+                if(addBtn){
+                    addBtn.style.display = "block";
+                }
             }
 
             // Fetch logs
@@ -488,14 +610,26 @@
             const logs = await response.json();
 
             if(logs.length===0){
-                container.innerHTML="<p class='grey-text'>No logs</p>";
+                container.innerHTML="<p class='grey-text center'>No logs</p>";
                 return;
             }
             
             // Render logs
-            container.innerHTML=logs.map(l =>`
-                <div class="timeline-item">
-                    <div class="log-card"> I ${l.verb_name} a ${l.activity_name}</div>
+            container.innerHTML = logs.map(l => `
+                <div class="timeline-container">
+
+                    <div class="timeline-icon">
+                        <i class="material-icons">edit</i>
+                    </div>
+
+                    <div class="timeline-body">
+                        <h6 class="timeline-title">
+                            I ${l.verb_name} a ${l.activity_name}
+                        </h6>
+
+                        <div class="timeline-subtitle"></div>
+                    </div>
+
                 </div>
             `).join("");
         }

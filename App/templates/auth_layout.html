@@ -32,11 +32,12 @@
 
             .login-form{
                 min-height: 100vh;
+                width: 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 30px;
+                padding: 20px;
             }
 
             .login-form h1{
@@ -56,10 +57,13 @@
 
             .content{
                 width: 500px;
+                max-width: 100%;
                 padding: 2.5em;
                 background: #ffffff;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
                 border-radius: 16px;
+                margin: 0 auto;
+                box-sizing: border-box;
             }
 
             .input-group{
@@ -141,6 +145,21 @@
 
             p.account a:hover{
                 text-decoration: underline;
+            }
+
+            @media(max-width: 480px){
+                .login-form h1{
+                    font-size: 1.8rem;
+                    margin-bottom: 20px;
+                }
+                
+                .content{
+                    padding: 1.5em;
+                }
+
+                .login-form h2{
+                    font-size: 18px;
+                }
             }
         </style>
 

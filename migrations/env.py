@@ -78,6 +78,7 @@ def run_migrations_online():
             connection=connection,
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,
+            render_as_batch=True,
             version_table_schema='flaskmvc' if not is_sqlite else None, 
             include_schemas=True if not is_sqlite else False,
             **current_app.extensions['migrate'].configure_args

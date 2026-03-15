@@ -110,8 +110,8 @@ def get_logs(user_code, course_id):
     
     query = {
         "agent": agent,
-        "limit": 10,
-        "since": "2026-03-05T00:00:00Z"
+        "limit": 10 #,
+        #"since": "2026-03-05T00:00:00Z"
     }
     
     lrs = get_lrs()
@@ -127,27 +127,33 @@ def get_logs(user_code, course_id):
         statements = response.content.statements or []
         
         for stmt in statements:
-            stmt_course_id = getattr(stmt.object, "id", None)
-            if stmt_course_id != expected_course_id:
+            context_activities = getattr(stmt.context, "context_activities", None)
+            course_match = False
+
+            if context_activities:
+                categories = getattr(context_activities, "category", [])
+                if categories is None:
+                    categories = []
+                elif not isinstance(categories, list):
+                    categories = [categories]
+
+                for act in categories:
+                    if act.id == expected_course_id:
+                        course_match = True
+                        break
+
+            if not course_match:
                 continue
 
             exts = getattr(stmt.context, "extensions", {})
             if not exts or f'{LOGSTACK_BASE}/extensions/pedagogical-stage' not in exts:
-                return {"error": "Statement missing pedagogical stage"}, 500
-
-            stage = exts[f'{LOGSTACK_BASE}/extensions/pedagogical-stage']
+                #return {"error": "Statement missing pedagogical stage"}, 500
+                continue
 
             try:
-                summary = (
-                    f"{stmt.actor.account.name} "
-                    f"{stmt.verb.display['en-US']} "
-                    f"{stmt.object.definition.name['en-US']} "
-                    f"(Stage: {stage})"
-                )
-
                 results.append({
-                    "summary": summary,
-                    "statement": stmt.to_json()
+                    "verb_name": stmt.verb.display["en-US"],
+                    "activity_name": stmt.object.definition.name["en-US"]
                 })
             except (AttributeError, KeyError):
                 return {"error": "Statement malformed"}, 500
@@ -238,7 +244,7 @@ def load_json(filename):
         with open(filename, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        return {}
+        return {}    
 
 # -----------------------------------
 # Getters

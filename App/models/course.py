@@ -5,8 +5,8 @@ class Course(db.Model):
     id = db.Column(db.String(8), primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     
-    teams = db.relationship('Team', backref='course', lazy=True, cascade="all, delete-orphan")
-    
+    students = db.relationship('CourseEnrollment', backref='course', cascade="all, delete-orphan")
+
     def __init__(self, id, name):
         self.id = id
         self.name = name

@@ -1,35 +1,17 @@
-from flask import Blueprint
-from flask import render_template
-from flask import jsonify
-from types import SimpleNamespace
+from flask import Blueprint, jsonify
+from flask_jwt_extended import jwt_required, current_user
+from App.controllers import teamMembership as team_membership_controller 
 
-TeamMembership_bp = Blueprint("TeamMembership", __name__)
+teamMembership_views = Blueprint("TeamMembership", __name__)
 
-@TeamMembership_bp.route("/courses/<int:course_id>/membership", methods=["GET"])
-def check_membership(course_id: int):
- 
-    current_user = getattr(check_membership, "current_user", SimpleNamespace(is_authenticated=False, id=None))
-    session = getattr(check_membership, "session", None)
-    
-    try:
-        if not current_user or not current_user.is_authenticated:
-            return jsonify({"error": "Authentication required"}), 401
-        
-        memberships = getattr(session, "memberships", [])
+@teamMembership_views.route("/courses/<string:course_id>/<string:team_id>/membership", methods=["GET"])
+def check_membership(course_id, team_id):
+    user = current_user
+    already_member = team_membership_controller.check_membership(team_id=team_id, user_id=user.id)
 
-        already_member = any(
-            m.user_id == current_user.id and
-            m.course_id == course_id
-            for m in memberships
-        )
+    if already_member:
+        return jsonify({"error": "User already belongs to team"}), 409
 
-        if already_member:
-            return jsonify({
-                "error": "User already belongs to a team in this course"
-            }), 409
+    is_enrolled = any(c.id == course_id for c in user.enrolled_courses)
 
-        enrolled = getattr(session, "enrolled", False)
-        return jsonify({"enrolled": enrolled}), 200
-    finally:
-        if session and hasattr(session, "close"):
-            session.close()
+    return jsonify({"enrolled": is_enrolled}), 200

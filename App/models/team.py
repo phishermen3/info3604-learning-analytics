@@ -9,7 +9,8 @@ class Team(db.Model):
     created_by = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
     
     memberships = db.relationship('TeamMembership', backref='team', lazy=True, cascade="all, delete-orphan")
-    
+    project = db.relationship("Project", backref="team", uselist=False)
+
     def __init__(self, course_id, team_code, created_by):
         self.course_id = course_id
         self.team_code = team_code

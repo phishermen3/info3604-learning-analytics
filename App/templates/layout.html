@@ -15,9 +15,16 @@
         <title>{% block title %}{% endblock %}</title>
 
         <style>
+            @import url('https://fonts.googleapis.com/css?family=Niramit:300,300i,700');
+            
             .material-icons{
                 font-family: 'Material Icons' !important;
                 vertical-align: middle;
+            }
+
+            html{
+                background-color: #1e1e2f;
+                font-family: 'K2D', sans-serif;
             }
 
             nav.navbar, 
@@ -83,6 +90,7 @@
                 height: calc(100vh - 83px); 
                 overflow: hidden;
                 width: 100%;
+                font-family: 'K2D', sans-serif;
             }
 
             .sidebar-wrapper{
@@ -139,17 +147,9 @@
         </nav>
 
         <div class="main">
-            <div class="sidebar-wrapper" id="sidebar">
-                <div class="sidebar-control">
-                    <a href="javascript:void(0)" onclick="toggleSidebar()">
-                        <i class="material-icons" id="toggleIcon">keyboard_double_arrow_left</i>
-                    </a>
-                </div>
-
                 <div class="sidebar-items">
                     {% block sidebar_content %}{% endblock %}
                 </div>
-            </div>
 
             <div class="content">{% block content %}{% endblock %}</div>
         </div>

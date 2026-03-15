@@ -1,7 +1,8 @@
 [
     "Problem Definition",
-    "Knowledge Acquisition",
-    "Knowledge Representation",
-    "System Building",
-    "Deployment"
+    "Data Acquisition and Preparation",
+    "Model Development and Training",
+    "Model Evaluation and Refinement",
+    "Deployment",
+    "Machine Learning Operations"
 ]

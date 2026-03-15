@@ -1,0 +1,197 @@
+{
+    "analysed": {
+        "id": "https://logstack.azurewebsites.net/verbs/analysed",
+        "display": { 
+            "en-US": "analysed" 
+        },
+        "definition": { 
+            "en-US": "Examined data, system behavior, or problem requirements to identify patterns, constraints, or performance characteristics relevant to an intelligent system."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Exploration",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Problem Definition"
+        }
+    },
+    "attempted": {
+        "id": "https://logstack.azurewebsites.net/verbs/attempted",
+        "display": { 
+            "en-US": "attempted" 
+        },
+        "definition": { 
+            "en-US": "Applied a proposed method, algorithm, or approach to solve a problem or achieve a system objective, regardless of final success."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Exploration",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Data Acquisition and Preparation"
+        }
+    },
+    "classified": {
+        "id": "https://logstack.azurewebsites.net/verbs/classified",
+        "display": { 
+            "en-US": "classified" 
+        },
+        "definition": { 
+            "en-US": "Assigned data instances to predefined categories or labels using rules, models, or machine learning techniques."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Exploration",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Data Acquisition and Preparation"
+        }
+    },
+    "demonstrated": {
+        "id": "https://logstack.azurewebsites.net/verbs/demonstrated",
+        "display": { 
+            "en-US": "demonstrated" 
+        },
+        "definition": { 
+            "en-US": "Showed the functionality or effectiveness of an intelligent system through practical execution, examples, or performance evidence."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Testing",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Deployment"
+        }
+    },
+    "derived": {
+        "id": "https://logstack.azurewebsites.net/verbs/derived",
+        "display": { 
+            "en-US": "derived" 
+        },
+        "definition": { 
+            "en-US": "Formulated mathematical expressions, algorithms, or logical relationships from existing principles or observed data."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Data Acquisition and Preparation"
+        }
+    },
+    "developed": {
+        "id": "https://logstack.azurewebsites.net/verbs/developed",
+        "display": { 
+            "en-US": "developed" 
+        },
+        "definition": { 
+            "en-US": "Designed and built components, models, or software solutions forming part of an intelligent system."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Model Development and Training"
+        }
+    },
+    "documented": {
+        "id": "https://logstack.azurewebsites.net/verbs/documented",
+        "display": { 
+            "en-US": "documented" 
+        },
+        "definition": { 
+            "en-US": "Produced structured records describing system design, implementation decisions, processes, or results to support understanding, replication, or evaluation."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Machine Learning Operations"
+        }
+    },
+    "implemented": {
+        "id": "https://logstack.azurewebsites.net/verbs/implemented",
+        "display": { 
+            "en-US": "implemented" 
+        },
+        "definition": { 
+            "en-US": "Translated algorithms, models, or system designs into executable code or operational system components."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Model Development and Training"
+        }
+    },
+    "modeled": {
+        "id": "https://logstack.azurewebsites.net/verbs/modeled",
+        "display": { 
+            "en-US": "modeled" 
+        },
+        "definition": { 
+            "en-US": "Created abstract, mathematical, or computational representations of systems, environments, or data relationships to support analysis, prediction, or system design."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Planning",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Model Development and Training"
+        }
+    },
+    "planned": {
+        "id": "https://logstack.azurewebsites.net/verbs/planned",
+        "display": { 
+            "en-US": "planned" 
+        },
+        "definition": { 
+            "en-US": "Defined objectives, methodologies, resources, and workflows required for intelligent system development or investigation."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Planning",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Problem Definition"
+        }
+    },
+    "predicted": {
+        "id": "https://logstack.azurewebsites.net/verbs/predicted",
+        "display": { 
+            "en-US": "predicted" 
+        },
+        "definition": { 
+            "en-US": "Generated estimated outcomes or future values using data-driven models or computational inference methods."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Planning",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Problem Definition"
+        }
+    },
+    "presented": {
+        "id": "https://logstack.azurewebsites.net/verbs/presented",
+        "display": { 
+            "en-US": "presented" 
+        },
+        "definition": { 
+            "en-US": "Communicated system design, findings, or results using technical explanations, visualizations, or demonstrations to convey understanding or justify outcomes."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Reflection",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Deployment"
+        }
+    },
+    "reflected": {
+        "id": "https://logstack.azurewebsites.net/verbs/reflected",
+        "display": { 
+            "en-US": "reflected" 
+        },
+        "definition": { 
+            "en-US": "Critically evaluated system performance, decisions, or learning outcomes to identify improvements or insights."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Reflection",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Machine Learning Operations"
+        }
+    },
+    "revised": {
+        "id": "https://logstack.azurewebsites.net/verbs/revised",
+        "display": { 
+            "en-US": "revised" 
+        },
+        "definition": { 
+            "en-US": "Modified system components, models, or methodologies based on feedback, testing results, or evaluation findings."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Reflection",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Model Evaluation and Refinement"
+        }
+    },
+    "tested": {
+        "id": "https://logstack.azurewebsites.net/verbs/tested",
+        "display": { 
+            "en-US": "tested" 
+        },
+        "definition": { 
+            "en-US": "Evaluated system functionality, accuracy, or reliability through structured validation procedures, experiments, or datasets."
+        },
+        "extensions": {
+            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Testing",
+            "https://logstack.azurewebsites.net/extensions/problem-step": "Model Evaluation and Refinement"
+        }
+    }
+}

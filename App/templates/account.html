@@ -1,0 +1,70 @@
+{% extends "auth_layout.html" %}
+{% block title %}{{ current_user.user_code }}{% endblock %}
+
+{{ super() }}
+
+{% block form_content %}
+    <h2>Change Password</h2>
+    <form id="changePasswordForm" method="POST" action="/account/change-password">
+        <div class="input-group">
+            <label for="current_password">Current Password</label>
+            <input type="password" name="current_password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+
+        <div class="input-group">
+            <label for="new_password">New Password</label>
+            <input type="password" name="new_password" placeholder="Enter your new password" minlength="8" required>
+        </div>
+
+        <div class="input-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Re-enter your new password" minlength="8" required>
+        </div>
+
+        <button type="submit">Update Password</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        const changePasswordForm = document.getElementById("changePasswordForm");
+        const csrf = getCookie("csrf_access_token");
+
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(changePasswordForm);
+            try{
+                const response = await fetch("/account/change-password", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-CSRF-TOKEN": csrf
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if(result.success){
+                    window.location.href = "/home";
+                }
+                else{
+                    M.toast({
+                        html: result.message, 
+                        classes: 'red rounded',
+                        displayLength: 4000
+                    });
+                }
+            } catch(err){
+                M.toast({html: 'Server error. Please try again.', classes: 'red'});
+            }
+        });
+    </script>
+{% endblock %}

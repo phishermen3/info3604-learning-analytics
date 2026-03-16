@@ -7,6 +7,16 @@ def create_user(user_code, password):
     db.session.commit()
     return newuser
 
+def change_user_password(user, new_password):
+    try:
+        user.set_password(new_password)
+        db.session.add(user)
+        db.session.commit()
+        return True, None
+    except Exception as e:
+        db.session.rollback()
+        return False, str(e)
+
 def get_user_by_code(user_code):
     result = db.session.execute(db.select(User).filter_by(user_code=user_code))
     return result.scalar_one_or_none()

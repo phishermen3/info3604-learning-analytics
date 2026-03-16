@@ -22,11 +22,12 @@
             }
 
             body{
-                background: #1e1e2f;
+                background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), #27293d, #1e1e2f);
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
+                transition: background 0.1s ease;
             }
 
             .login-form{
@@ -179,6 +180,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         
         <script>
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                document.body.style.setProperty('--mouse-x', x + '%');
+                document.body.style.setProperty('--mouse-y', y + '%');
+            });
             M.AutoInit();
 
             {% with messages = get_flashed_messages() %}

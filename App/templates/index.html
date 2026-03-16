@@ -16,7 +16,7 @@
             color: #9e8ff3
         }
 
-        a:hover{
+        .join-link:hover{
             text-decoration: underline;
         }
 
@@ -516,7 +516,7 @@
             <div style="padding:20px">
 
                 <div class="logs-header">
-                    <h6 style="color: #fff"><b>Your Logs</b></h6>
+                    <h6 style="color: #fff"><b>Recorded Logs</b></h6>
 
                     <div class="input-field course-dropdown">
                         <select id="course-select"></select>
@@ -646,6 +646,11 @@
                 <div id="peda-stage" class="stage-row"></div>
                 <div id="stage-definition" class="definition-card" style="display:none; margin-top:10px;"></div>
 
+                <div class="divider" style="margin:25px 0"></div>
+
+                <!-- LIVE LOG PREVIEW -->
+                <div id="live-log-preview" class="definition-card" style="padding-bottom:30px;"></div>
+
                 <div class="right-align">
                     <button type="button" class="submit-btn" onclick="submitLog()">
                         Log Action
@@ -672,6 +677,14 @@
 
         let selectedPedagogicalStage = null;
         let stageDefinitions = {};
+
+        const stageIcons = {
+            "planning": "event_note",
+            "documentation": "description",
+            "construction": "build",
+            "exploration": "explore",
+            "reflection": "insights"
+        };
         
 
         function openForm(){
@@ -794,6 +807,10 @@
 
                 container.appendChild(p);
             });
+
+            document.querySelectorAll('input[name="verb"]').forEach(rb => {
+                rb.addEventListener('change', updateLivePreview);
+            });
         }
 
         function renderStages(containerId, items){
@@ -828,6 +845,8 @@
                 defBox.style.display = "block";
                 defBox.innerHTML = `<b>${value}</b><br>${stepDefinitions[value]}`;
             }
+
+            updateLivePreview();
         }
 
         function setupAutocomplete(){
@@ -847,6 +866,7 @@
                     );
 
                     elem.dataset.key=key;
+                    updateLivePreview();
                 }
             });
         }
@@ -929,7 +949,7 @@
                 container.innerHTML = `
                     <p style="text-align: center; margin-right: 80px;">
                         You are not part of a team yet. 
-                        <a href="#!" onclick="openJoinTeamModal('${currentCourse}')">
+                        <a href="#!" onclick="openJoinTeamModal('${currentCourse}')" class="join-link">
                             Join a team now!
                         </a>
                     </p>
@@ -972,13 +992,13 @@
                 const step = l.step?.toLowerCase() || "";
                 const stage = l.stage?.toLowerCase() || "";
                 const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
-
                 const article = articleFor(activity);
+                const icon = stageIcons[stage] || "edit";
 
                 return `
                 <div class="timeline-container">
                     <div class="timeline-icon">
-                        <i class="material-icons">edit</i>
+                        <i class="material-icons">${icon}</i>
                     </div>
                     <div class="timeline-body">
                         <h6 class="timeline-title">
@@ -1006,6 +1026,17 @@
         function formatDate(isoString) {
             const date = new Date(isoString);
             return date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+        }
+
+        function updateLivePreview() {
+            const verb = document.querySelector('input[name="verb"]:checked')?.nextElementSibling?.textContent.toLowerCase() || "";
+            const activity = document.getElementById("object-search").value.toLowerCase() || "";
+            const step = selectedProblemStep?.toLowerCase() || "";
+            const stage = selectedPedagogicalStage?.toLowerCase() || "";
+
+            const article = articleFor(activity);
+            const sentence = `Final Log: I ${verb} ${article} ${activity} ${step ? `during ${step}` : ""} ${stage ? `in the ${stage} stage` : ""}.`;
+            document.getElementById("live-log-preview").textContent = sentence;
         }
 
 

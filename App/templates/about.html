@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block title %}About Page{% endblock %}
+{% block page %}About Page{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+
+<body>
+
+<header>
+    <h1>About This Research Project</h1>
+    <p>xAPI Learning Analytics Study</p>
+</header>
+
+<main>
+
+    <section>
+        <h2>What Are We Researching?</h2>
+        <p>
+            This project explores the student learning process using 
+            <strong>Experience API (xAPI)</strong>. xAPI allows researchers to capture 
+            meaningful learning activities such as attempts, analyses, reflections, 
+            and problem-solving behaviors across digital learning environments.
+        </p>
+
+        <p>
+            Our goal is to better understand learning patterns, engagement, and how
+            students approach complex academic tasks.
+        </p>
+    </section>
+
+    <section>
+        <h2>Why Does This Matter?</h2>
+        <p>
+            Traditional grading systems only measure final outcomes. This research
+            focuses on the <em>learning process itself</em>, how students learn,
+            not just what score they receive.
+        </p>
+
+        <p>
+            Insights from this study can help improve:
+        </p>
+        <ul>
+            <li>Learning analytics and feedback systems</li>
+            <li>Course design and teaching strategies</li>
+            <li>Student support and personalized learning tools</li>
+            <li>Future educational technologies</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>What We Need From You</h2>
+        <p>
+            As a participant, you will simply use the learning system as part of
+            your normal academic activities. Certain interactions will be recorded
+            as anonymous xAPI learning statements.
+        </p>
+
+        <div class="highlight">
+            <strong>Your participation does NOT require extra work.</strong>
+            We are observing learning interactions, not evaluating you personally.
+        </div>
+    </section>
+
+    <section>
+        <h2>Your Contribution to the Research</h2>
+        <p>
+            Every interaction you make helps researchers understand how students
+            think, experiment, and improve over time. Your participation contributes
+            to building smarter learning systems that can benefit future students.
+        </p>
+
+        <p>
+            Data collected is used strictly for academic research purposes and will
+            be analyzed in aggregated and anonymized form.
+        </p>
+    </section>
+
+    <section>
+        <h2>Privacy and Ethics</h2>
+        <p>
+            Student privacy is important to us. All collected data follows ethical
+            research guidelines. Personal identities are not shared, and results
+            are reported only at a group level.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>2026 xAPI Learning Analytics Research Project - phishermen3</p>
+</footer>
+
+</body>
+</html>
+
+{% endblock %}

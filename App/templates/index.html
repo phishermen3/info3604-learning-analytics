@@ -9,25 +9,52 @@
         #page-layout{
             display:flex;
             height:100%;
+            overflow: hidden;
+        }
+
+        a {
+            color: #9e8ff3
+        }
+
+        .join-link:hover{
+            text-decoration: underline;
         }
 
         /* LOG LIST */
         #logs-panel{
             width:100%;
+            padding-bottom: 100px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
             transition:all .3s ease;
         }
 
         /* FORM PANEL */
         #log-form-panel{
             width:0;
-            overflow-y:auto;
+            margin-bottom: 100px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
             transition:all .3s ease;
+        }
+
+        #logs-panel::-webkit-scrollbar,
+        #log-form-panel::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+
+        .content, #logs-panel, #log-form-panel {
+            scroll-behavior: smooth;
         }
 
         .form-header{
             display:flex;
             justify-content:space-between;
             align-items:center;
+            padding-bottom: 15px;
         }
 
         /* when form open */
@@ -42,15 +69,10 @@
 
         .form-card{
             max-width:700px;
-        }
-
-        .form-card{
-            max-width:700px;
             margin:auto;
-            background:#fafafa;
-            border:1px solid #ddd;
+            background-color: #27293d;
+            border-radius: 15px;
             padding:25px;
-            border-radius:12px;
         }
 
         .stage-title{
@@ -75,10 +97,6 @@
             align-items:center;
         }
 
-        .course-dropdown{
-            width:275px;
-        }
-
         /* stage buttons */
         .stage-row{
             display:flex;
@@ -99,11 +117,11 @@
             color:white;
         }
 
-        .course-dropdown input.select-dropdown {
-            color: #fff;
+        .course-dropdown{
+            width:275px;
         }
 
-        .course-dropdown .caret {
+        .course-dropdown input.select-dropdown {
             color: #fff;
         }
 
@@ -119,7 +137,7 @@
 
         .add-log-node{
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: flex-start;
             gap: 15px;
             margin-top: 50px;
@@ -129,8 +147,8 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #1d8cf8;
-            color: white;
+            background: #9e8ff3;
+            color: black;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -143,7 +161,15 @@
 
         .add-log-btn:hover{
             transform:scale(1.1);
-            background:#1d8cf8;
+        }
+
+        .add-log-label{
+            margin-left: 15px;
+            color: #b8b9c3;
+            font-size: 1.3rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center; /* vertically align with button */
         }
 
         .timeline{
@@ -161,6 +187,10 @@
             width:4px;
             height:100%;
             background:#222a42;
+        }
+
+        .timeline.hide-line:before{
+            display: none;
         }
 
         .timeline-container{
@@ -186,7 +216,7 @@
         .timeline-body{
             background:#27293d;
             border-radius:6px;
-            padding:15px;
+            padding:15px 15px 15px 30px;
             color: white;
             box-shadow: 1px 3px 9px rgba(0,0,0, .1);
         }
@@ -204,16 +234,272 @@
 
         .timeline-title{
             margin-bottom:8px;
+            font-weight: 300;
+            line-height: 1.5;
+            opacity: .8;
         }
 
         .timeline-subtitle{
             font-size:12px;
             color:#888;
             margin-top:10px;
+            font-style: italic;
         }
 
         .grey-text{
             margin:0px;
+        }
+
+        p {
+            color: #b8b9c3;
+        }
+
+        h5, h6{
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .helper-text, span{
+            color: #b8b9c3;
+        }
+
+        .divider {
+            background-color:#49495c
+        }
+
+        [type="radio"]:checked + span:before {
+            border: 2px solid #9e8ff3;
+        }
+
+        [type="radio"]:checked + span:after {
+            background-color: #9e8ff3;
+            border: 2px solid #9e8ff3;
+        }
+
+        [type="radio"]:not(:checked) + span:before {
+            border: 2px solid #6f6f7e;
+        }
+
+        [type="radio"]:checked + span {
+            color: #9e8ff3;
+            font-weight: 200;
+        }
+
+        /* search icon */
+        .input-field .prefix, .input-field .prefix.active{
+            color: #9e8ff3;
+        }
+
+        .input-field input[type="text"] {
+            color: #b8b9c3;
+            border-bottom: 1px solid #9e8ff3 !important;
+        }
+
+        /* search underline */
+        .input-field input[type="text"]:focus {
+            border-bottom: #9e8ff3 !important;
+            box-shadow: 0 1px 0 0 #9e8ff3 !important;
+        }
+
+        /* remove label */
+        .input-field label {
+            display: none !important;
+        }
+
+        input::placeholder {
+            color: #6f6f7e; /* placeholder text color */
+        }
+
+        .autocomplete-content .highlight {
+            color: #9e8ff3 !important; /* default black */
+        }
+
+        /* basic pill shape + raised */
+        .stage-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            margin: 5px 5px 5px 0;
+            border-radius: 25px;          /* pill shape */
+            background-color: #232436;    /* idle background */
+            color: #b8b9c3;                  /* text color */
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* slight raised effect */
+            user-select: none;
+            border-color: #232436;
+        }
+
+        /* hover effect */
+        .stage-btn:hover {
+            background-color: #9e8ff3;
+            color: black;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* active press-down effect */
+        .stage-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* selected / active button */
+        .stage-btn.active {
+            background-color: #9e8ff3;  /* your accent color */
+            color: black;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .definition-card {
+            color: #b8b9c3;
+            background-color: #27293d;
+            border: 0px solid #6f6f7e;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        /* default submit button style */
+        .submit-btn {
+            padding: 12px 28px;                  /* slightly bigger for emphasis */
+            margin: 10px 0 10px 0;               /* clean vertical spacing */
+            border-radius: 25px;                 
+            background-color: #9e8ff3;           /* purple by default */
+            color: black;                        
+            font-size: 1.2rem;                     /* slightly larger text */
+            font-weight: 600;                     /* bold to stand out */
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.25); /* a little deeper shadow */
+            border: 1px solid #9e8ff3;
+        }
+
+        /* hover: subtle glow/shadow effect */
+        .submit-btn:hover {
+            background-color: #a88ffb;           /* slightly lighter purple on hover */
+            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        }
+
+        /* press-down effect */
+        .submit-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+        }
+
+        .submit-btn:focus {
+            background-color: #9e8ff3 !important;   /* keep purple */
+            color: black !important;                /* text color */
+        }
+
+        i {
+            color: white;
+        }
+
+        #team-modal {
+            margin:auto;
+            background-color: #27293d;
+            max-width: 600px;
+            border-radius: 15px;
+            padding:25px;
+            overflow: visible !important;
+        }
+
+        .modal-content{
+            padding: 0px !important;
+        }
+
+        /* container */
+        .toggle-buttons {
+            position: relative;
+            display: inline-flex;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #232436;
+            border-color: #232436;
+        }
+
+        /* the sliding highlight */
+        .toggle-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;              /* half width because 2 buttons */
+            height: 100%;
+            background-color: #9e8ff3;
+            border-radius: 15px;
+            transition: left 0.25s ease;
+            z-index: 0;
+        }
+
+        /* buttons */
+        .toggle-buttons a.btn-flat {
+            flex: 1 1 auto;      /* allow the button to expand */
+            white-space: nowrap; /* prevent text from wrapping */
+            position: relative;
+            padding: 0 25px;             /* remove vertical padding, we’ll use flex for centering */
+            margin: 3px 0px;
+            color: #b8b9c3;
+            text-decoration: none;
+            z-index: 1;
+            cursor: pointer;
+            flex: 1;
+            
+            display: flex;               /* flex for centering */
+            align-items: center;         /* vertical center */
+            justify-content: center;     /* horizontal center */
+            height: 40px;                /* set a fixed height for consistency */
+            
+            transition: color 0.25s ease;
+            font-weight: 500;            /* optional: makes text stand out more */
+            font-size: 1rem; 
+        }
+
+        /* active button text color */
+        .toggle-buttons a.btn-flat.active {
+            color: black;
+        }
+
+        .toggle-buttons-wrapper {
+            margin-bottom: 60px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 0;
+            top: 10px;
+            cursor: pointer;
+        }
+
+        .copy-btn i {
+            color: #9e8ff3; /* match your accent colour */
+            transition: transform 0.15s ease;
+        }
+
+        .copy-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .verb-tooltip {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            background: #4f537b;
+            color: #fff;
+            margin-top: 6px;
+            padding: 6px 10px;
+            border-radius: 5px;
+            width: 400px;
+            font-size: 0.9rem;
+            font-weight: 100;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 100;
+            white-space: normal;
+            text-align: center;
+        }
+
+        p.col.s4 {
+            position: relative;         /* important for tooltip positioning */
+            cursor: pointer;
         }
     </style>
 {% endblock %}
@@ -230,7 +516,7 @@
             <div style="padding:20px">
 
                 <div class="logs-header">
-                    <h6 style="color: #fff"><b>Your Logs</b></h6>
+                    <h6 style="color: #fff"><b>Recorded Logs</b></h6>
 
                     <div class="input-field course-dropdown">
                         <select id="course-select"></select>
@@ -241,20 +527,30 @@
                     <div class="add-log-btn" onclick="openForm()">
                         <i class="material-icons">add</i>
                     </div>
+
+                    <span class="add-log-label">
+                        Add new log
+                    </span>
                 </div>
 
                 <div id="timeline-container" class="timeline"></div>
 
                 <div id="team-modal" class="modal">
                     <div class="modal-content">
-                        <h5>Project Team Setup</h5>
+                        <div class="form-header">
+                            <h5>Project Team Setup</h5>
+
+                            <a class="modal-close btn-flat">
+                                <i class="material-icons">close</i>
+                            </a>
+                        </div>
 
                         <!-- Toggle -->
-                        <div class="row">
-                            <div class="col s12 center">
-                                <a href="#!" id="join-tab" class="btn-flat active" onclick="showJoinTeam()">Join Team</a>
-                                |
-                                <a href="#!" id="create-tab" class="btn-flat" onclick="showCreateTeam()">Create Team</a>
+                        <div class="row center toggle-buttons-wrapper">
+                            <div class="toggle-buttons">
+                                <div class="toggle-indicator"></div> <!-- the sliding highlight -->
+                                <a href="#!" id="join-tab" class="btn-flat active" onclick="toggleTab('join')">Join Team</a>
+                                <a href="#!" id="create-tab" class="btn-flat" onclick="toggleTab('create')">Create Team</a>
                             </div>
                         </div>
 
@@ -269,7 +565,7 @@
                             </div>
 
                             <div class="center">
-                                <button class="btn" onclick="joinTeamByCode()">
+                                <button class="submit-btn" onclick="joinTeamByCode()">
                                     Join Team
                                 </button>
                             </div>
@@ -280,37 +576,29 @@
                         <div id="create-team-panel" style="display:none;">
 
                             <p>Create a new team for this course.</p>
-
+                            
                             <div class="input-field">
                                 <input id="generated-team-code" type="text" readonly>
                                 <label for="generated-team-code">Your Team Code</label>
+
+                                <a href="#!" onclick="copyTeamCode()" class="copy-btn">
+                                    <i class="material-icons">content_copy</i>
+                                </a>
                             </div>
 
-                            <div class="center" style="margin-bottom:15px">
-                                <button class="btn grey lighten-1 black-text" onclick="copyTeamCode()">
-                                    Copy Code
-                                </button>
-                            </div>
-
-                            <p class="grey-text center">
+                            <p>
                                 Share this code with your teammates.
                             </p>
 
                             <div class="center" style="margin-top:20px">
-                                <button class="btn black waves-effect" onclick="generateTeamCode()">
+                                <button class="submit-btn" onclick="generateTeamCode()">
                                     Generate Team Code
                                 </button>
                             </div>
 
                         </div>
-
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-close btn-flat">Cancel</a>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -319,36 +607,52 @@
             <div class="form-card">
 
                 <div class="form-header">
-                    <h5>Add New Action Log</h5>
+                    <h5>New Action Log</h5>
 
                     <a onclick="closeForm()" class="btn-flat">
                         <i class="material-icons">close</i>
                     </a>
                 </div>
                 
-                <!-- OBJECT-VERB SELECTION-->
-                <h6><b>Object</b></h6>
+                <!-- OBJECT SELECTION-->
+                <h6><b>What were you working on?</b></h6>
+                <p class="helper-text">Search and select the item you worked on.</p>
                 <div class="input-field">
                     <i class="material-icons prefix">search</i>
-                    <input id="object-search" type="text" class="autocomplete">
+                    <input id="object-search" type="text" class="autocomplete" placeholder="Search activity">
                     <label for="object-search">Search activity</label>
                 </div>
 
                 <div class="divider" style="margin:25px 0"></div>
-
-                <h6><b>Verb</b></h6>
+                
+                <!-- VERB SELECTION-->
+                <h6><b>What did you do?</b></h6>
+                <p class="helper-text">Choose the action you performed on your selected item.</p>
                 <div id="verb-section" class="row"></div>
 
-                <!-- PEDAGOGICAL STAGE SELECTION-->
-                <h6><b>Pedagogical Stage</b></h6>
-                <div id="peda-stage" class="stage-row"></div>
+                <div class="divider" style="margin:25px 0"></div>
 
                 <!-- PROBLEM STEP SELECTION -->
-                <h6><b>Problem Step</b></h6>
+                <h6><b>Which project phase were you in?</b></h6>
+                <p class="helper-text">Select the phase of the project you were working in.</p>
                 <div id="step-stage" class="stage-row"></div>
+                <div id="step-definition" class="definition-card" style="display:none; margin-top:10px;"></div>
+                
+                <div class="divider" style="margin:25px 0"></div>
+
+                <!-- PEDAGOGICAL STAGE SELECTION-->
+                <h6><b>Which learning stage best fits your work?</b></h6>
+                <p class="helper-text">Select the stage that that best represents what you did.</p>
+                <div id="peda-stage" class="stage-row"></div>
+                <div id="stage-definition" class="definition-card" style="display:none; margin-top:10px;"></div>
+
+                <div class="divider" style="margin:25px 0"></div>
+
+                <!-- LIVE LOG PREVIEW -->
+                <div id="live-log-preview" class="definition-card" style="padding-bottom:30px;"></div>
 
                 <div class="right-align">
-                    <button type="button" class="btn black waves-effect waves-light" onclick="submitLog()">
+                    <button type="button" class="submit-btn" onclick="submitLog()">
                         Log Action
                     </button>
                 </div>
@@ -367,8 +671,20 @@
 
         let verbs = {};
         let activities = {};
-        let selectedPedagogicalStage = null;
+
         let selectedProblemStep = null;
+        let stepDefinitions = {};
+
+        let selectedPedagogicalStage = null;
+        let stageDefinitions = {};
+
+        const stageIcons = {
+            "planning": "event_note",
+            "documentation": "description",
+            "construction": "build",
+            "exploration": "explore",
+            "reflection": "insights"
+        };
         
 
         function openForm(){
@@ -428,8 +744,12 @@
 
             verbs = data.verbs;
             activities = data.activities;
+
             problem_steps = data.problem_steps;
+            stepDefinitions = data.step_definitions;
+
             stages = data.stages;
+            stageDefinitions = data.stage_definitions;
 
             console.log(problem_steps)
 
@@ -438,29 +758,59 @@
 
             renderStages("peda-stage", stages);
             renderStages("step-stage", problem_steps);
+
+            // Reset selection and hide definitions when switching courses
+            selectedPedagogicalStage = null;
+            selectedProblemStep = null;
+
+            const stageDefBox = document.getElementById("stage-definition");
+            const stepDefBox = document.getElementById("step-definition");
+            if(stageDefBox) stageDefBox.style.display = "none";
+            if(stepDefBox) stepDefBox.style.display = "none";
+
+            document.querySelectorAll("#peda-stage .stage-btn").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll("#step-stage .stage-btn").forEach(btn => btn.classList.remove("active"));
         }
 
-        function renderVerbs(){
+        function renderVerbs() {
             const container = document.getElementById("verb-section");
-            let html = "";
+            container.innerHTML = ""; // clear previous
 
             if (!verbs || Object.keys(verbs).length === 0) {
-                container.innerHTML = "<p class='grey-text'>No verbs found</p>";
+                container.innerHTML = "<p>No verbs found</p>";
                 return;
             }
 
-            Object.entries(verbs).forEach(([key, verb]) => {
-                html += `
-                    <p class="col s4">
-                        <label>
-                            <input name="verb" type="radio" value="${key}">
-                            <span>${verb.display["en-US"]}</span>
-                        </label>
-                    </p>
+            Object.entries(verbs).forEach(([key, verb], index) => {
+                const pId = `verb-${index}`;
+                const definition = verb.definition?.["en-US"] || "";
+
+                // create <p> element
+                const p = document.createElement("p");
+                p.className = "col s4";
+                p.id = pId;
+                p.style.position = "relative";
+
+                // inner HTML
+                p.innerHTML = `
+                    <label>
+                        <input name="verb" type="radio" value="${key}">
+                        <span>${verb.display["en-US"]}</span>
+                    </label>
+                    <div class="verb-tooltip"><b>${definition}</b></div>
                 `;
+
+                // attach hover events directly
+                const tooltip = p.querySelector(".verb-tooltip");
+                p.addEventListener("mouseenter", () => tooltip.style.display = "block");
+                p.addEventListener("mouseleave", () => tooltip.style.display = "none");
+
+                container.appendChild(p);
             });
 
-            container.innerHTML = html;
+            document.querySelectorAll('input[name="verb"]').forEach(rb => {
+                rb.addEventListener('change', updateLivePreview);
+            });
         }
 
         function renderStages(containerId, items){
@@ -482,11 +832,21 @@
 
             if(group === "peda-stage"){
                 selectedPedagogicalStage = value;
+
+                const defBox = document.getElementById("stage-definition");
+                defBox.style.display = "block";
+                defBox.innerHTML = `<b>${value}</b><br>${stageDefinitions[value]}`;
             }
 
             if(group === "step-stage"){
                 selectedProblemStep = value;
+
+                const defBox = document.getElementById("step-definition");
+                defBox.style.display = "block";
+                defBox.innerHTML = `<b>${value}</b><br>${stepDefinitions[value]}`;
             }
+
+            updateLivePreview();
         }
 
         function setupAutocomplete(){
@@ -506,6 +866,7 @@
                     );
 
                     elem.dataset.key=key;
+                    updateLivePreview();
                 }
             });
         }
@@ -570,9 +931,11 @@
             if(!currentCourse) return;
 
             const container = document.getElementById("timeline-container");
-            
+            const timeline = document.getElementById("timeline-container");
+            const addBtn = document.querySelector(".add-log-btn");
+
             // show loading state immediately
-            container.innerHTML = "<p class='grey-text center'>Loading...</p>";
+            container.innerHTML = `<p style="text-align: center;">Loading...</p>`;
 
             // Fetch course info (team and project)
             const infoResp = await fetch(`/api/course-info?course_id=${currentCourse}`);
@@ -584,24 +947,32 @@
             // If user is enrolled but not part of a team
             if(currentTeamId === null){
                 container.innerHTML = `
-                    <p class='grey-text center'>
+                    <p style="text-align: center; margin-right: 80px;">
                         You are not part of a team yet. 
-                        <a href="#!" onclick="openJoinTeamModal('${currentCourse}')">
+                        <a href="#!" onclick="openJoinTeamModal('${currentCourse}')" class="join-link">
                             Join a team now!
                         </a>
                     </p>
                 `;
 
                 // hide the "Add Log" button
-                const addBtn = document.querySelector("a[onclick='openForm()']");
-                if(addBtn){
+                timeline.classList.add("hide-line");
+                const addBtn = document.querySelector(".add-log-btn");
+                const addLabel = document.querySelector(".add-log-label");
+                if(addBtn && addLabel){
                     addBtn.style.display = "none";
+                    addLabel.style.display = "none";
                 }
+                return;
+
             } else {
                 // show "Add Log" button
-                const addBtn = document.querySelector("a[onclick='openForm()']");
-                if(addBtn){
-                    addBtn.style.display = "block";
+                timeline.classList.remove("hide-line");
+                const addBtn = document.querySelector(".add-log-btn");
+                const addLabel = document.querySelector(".add-log-label");
+                if(addBtn && addLabel){
+                    addBtn.style.display = "flex";
+                    addLabel.style.display = "flex";
                 }
             }
 
@@ -609,34 +980,64 @@
             const response = await fetch(`/logs?course=${currentCourse}`);
             const logs = await response.json();
 
-            if(logs.length===0){
-                container.innerHTML="<p class='grey-text center'>No logs</p>";
+            if(logs.length===0 && currentTeamId !== null){
+                container.innerHTML=`<p style="text-align: center;">No logs</p>`;
                 return;
             }
             
             // Render logs
-            container.innerHTML = logs.map(l => `
+            container.innerHTML = logs.map(l => {
+                const verb = l.verb_name?.toLowerCase() || "";
+                const activity = l.activity_name?.toLowerCase() || "";
+                const step = l.step?.toLowerCase() || "";
+                const stage = l.stage?.toLowerCase() || "";
+                const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
+                const article = articleFor(activity);
+                const icon = stageIcons[stage] || "edit";
+
+                return `
                 <div class="timeline-container">
-
                     <div class="timeline-icon">
-                        <i class="material-icons">edit</i>
+                        <i class="material-icons">${icon}</i>
                     </div>
-
                     <div class="timeline-body">
                         <h6 class="timeline-title">
-                            I ${l.verb_name} a ${l.activity_name}
+                            I ${verb} ${article} ${activity}
+                            ${step ? `during ${step}` : ""}
+                            ${stage ? `in the <b>${stage}</b> stage` : ""}.
                         </h6>
-
-                        <div class="timeline-subtitle"></div>
+                        <div class="timeline-subtitle">${timestamp}</div>
                     </div>
-
                 </div>
-            `).join("");
+                `;
+            }).join("");
         }
 
         document.addEventListener("DOMContentLoaded", () =>{
             loadCourses();
         });
+
+        function articleFor(word) {
+            if (!word) return "a";
+            const first = word.trim()[0].toLowerCase();
+            return ["a","e","i","o","u"].includes(first) ? "an" : "a";
+        }
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+        }
+
+        function updateLivePreview() {
+            const verb = document.querySelector('input[name="verb"]:checked')?.nextElementSibling?.textContent.toLowerCase() || "";
+            const activity = document.getElementById("object-search").value.toLowerCase() || "";
+            const step = selectedProblemStep?.toLowerCase() || "";
+            const stage = selectedPedagogicalStage?.toLowerCase() || "";
+
+            const article = articleFor(activity);
+            const sentence = `Final Log: I ${verb} ${article} ${activity} ${step ? `during ${step}` : ""} ${stage ? `in the ${stage} stage` : ""}.`;
+            document.getElementById("live-log-preview").textContent = sentence;
+        }
 
 
         function showJoinTeam(){
@@ -741,6 +1142,24 @@
             const modals = document.querySelectorAll(".modal");
             M.Modal.init(modals);
         });
+
+        function toggleTab(tab) {
+            const joinBtn = document.getElementById("join-tab");
+            const createBtn = document.getElementById("create-tab");
+            const indicator = document.querySelector(".toggle-indicator");
+
+            if(tab === 'join'){
+                joinBtn.classList.add("active");
+                createBtn.classList.remove("active");
+                indicator.style.left = '0';
+                showJoinTeam();  // your existing function
+            } else {
+                createBtn.classList.add("active");
+                joinBtn.classList.remove("active");
+                indicator.style.left = '50%';
+                showCreateTeam(); // your existing function
+            }
+        }
 
     </script>
 {% endblock %}

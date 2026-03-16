@@ -158,14 +158,17 @@ def get_logs(user_code, course_id):
                 continue
 
             exts = getattr(stmt.context, "extensions", {})
-            if not exts or f'{LOGSTACK_BASE}/extensions/pedagogical-stage' not in exts:
-                #return {"error": "Statement missing pedagogical stage"}, 500
-                continue
+            stage = exts.get(f'{LOGSTACK_BASE}/extensions/pedagogical-stage', None)
+            step = exts.get(f'{LOGSTACK_BASE}/extensions/problem-step', None)
+
 
             try:
                 results.append({
                     "verb_name": stmt.verb.display["en-US"],
-                    "activity_name": stmt.object.definition.name["en-US"]
+                    "activity_name": stmt.object.definition.name["en-US"],
+                    "stage": stage,
+                    "step": step,
+                    "timestamp": getattr(stmt, "timestamp", None) 
                 })
             except (AttributeError, KeyError):
                 return {"error": "Statement malformed"}, 500

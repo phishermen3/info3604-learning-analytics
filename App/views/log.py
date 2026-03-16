@@ -28,9 +28,9 @@ def send_statement():
     user_code = current_user.user_code
 
     statement, code = create_log(
-        user_code, 
+        user_code,
         data.get("course_id"),
-        data.get("verb_name"), 
+        data.get("verb_name"),
         data.get("activity_name"),
         data.get("team_id"),
         data.get("project_id"),
@@ -40,14 +40,15 @@ def send_statement():
 
     if code != 201:
         return jsonify(statement), code
-        
+
     success, error = send_to_lrs(statement)
-    
+
     if not success:
         current_app.logger.error(f"Error statement not sent: {error}")
         return jsonify({"error": error}), 500
-    
+
     return jsonify(statement), code
+
 
 @log_views.route('/logs', methods=['GET'])
 @jwt_required()
@@ -55,7 +56,7 @@ def get_statements():
     course_id = request.args.get("course")
     if not course_id:
         return jsonify({"error": "Course ID required"}), 400
-    
+
     logs, code = get_logs(current_user.user_code, course_id)
     return jsonify(logs), code
 
@@ -67,11 +68,18 @@ def get_api_data():
 
     verbs = registry.get("verbs", {})
     activities = registry.get("activities", {})
-    problem_steps = registry.get("problem_steps", {})
-    stages = registry.get("stages", {})
 
-    return jsonify({"verbs": verbs, "activities": activities, 
-                    "problem_steps": problem_steps, "stages": stages})
+    problem_steps = registry.get("problem_steps", {})
+    problem_step_names = list(problem_steps.keys())
+    step_definitions = {k: v["definition"] for k, v in problem_steps.items()}
+
+    stages = registry.get("stages", {})
+    stage_names = list(stages.keys())
+    stage_definitions = {k: v["definition"] for k, v in stages.items()}
+
+    return jsonify({"verbs": verbs, "activities": activities,
+                    "problem_steps": problem_step_names, "step_definitions": step_definitions,
+                    "stages": stage_names, "stage_definitions": stage_definitions})
 
 @log_views.route("/csrf-token", methods=["GET"])
 @jwt_required(locations=["cookies"])

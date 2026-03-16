@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="icon" href="/static/logo-favicon.png" type="image/png">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -19,15 +20,15 @@
                 padding: 0;
                 margin: 0;
                 box-sizing: border-box;
-                font-family: 'Poppins', sans-serif;
             }
 
             body{
-                background: #f5f6f8;
+                background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), #27293d, #1e1e2f);
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
+                transition: background 0.1s ease;
             }
 
             .login-form{
@@ -46,6 +47,13 @@
                 font-weight: 400;
                 margin-bottom: 30px;
                 width: 100%;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 800;
+                color: white;
+            }
+
+            .logo-accent {
+                color: #9e8ff3;
             }
 
             .login-form h2{
@@ -72,7 +80,7 @@
 
             .input-group label{
                 display: block;
-                color: #667;
+                color: #b8b9c3;
                 font-size: 13px;
                 margin-bottom: 8px;
                 margin-left: 5px;
@@ -82,8 +90,8 @@
 
             .login-form input[type="text"],
             .login-form input[type="password"]{
-                background: #f9f9f9 !important;
-                border: 1px solid #e0e0e0 !important;
+                background: #1e1e2f !important;
+                border: 1px solid #1e1e2f !important;
                 border-radius: 30px !important;
                 padding: 0 20px !important;
                 height: 48px !important;
@@ -94,30 +102,42 @@
                 transition: 0.3s ease;
             }
 
+            .login-form input::placeholder {
+                color: #6f6f7e;
+                opacity: 1;    
+            }
+
             .login-form input:focus{
-                border: 1px solid #000 !important;
+                border: 1px solid #6f6f7e !important;
                 background: #fff !important;
             }
 
             .checkbox-container{
+                display: flex;
+                align-items: center;
+                gap: 10px;
                 margin: 15px 0 25px 5px;
             }
             
             [type="checkbox"]+span:not(.lever){
                 font-size: 14px;
-                color: #555;
+                color: #b8b9c3;
+            }
+
+            [type="checkbox"].filled-in:not(:checked) + span:before {
+                border: 2px solid #27293d !important;
             }
 
             [type="checkbox"].filled-in:checked+span:not(.lever):after{
-                border: 1px solid #000 !important;
-                background-color: #000 !important;
+                border: 1px solid #9e8ff3 !important;
+                background-color: #9e8ff3 !important;
             }
 
             .login-form button{
                 font-size: 16px;
                 color: #fff;
                 width: 100%;
-                background: #000;
+                background: #9e8ff3;
                 border: none;
                 padding: 12px;
                 font-weight: 600;
@@ -128,7 +148,7 @@
             }
 
             .login-form button:hover{
-                background: #333;
+                background: #7467c0;
             }
 
             p.account{
@@ -139,7 +159,7 @@
             }
 
             p.account a{
-                color: #000;
+                color: #9e8ff3;
                 font-weight: 600;
             }
 
@@ -168,7 +188,7 @@
 
     <body>
         <div class="login-form">
-            <h1>Project Logger</h1>  
+            <h1>Project <span class="logo-accent">Logger</span></h1>  
             <div class="content">
                 {% block form_content %}{% endblock %}
             </div>
@@ -179,6 +199,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         
         <script>
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                document.body.style.setProperty('--mouse-x', x + '%');
+                document.body.style.setProperty('--mouse-y', y + '%');
+            });
             M.AutoInit();
 
             {% with messages = get_flashed_messages() %}

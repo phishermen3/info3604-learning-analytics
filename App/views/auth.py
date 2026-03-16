@@ -9,7 +9,7 @@ from flask_jwt_extended import (
     decode_token
 )
 
-from.index import index_views
+from .log import log_views
 
 from App.controllers import (
     login,
@@ -34,7 +34,7 @@ def signup_page():
 @auth_views.route('/identify', methods=['GET'])
 @jwt_required()
 def identify_page():
-    return render_template('message.html', title="Identify", message=f"You are logged in as {current_user.id}")
+    return render_template('message.html', title="Identify", message=f"You are logged in as {current_user.user_code}")
 
 @auth_views.route('/signup', methods=['POST'])
 def signup_action():    
@@ -66,7 +66,7 @@ def login_action():
         flash('Login failed')
         return redirect(url_for('auth_views.login_page'))
     flash('Login successful')
-    response = redirect(url_for('index_views.home'))
+    response = redirect(url_for('log_views.dashboard'))
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
     return response

@@ -75,6 +75,8 @@
                 background-color: #f5f5f5;
             }
 
+            .logout-icon,
+            .account-icon{
             .btn-nav {
                 display: inline-block;
                 padding: 0 20px 0 20px;
@@ -120,7 +122,8 @@
                 color: #9e8ff3; /* Logger in purple */
             }
 
-            .logout-icon{
+            .logout-icon,
+            .account-icon{
                 color: #000;
                 background-color: transparent !important;
                 height: 80px;
@@ -182,12 +185,13 @@
     <body>
         <nav class="navbar">
             <div class="nav-wrapper">
-                <a href="/app" class="logo left">
+                <a href="/home" class="logo left">
                     Project <span class="logo-accent">Logger</span>
                 </a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a href="#/app" class="btn-nav">Action Logs</a></li>
                     <li><a href="#" class="btn-nav">About</a></li>
+                    <li><a href="/account" class="account-icon"><i class="material-icons">account_circle</i></a></li>
                     <li><a href="/logout" class="logout-icon"><i class="material-icons">logout</i></a></li>
                 </ul>
             </div>

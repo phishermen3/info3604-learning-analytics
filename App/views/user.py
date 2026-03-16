@@ -1,40 +1,53 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
-from flask_jwt_extended import jwt_required, current_user as jwt_current_user
-
-from.index import index_views
-
+from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from .log import log_views
+from .auth import auth_views
+from App.models import User
 from App.controllers import (
-    create_user,
-    get_all_users,
-    get_all_users_json,
+    change_user_password,
     jwt_required
 )
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
-@user_views.route('/users', methods=['GET'])
-def get_user_page():
-    users = get_all_users()
-    return render_template('users.html', users=users)
+@user_views.route('/account', methods=['GET'])
+@jwt_required()
+def account_page():
+    identity = get_jwt_identity()
+    user = User.query.get(identity)
+    if not user:
+        flash("User session expired. Please log in again.")
+        return redirect(url_for('auth_views.login'))
+    
+    return render_template('account.html', current_user=user)
 
-@user_views.route('/users', methods=['POST'])
-def create_user_action():
+@user_views.route('/account/change-password', methods=['POST'])
+@jwt_required(locations=["cookies"])
+def change_password_action():
     data = request.form
-    flash(f"User {data['username']} created!")
-    create_user(data['username'], data['password'])
-    return redirect(url_for('user_views.get_user_page'))
-
-@user_views.route('/api/users', methods=['GET'])
-def get_users_action():
-    users = get_all_users_json()
-    return jsonify(users)
-
-@user_views.route('/api/users', methods=['POST'])
-def create_user_endpoint():
-    data = request.json
-    user = create_user(data['username'], data['password'])
-    return jsonify({'message': f"user {user.username} created with id {user.id}"})
-
-@user_views.route('/static/users', methods=['GET'])
-def static_user_page():
-  return send_from_directory('static', 'static-user.html')
+    identity = get_jwt_identity()
+    user = User.query.get(identity)
+    if not user:
+        flash("User session expired. Please log in again.")
+        return redirect(url_for('auth_views.login'))
+        
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+    confirm = data.get('confirm_password')
+    
+    if not user.check_password(current_password):
+        return jsonify({"success": False, "message": "Current Password is Incorrect"}), 400
+    
+    if not new_password or len(new_password) < 8:
+        return jsonify({"success": False, "message": "Password must be at least 8 characters long"}), 400
+    
+    if new_password != confirm:
+        return jsonify({"success": False, "message": "Passwords do not match"}), 400
+    
+    success, error = change_user_password(user, new_password)
+    
+    if success:
+        flash("Password updated!")
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "message": error}), 500

@@ -1,7 +1,17 @@
-[
-    "Problem Definition",
-    "Knowledge Acquisition",
-    "Knowledge Representation",
-    "System Building",
-    "Deployment"
-]
+{
+    "Problem Definition": {
+        "definition": ""
+    },
+    "Data Acquisition and Preparation": {
+        "definition": ""
+    },
+    "Model Development and Training": {
+        "definition": ""
+    },
+    "Model Evaluation and Refinement": {
+        "definition": ""
+    },
+    "Deployment": {
+        "definition": ""
+    }
+}

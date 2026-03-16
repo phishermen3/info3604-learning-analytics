@@ -67,11 +67,18 @@ def get_api_data():
 
     verbs = registry.get("verbs", {})
     activities = registry.get("activities", {})
+
     problem_steps = registry.get("problem_steps", {})
+    problem_step_names = list(problem_steps.keys())
+    step_definitions = {k: v["definition"] for k, v in problem_steps.items()}
+
     stages = registry.get("stages", {})
+    stage_names = list(stages.keys())
+    stage_definitions = {k: v["definition"] for k, v in stages.items()}
 
     return jsonify({"verbs": verbs, "activities": activities, 
-                    "problem_steps": problem_steps, "stages": stages})
+                    "problem_steps": problem_step_names, "step_definitions": step_definitions,
+                    "stages": stage_names, "stage_definitions": stage_definitions})
 
 @log_views.route("/csrf-token", methods=["GET"])
 @jwt_required(locations=["cookies"])

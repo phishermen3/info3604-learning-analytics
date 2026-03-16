@@ -3,6 +3,27 @@
 
 {{ super() }}
 
+{% block styles %}
+    <style>
+        .back-btn-container{
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn{
+            color: #9e8ff3;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-btn:hover{
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+    </style>
+{% endblock %}
+
 {% block form_content %}
     <h2>Change Password</h2>
     <form id="changePasswordForm" method="POST" action="/account/change-password">
@@ -23,6 +44,10 @@
 
         <button type="submit">Update Password</button>
     </form>
+
+    <div class="back-btn-container">
+        <a href="javascript:history.back()" class="back-btn">Go Back</a>
+    </div>
 {% endblock %}
 
 {% block scripts %}

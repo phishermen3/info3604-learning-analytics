@@ -16,6 +16,10 @@
             color: #9e8ff3
         }
 
+        a:hover{
+            text-decoration: underline;
+        }
+
         /* LOG LIST */
         #logs-panel{
             width:100%;
@@ -212,7 +216,7 @@
         .timeline-body{
             background:#27293d;
             border-radius:6px;
-            padding:15px;
+            padding:15px 15px 15px 30px;
             color: white;
             box-shadow: 1px 3px 9px rgba(0,0,0, .1);
         }
@@ -239,6 +243,7 @@
             font-size:12px;
             color:#888;
             margin-top:10px;
+            font-style: italic;
         }
 
         .grey-text{
@@ -961,28 +966,47 @@
             }
             
             // Render logs
-            container.innerHTML = logs.map(l => `
-                <div class="timeline-container">
+            container.innerHTML = logs.map(l => {
+                const verb = l.verb_name?.toLowerCase() || "";
+                const activity = l.activity_name?.toLowerCase() || "";
+                const step = l.step?.toLowerCase() || "";
+                const stage = l.stage?.toLowerCase() || "";
+                const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
 
+                const article = articleFor(activity);
+
+                return `
+                <div class="timeline-container">
                     <div class="timeline-icon">
                         <i class="material-icons">edit</i>
                     </div>
-
                     <div class="timeline-body">
                         <h6 class="timeline-title">
-                            I ${l.verb_name} a ${l.activity_name}
+                            I ${verb} ${article} ${activity}
+                            ${step ? `during ${step}` : ""}
+                            ${stage ? `in the <b>${stage}</b> stage` : ""}.
                         </h6>
-
-                        <div class="timeline-subtitle"></div>
+                        <div class="timeline-subtitle">${timestamp}</div>
                     </div>
-
                 </div>
-            `).join("");
+                `;
+            }).join("");
         }
 
         document.addEventListener("DOMContentLoaded", () =>{
             loadCourses();
         });
+
+        function articleFor(word) {
+            if (!word) return "a";
+            const first = word.trim()[0].toLowerCase();
+            return ["a","e","i","o","u"].includes(first) ? "an" : "a";
+        }
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+        }
 
 
         function showJoinTeam(){

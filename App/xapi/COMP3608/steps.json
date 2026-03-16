@@ -1,8 +1,20 @@
-[
-    "Problem Definition",
-    "Data Acquisition and Preparation",
-    "Model Development and Training",
-    "Model Evaluation and Refinement",
-    "Deployment",
-    "Machine Learning Operations"
-]
+{
+    "Problem Definition": {
+        "definition": ""
+    },
+    "Data Acquisition and Preparation": {
+        "definition": ""
+    },
+    "Model Development and Training": {
+        "definition": ""
+    },
+    "Model Evaluation and Refinement": {
+        "definition": ""
+    },
+    "Deployment": {
+        "definition": ""
+    },
+    "Machine Learning Operations": {
+        "definition": ""
+    }
+}

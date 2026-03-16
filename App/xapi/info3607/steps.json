@@ -1,7 +1,17 @@
-[
-    "Requirement Analysis",
-    "Design",
-    "Simulation",
-    "Testing",
-    "Documentation"
-]
+{
+    "Requirement Analysis": {
+        "definition": "Understanding and documenting what the network needs to achieve and what problem is being solved."
+    },
+    "Design": {
+        "definition": "Creating a detailed plan or blueprint for the network that identifies how the solution will meet requirements."
+    },
+    "Simulation": {
+        "definition": "Building and running the network design in a virtual environment to observe and explore how it behaves."
+    },
+    "Testing": {
+        "definition": "Validating the implemented network to confirm it meets specifications and performs correctly."
+    },
+    "Documentation": {
+        "definition": "Recording all aspects of the network design and implementation for assessment and reference."
+    }
+}

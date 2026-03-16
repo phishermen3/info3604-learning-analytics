@@ -472,6 +472,30 @@
             transform: scale(1.1);
         }
 
+        .verb-tooltip {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            background: #4f537b;
+            color: #fff;
+            margin-top: 6px;
+            padding: 6px 10px;
+            border-radius: 5px;
+            width: 400px;
+            font-size: 0.9rem;
+            font-weight: 100;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 100;
+            white-space: normal;
+            text-align: center;
+        }
+
+        p.col.s4 {
+            position: relative;         /* important for tooltip positioning */
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
@@ -730,27 +754,41 @@
             document.querySelectorAll("#step-stage .stage-btn").forEach(btn => btn.classList.remove("active"));
         }
 
-        function renderVerbs(){
+        function renderVerbs() {
             const container = document.getElementById("verb-section");
-            let html = "";
+            container.innerHTML = ""; // clear previous
 
             if (!verbs || Object.keys(verbs).length === 0) {
                 container.innerHTML = "<p>No verbs found</p>";
                 return;
             }
 
-            Object.entries(verbs).forEach(([key, verb]) => {
-                html += `
-                    <p class="col s4">
-                        <label>
-                            <input name="verb" type="radio" value="${key}">
-                            <span>${verb.display["en-US"]}</span>
-                        </label>
-                    </p>
-                `;
-            });
+            Object.entries(verbs).forEach(([key, verb], index) => {
+                const pId = `verb-${index}`;
+                const definition = verb.definition?.["en-US"] || "";
 
-            container.innerHTML = html;
+                // create <p> element
+                const p = document.createElement("p");
+                p.className = "col s4";
+                p.id = pId;
+                p.style.position = "relative";
+
+                // inner HTML
+                p.innerHTML = `
+                    <label>
+                        <input name="verb" type="radio" value="${key}">
+                        <span>${verb.display["en-US"]}</span>
+                    </label>
+                    <div class="verb-tooltip"><b>${definition}</b></div>
+                `;
+
+                // attach hover events directly
+                const tooltip = p.querySelector(".verb-tooltip");
+                p.addEventListener("mouseenter", () => tooltip.style.display = "block");
+                p.addEventListener("mouseleave", () => tooltip.style.display = "none");
+
+                container.appendChild(p);
+            });
         }
 
         function renderStages(containerId, items){

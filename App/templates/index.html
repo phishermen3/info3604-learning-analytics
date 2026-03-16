@@ -204,6 +204,10 @@
 
         .timeline-title{
             margin-bottom:8px;
+            letter-spacing: 1px;
+            font-weight: 300;
+            line-height: 1.5;
+            opacity: .8;
         }
 
         .timeline-subtitle{
@@ -319,15 +323,16 @@
             <div class="form-card">
 
                 <div class="form-header">
-                    <h5>Add New Action Log</h5>
+                    <h5>New Action Log</h5>
 
                     <a onclick="closeForm()" class="btn-flat">
                         <i class="material-icons">close</i>
                     </a>
                 </div>
                 
-                <!-- OBJECT-VERB SELECTION-->
-                <h6><b>Object</b></h6>
+                <!-- OBJECT SELECTION-->
+                <h6><b>What were you working on?</b></h6>
+                <p class="helper-text">Search and select the item you worked on.</p>
                 <div class="input-field">
                     <i class="material-icons prefix">search</i>
                     <input id="object-search" type="text" class="autocomplete">
@@ -335,17 +340,23 @@
                 </div>
 
                 <div class="divider" style="margin:25px 0"></div>
-
-                <h6><b>Verb</b></h6>
+                
+                <!-- VERB SELECTION-->
+                <h6><b>What did you do?</b></h6>
+                <p class="helper-text">Choose the action you performed on your selected item.</p>
                 <div id="verb-section" class="row"></div>
 
-                <!-- PEDAGOGICAL STAGE SELECTION-->
-                <h6><b>Pedagogical Stage</b></h6>
-                <div id="peda-stage" class="stage-row"></div>
-
                 <!-- PROBLEM STEP SELECTION -->
-                <h6><b>Problem Step</b></h6>
+                <h6><b>Which project phase were you in?</b></h6>
+                <p class="helper-text">Select the phase of the project you were working in.</p>
                 <div id="step-stage" class="stage-row"></div>
+                <div id="step-definition" class="card-panel blue lighten-5" style="display:none; margin-top:10px;"></div>
+
+                <!-- PEDAGOGICAL STAGE SELECTION-->
+                <h6><b>Which learning stage best fits your work?</b></h6>
+                <p class="helper-text">Select the stage that that best represents what you did.</p>
+                <div id="peda-stage" class="stage-row"></div>
+                <div id="stage-definition" class="card-panel blue lighten-5" style="display:none; margin-top:10px;"></div>
 
                 <div class="right-align">
                     <button type="button" class="btn black waves-effect waves-light" onclick="submitLog()">
@@ -367,8 +378,12 @@
 
         let verbs = {};
         let activities = {};
-        let selectedPedagogicalStage = null;
+
         let selectedProblemStep = null;
+        let stepDefinitions = {};
+
+        let selectedPedagogicalStage = null;
+        let stageDefinitions = {};
         
 
         function openForm(){
@@ -428,8 +443,12 @@
 
             verbs = data.verbs;
             activities = data.activities;
+
             problem_steps = data.problem_steps;
+            stepDefinitions = data.step_definitions;
+
             stages = data.stages;
+            stageDefinitions = data.stage_definitions;
 
             console.log(problem_steps)
 
@@ -438,6 +457,18 @@
 
             renderStages("peda-stage", stages);
             renderStages("step-stage", problem_steps);
+
+            // Reset selection and hide definitions when switching courses
+            selectedPedagogicalStage = null;
+            selectedProblemStep = null;
+
+            const stageDefBox = document.getElementById("stage-definition");
+            const stepDefBox = document.getElementById("step-definition");
+            if(stageDefBox) stageDefBox.style.display = "none";
+            if(stepDefBox) stepDefBox.style.display = "none";
+
+            document.querySelectorAll("#peda-stage .stage-btn").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll("#step-stage .stage-btn").forEach(btn => btn.classList.remove("active"));
         }
 
         function renderVerbs(){
@@ -482,10 +513,18 @@
 
             if(group === "peda-stage"){
                 selectedPedagogicalStage = value;
+
+                const defBox = document.getElementById("stage-definition");
+                defBox.style.display = "block";
+                defBox.innerHTML = `<b>${value}</b><br>${stageDefinitions[value]}`;
             }
 
             if(group === "step-stage"){
                 selectedProblemStep = value;
+
+                const defBox = document.getElementById("step-definition");
+                defBox.style.display = "block";
+                defBox.innerHTML = `<b>${value}</b><br>${stepDefinitions[value]}`;
             }
         }
 

@@ -1,7 +1,17 @@
-[
-    "Planning",
-    "Exploration",
-    "Construction",
-    "Testing",
-    "Reflection"
-]
+{
+    "Planning": {
+        "definition": "Preparing how to approach the task before actively working on the solution. During this stage you are thinking about how you will complete the task rather than building the solution itself."
+    },
+    "Exploration": {
+        "definition": "Investigating the problem, experimenting with ideas or learning about tools and concepts that may help complete the task. The focus of this stage is learning and discovering possibilities."
+    },
+    "Construction": {
+        "definition": "Actively creating or building the solution to the task. In this stage you are turning ideas or plans into something concrete."
+    },
+    "Testing": {
+        "definition": "Checking whether the solution works as expected. The purpose of this stage is to evaluate whether the work functions correctly and identify issues that need fixing."
+    },
+    "Reflection": {
+        "definition": "Thinking about the work that was completed and evaluating the outcome. The focus of this stage is evaluating and learning from the experience."
+    }
+}

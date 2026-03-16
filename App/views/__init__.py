@@ -4,10 +4,10 @@ from .user import user_views
 from .index import index_views
 from .auth import auth_views
 from .log import log_views
-from .course import course_views
+from .Course import course_views
 from .courseEnrollment import courseEnrollment_views
-from .team import team_views
-from .teamMembership import teamMembership_views
+from .Team import team_views
+from .TeamMembership import teamMembership_views
 from .admin import setup_admin
 
 

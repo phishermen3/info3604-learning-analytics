@@ -5,7 +5,7 @@ from sqlalchemy import CheckConstraint
 class Project(db.Model):
     __tablename__ = "projects"
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    team_id = db.Column(db.String(8), db.ForeignKey('teams.id'), nullable=False)
+    team_id = db.Column(db.String(36), db.ForeignKey('teams.id'), nullable=False)
     grade = db.Column(db.Float, nullable=True)
     
     __table_args__ = (

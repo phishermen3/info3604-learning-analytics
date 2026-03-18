@@ -72,15 +72,19 @@ def login_action():
     set_refresh_cookies(response, refresh_token)
     return response
 
-@auth_views.route('/refresh', methods=['POST'])
+@auth_views.route('/refresh', methods=['GET', 'POST'])
 @jwt_required(refresh=True)
 def refresh_token_route():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
     
-    response = jsonify({'refresh': True})
+    target_url = request.referrer
+    if '/refresh' in target_url:
+        target_url = url_for('log_views.dashboard')
+
+    response = redirect(target_url)
     set_access_cookies(response, new_access_token)
-    return response, 200
+    return response
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():

@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -32,6 +32,12 @@ def create_app(overrides={}):
     init_db(app)
     jwt = setup_jwt(app)
     setup_admin(app)
+    @jwt.expired_token_loader
+    def handle_auth_error(jwt_header, jwt_payload):
+        if jwt_payload['type'] == 'access':
+            return redirect(url_for('auth_views.refresh_token_route'))
+        else:
+            return render_template('401.html', error="Session expired"), 401
     @jwt.invalid_token_loader
     @jwt.unauthorized_loader
     def custom_unauthorized_response(error):

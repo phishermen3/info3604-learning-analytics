@@ -19,11 +19,3 @@ def get_course_by_id(course_id):
         if course["id"] == course_id:
             return jsonify({"course id": course["id"], "course name": course["name"]}), 200
     return jsonify({"message": "Error: Course code invalid"}), 404
-
-@course_views.route("/api/enrolled", methods=["GET"])
-def check_enrollment():
-    course_id = request.args.get("course_id")
-    user = current_user
-
-    enrolled = any(c.id == course_id for c in user.enrolled_courses)
-    return jsonify({"enrolled": enrolled}), 200

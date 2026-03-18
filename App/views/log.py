@@ -1,3 +1,4 @@
+from App.models import TeamMembership, Team
 from App.controllers.log import load_course_registry
 from flask_login import current_user
 from flask import Blueprint, jsonify, request, current_app, render_template
@@ -7,8 +8,7 @@ import os
 from App.controllers import (
     create_log,
     get_logs,
-    send_to_lrs,
-    load_json
+    send_to_lrs
 )
 
 log_views = Blueprint('log_views', __name__, template_folder='../templates')
@@ -54,10 +54,18 @@ def send_statement():
 @jwt_required()
 def get_statements():
     course_id = request.args.get("course")
+    scope = request.args.get("scope", "individual")
+
     if not course_id:
         return jsonify({"error": "Course ID required"}), 400
+    
+    team_membership = TeamMembership.query.join(Team).filter(
+        TeamMembership.user_id == current_user.id,
+        Team.course_id == course_id
+    ).first()
+    team_id = team_membership.team.id if team_membership else None
 
-    logs, code = get_logs(current_user.user_code, course_id)
+    logs, code = get_logs(current_user.user_code, course_id, scope, team_id)
     return jsonify(logs), code
 
 @log_views.route('/api/data', methods=['GET'])

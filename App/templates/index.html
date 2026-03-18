@@ -20,6 +20,51 @@
             text-decoration: underline;
         }
 
+        #logs-title {
+            font-size: 1.4rem;
+        }
+
+        /* Switch track */
+        .switch .lever {
+            height: 25px !important;
+            width: 55px !important;
+            margin: 0px !important;
+            background-color: #232436 !important;
+            border: 2px solid #9e8ff3;
+        }
+
+        .switch input:checked + .lever {
+            background-color: #232436 !important;
+            border: 2px solid #9e8ff3;
+        }
+
+        .switch .lever::before {
+            display: none !important;
+        }
+
+        /* Circle/knob */
+        .switch .lever::after {
+            height: 20px !important;                    /* circle size */
+            width: 20px !important;
+            top: 1px !important;                        /* vertical alignment */
+            left: -1px;
+            background-color: #9e8ff3 !important;           /* knob color */
+            border: 2px solid #232436;           /* knob border */
+            transition: transform 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .switch input:checked + .lever::after {
+            transform: translateX(13.5px); /* moves knob fully to right */
+        }
+
+        .title-switch {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;                 /* space between h6 and toggle */
+        }
+
+
+
         /* LOG LIST */
         #logs-panel{
             width:100%;
@@ -516,7 +561,16 @@
             <div style="padding:20px">
 
                 <div class="logs-header">
-                    <h6 style="color: #fff"><b>Recorded Logs</b></h6>
+                    <div class="title-switch">
+                        <h6 id="logs-title" style="color: #fff"><b>Individual Logs</b></h6>
+
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="log-scope-toggle">
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
 
                     <div class="input-field course-dropdown">
                         <select id="course-select"></select>
@@ -678,6 +732,8 @@
         let selectedPedagogicalStage = null;
         let stageDefinitions = {};
 
+        let showGroupLogs = false;
+
         const stageIcons = {
             "planning": "event_note",
             "documentation": "description",
@@ -695,6 +751,15 @@
             document.getElementById("page-layout").classList.remove("form-open");
         }
 
+        const toggle = document.getElementById("log-scope-toggle");
+        const logsTitle = document.getElementById("logs-title");
+
+        toggle.addEventListener("change", (e) => {
+            showGroupLogs = e.target.checked;
+            logsTitle.innerHTML = showGroupLogs ? "<b>Team Logs</b>" : "<b>Individual Logs</b>";
+            loadLogs();
+        });
+
         async function loadCourses(){
             // fetch all courses
             const allCourseResponse = await fetch("/courses");
@@ -704,10 +769,12 @@
             const enrolledCourseResponse = await fetch("/api/enrolled-courses");
             const enrolledCourses = await enrolledCourseResponse.json();
 
+            console.log("Enrolled courses:", enrolledCourses);
+
             const select = document.getElementById("course-select"); 
 
             let html = ``;
-            courses.forEach(c=>{
+            enrolledCourses.forEach(c=>{
                 html += `<option value="${c.id}">${c.name}</option>`;
             });
             select.innerHTML = html;
@@ -934,7 +1001,7 @@
             const timeline = document.getElementById("timeline-container");
             const addBtn = document.querySelector(".add-log-btn");
 
-            // show loading state immediately
+            // Show loading state immediately
             container.innerHTML = `<p style="text-align: center;">Loading...</p>`;
 
             // Fetch course info (team and project)
@@ -943,6 +1010,12 @@
 
             currentTeamId = infoData.team_id;
             currentProjectId = infoData.project_id;
+
+            // Ensure toggle consistency: no team = force individual mode
+            if(currentTeamId === null && showGroupLogs){
+                showGroupLogs = false;
+                document.getElementById("log-scope-toggle").checked = false;
+            }
 
             // If user is enrolled but not part of a team
             if(currentTeamId === null){
@@ -957,27 +1030,22 @@
 
                 // hide the "Add Log" button
                 timeline.classList.add("hide-line");
-                const addBtn = document.querySelector(".add-log-btn");
+                if (addBtn) addBtn.style.display = "none";
                 const addLabel = document.querySelector(".add-log-label");
-                if(addBtn && addLabel){
-                    addBtn.style.display = "none";
-                    addLabel.style.display = "none";
-                }
+                if (addLabel) addLabel.style.display = "none";
                 return;
 
             } else {
                 // show "Add Log" button
                 timeline.classList.remove("hide-line");
-                const addBtn = document.querySelector(".add-log-btn");
+                if (addBtn) addBtn.style.display = "flex";
                 const addLabel = document.querySelector(".add-log-label");
-                if(addBtn && addLabel){
-                    addBtn.style.display = "flex";
-                    addLabel.style.display = "flex";
-                }
+                if (addLabel) addLabel.style.display = "flex";
             }
 
             // Fetch logs
-            const response = await fetch(`/logs?course=${currentCourse}`);
+            const scope = showGroupLogs ? "group" : "individual";
+            const response = await fetch(`/logs?course=${currentCourse}&scope=${scope}`);
             const logs = await response.json();
 
             if(logs.length===0 && currentTeamId !== null){
@@ -987,8 +1055,9 @@
             
             // Render logs
             container.innerHTML = logs.map(l => {
+                const actor = showGroupLogs ? `<b>${l.user_code}</b>` : "I";
                 const verb = l.verb_name?.toLowerCase() || "";
-                const activity = l.activity_name?.toLowerCase() || "";
+                const activity = l.activity_name || "";
                 const step = l.step?.toLowerCase() || "";
                 const stage = l.stage?.toLowerCase() || "";
                 const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
@@ -1002,7 +1071,7 @@
                     </div>
                     <div class="timeline-body">
                         <h6 class="timeline-title">
-                            I ${verb} ${article} ${activity}
+                            ${actor} ${verb} ${article} ${activity}
                             ${step ? `during ${step}` : ""}
                             ${stage ? `in the <b>${stage}</b> stage` : ""}.
                         </h6>
@@ -1030,7 +1099,7 @@
 
         function updateLivePreview() {
             const verb = document.querySelector('input[name="verb"]:checked')?.nextElementSibling?.textContent.toLowerCase() || "";
-            const activity = document.getElementById("object-search").value.toLowerCase() || "";
+            const activity = document.getElementById("object-search").value || "";
             const step = selectedProblemStep?.toLowerCase() || "";
             const stage = selectedPedagogicalStage?.toLowerCase() || "";
 

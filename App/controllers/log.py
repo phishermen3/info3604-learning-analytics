@@ -112,19 +112,36 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
 
     return statement, 201
 
-def get_logs(user_code, course_id):
-    agent = Agent(
-        account={
-            "homePage": LOGSTACK_BASE,
-            "name": user_code
-        }
-    )
-    
+def get_logs(user_code, course_id, scope="individual", team_id=None):    
     query = {
-        "agent": agent,
         "limit": 10 #,
         #"since": "2026-03-05T00:00:00Z"
     }
+
+    # Individial mode
+    if scope == "individual":
+        query["agent"] = Agent(
+            account={
+                "homePage": LOGSTACK_BASE,
+                "name": user_code
+            }
+        )
+
+    # Group mode
+    elif scope == "group":
+        if not team_id:
+            return [], 200
+        
+        query["context"] = {
+            "contextActivities": {
+                "grouping": [
+                    {
+                        "objectType": "Activity",
+                        "id": f"{LOGSTACK_BASE}/groups/{team_id}"
+                    }
+                ]
+            }
+        }
     
     lrs = get_lrs()
     response = lrs.query_statements(query)
@@ -157,13 +174,17 @@ def get_logs(user_code, course_id):
             if not course_match:
                 continue
 
+            # Extract extensions
             exts = getattr(stmt.context, "extensions", {})
             stage = exts.get(f'{LOGSTACK_BASE}/extensions/pedagogical-stage', None)
             step = exts.get(f'{LOGSTACK_BASE}/extensions/problem-step', None)
 
+            # Extract actor
+            user_code = getattr(stmt.actor.account, "name", "Unknown")
 
             try:
                 results.append({
+                    "user_code": user_code,
                     "verb_name": stmt.verb.display["en-US"],
                     "activity_name": stmt.object.definition.name["en-US"],
                     "stage": stage,
@@ -173,6 +194,7 @@ def get_logs(user_code, course_id):
             except (AttributeError, KeyError):
                 return {"error": "Statement malformed"}, 500
         
+        # Pagination
         more_url = response.content.more
         if not more_url:
             break

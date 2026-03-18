@@ -112,36 +112,10 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
 
     return statement, 201
 
-def get_logs(user_code, course_id, scope="individual", team_id=None):    
-    query = {
-        "limit": 10 #,
-        #"since": "2026-03-05T00:00:00Z"
-    }
-
-    # Individial mode
-    if scope == "individual":
-        query["agent"] = Agent(
-            account={
-                "homePage": LOGSTACK_BASE,
-                "name": user_code
-            }
-        )
-
-    # Group mode
-    elif scope == "group":
-        if not team_id:
-            return [], 200
-        
-        query["context"] = {
-            "contextActivities": {
-                "grouping": [
-                    {
-                        "objectType": "Activity",
-                        "id": f"{LOGSTACK_BASE}/groups/{team_id}"
-                    }
-                ]
-            }
-        }
+def get_logs(user_code, course_id, scope="individual", team_code=None):    
+    query = build_query(user_code, scope, team_code)
+    if query is None:
+        return [], 200
     
     lrs = get_lrs()
     response = lrs.query_statements(query)
@@ -151,50 +125,20 @@ def get_logs(user_code, course_id, scope="individual", team_id=None):
     
     results = []
     expected_course_id = f"{LOGSTACK_BASE}/courses/{course_id}"
+    expected_team_code = f"{LOGSTACK_BASE}/groups/{team_code}" if team_code else None
     
     while True:
         statements = response.content.statements or []
         
         for stmt in statements:
-            context_activities = getattr(stmt.context, "context_activities", None)
-            course_match = False
-
-            if context_activities:
-                categories = getattr(context_activities, "category", [])
-                if categories is None:
-                    categories = []
-                elif not isinstance(categories, list):
-                    categories = [categories]
-
-                for act in categories:
-                    if act.id == expected_course_id:
-                        course_match = True
-                        break
-
-            if not course_match:
+            if not matches_scope(stmt, scope, expected_course_id, expected_team_code):
                 continue
 
-            # Extract extensions
-            exts = getattr(stmt.context, "extensions", {})
-            stage = exts.get(f'{LOGSTACK_BASE}/extensions/pedagogical-stage', None)
-            step = exts.get(f'{LOGSTACK_BASE}/extensions/problem-step', None)
-
-            # Extract actor
-            user_code = getattr(stmt.actor.account, "name", "Unknown")
-
             try:
-                results.append({
-                    "user_code": user_code,
-                    "verb_name": stmt.verb.display["en-US"],
-                    "activity_name": stmt.object.definition.name["en-US"],
-                    "stage": stage,
-                    "step": step,
-                    "timestamp": getattr(stmt, "timestamp", None) 
-                })
+                results.append(format_statement(stmt))
             except (AttributeError, KeyError):
                 return {"error": "Statement malformed"}, 500
         
-        # Pagination
         more_url = response.content.more
         if not more_url:
             break
@@ -207,7 +151,7 @@ def get_logs(user_code, course_id, scope="individual", team_id=None):
 
 
 # -----------------------------------
-# Log Helpers
+# Log Builders
 # -----------------------------------
 
 def build_actor(user_code):
@@ -276,12 +220,81 @@ def build_context(course_id, team_id, project_id, pedagogical_stage, problem_ste
         }
     }
 
+# -----------------------------------
+# Helper Functions
+# -----------------------------------
+
 def load_json(filename):
     try:
         with open(filename, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
         return {}    
+    
+def build_query(user_code, scope, team_code):
+    query = {"limit": 10}
+
+    if scope == "individual":
+        query["agent"] = Agent(
+            account={
+                "homePage": LOGSTACK_BASE,
+                "name": user_code
+            }
+        )
+
+    elif scope == "group":
+        if not team_code:
+            return None
+        
+        query["context"] = {
+            "contextActivities": {
+                "grouping": [
+                    {
+                        "objectType": "Activity",
+                        "id": f"{LOGSTACK_BASE}/groups/{team_code}"
+                    }
+                ]
+            }
+        }
+
+    return query
+
+def matches_scope(stmt, scope, expected_course_id, expected_team_id):
+    context = getattr(stmt, "context", None)
+    context_activities = getattr(context, "context_activities", None)
+
+    if not context_activities:
+        return False
+
+    def normalize(value):
+        if not value:
+            return []
+        return value if isinstance(value, list) else [value]
+
+    categories = normalize(getattr(context_activities, "category", []))
+    groupings = normalize(getattr(context_activities, "grouping", []))
+
+    course_match = any(act.id == expected_course_id for act in categories)
+    team_match = any(act.id == expected_team_id for act in groupings)
+
+    if scope == "group":
+        return course_match and team_match
+    return course_match
+
+def format_statement(stmt):
+    context = getattr(stmt, "context", None)
+    exts = getattr(context, "extensions", {}) if context else {}
+
+    actor_code = getattr(stmt.actor.account, "name", "Unknown")
+
+    return {
+        "user_code": actor_code,
+        "verb_name": stmt.verb.display["en-US"],
+        "activity_name": stmt.object.definition.name["en-US"],
+        "stage": exts.get(f'{LOGSTACK_BASE}/extensions/pedagogical-stage'),
+        "step": exts.get(f'{LOGSTACK_BASE}/extensions/problem-step'),
+        "timestamp": getattr(stmt, "timestamp", None)
+    }
 
 # -----------------------------------
 # Getters

@@ -209,7 +209,7 @@
             border-radius: 50%;
             background: #9e8ff3;
             color: black;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -221,6 +221,7 @@
 
         .add-log-btn:hover{
             transform:scale(1.1);
+            box-shadow: 0 3px 9px rgba(0,0,0, .3);
         }
 
         .add-log-label{
@@ -299,6 +300,7 @@
         }
 
         .timeline-title{
+            margin-top: 0px;
             margin-bottom:8px;
             font-weight: 300;
             line-height: 1.5;
@@ -566,6 +568,16 @@
         p.col.s4 {
             position: relative;         /* important for tooltip positioning */
             cursor: pointer;
+        }
+
+        .spin {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
         }
     </style>
 {% endblock %}
@@ -1023,7 +1035,9 @@
             const addBtn = document.querySelector(".add-log-btn");
 
             // Show loading state immediately
-            container.innerHTML = `<p style="text-align: center;">Loading...</p>`;
+            container.innerHTML = `<p style="text-align: center;">
+                    <i class="material-icons spin" style="font-size: 50px; color: #b8b9c3;">autorenew</i><br>
+                </p>`;
 
             // Fetch course info (team and project)
             const infoResp = await fetch(`/api/course-info?course_id=${currentCourse}`);
@@ -1042,6 +1056,7 @@
             if(currentTeamId === null){
                 container.innerHTML = `
                     <p style="text-align: center; margin-right: 80px;">
+                        <i class="material-icons" style="font-size: 100px; color: #b8b8c3;">group_add</i><br> 
                         You are not part of a team yet. 
                         <a href="#!" onclick="openJoinTeamModal('${currentCourse}')" class="join-link">
                             Join a team now!
@@ -1070,7 +1085,14 @@
             const logs = await response.json();
 
             if(logs.length===0 && currentTeamId !== null){
-                container.innerHTML=`<p style="text-align: center;">No logs</p>`;
+                container.innerHTML=`
+                <p style="text-align: center;">
+                    <i class="material-icons" style="font-size: 100px; color: #b8b8c3;">note_add</i><br> 
+                    You have no logs.
+                    <a href="#!" onclick="openForm()" class="join-link">
+                        Add your first log!
+                    </a>
+                </p>`;
                 return;
             }
             

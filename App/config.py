@@ -22,6 +22,8 @@ def load_config(app, overrides):
     app.config["JWT_COOKIE_SECURE"] = True
     app.config["JWT_COOKIE_SAMESITE"] = "Lax"
     app.config["JWT_COOKIE_CSRF_PROTECT"] = True
+    app.config["JWT_ACCESS_COOKIE_PATH"] = '/'
+    app.config["JWT_REFRESH_COOKIE_PATH"] = '/refresh'
     app.config["JWT_SESSION_COOKIE"] = False
     app.config['FLASK_ADMIN_SWATCH'] = 'darkly'
     for key in overrides:

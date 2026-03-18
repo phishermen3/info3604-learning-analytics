@@ -6,6 +6,7 @@ from flask_jwt_extended import (
     create_access_token,
     set_access_cookies,
     set_refresh_cookies,
+    get_jwt_identity,
     decode_token
 )
 
@@ -70,6 +71,16 @@ def login_action():
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
     return response
+
+@auth_views.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token_route():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+    
+    response = jsonify({'refresh': True})
+    set_access_cookies(response, new_access_token)
+    return response, 200
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():

@@ -5,91 +5,234 @@
 {{ super() }}
 
 {% block content %}
+<head>
+    <style>
+        #m {
+            margin:10%;
+            padding:10%;
+            border: 10%
+        }
+        .h {
+           font-size: 24px;
+           font-weight: 600;
+           color: #9e8ff3;
+           font-style:normal;
+        }
 
+        section{
+            padding-left:50px;
+            padding-right:50px;
+            padding-bottom: 20px;
+
+        }
+        h8 {
+            color: #9e8ff3;
+            font-style: oblique;
+        }
+        p {
+            font-size:medium;
+            font-weight: 400;
+            padding-right: 200px;
+            font-style:normal;
+        }
+        header{
+            padding-left: 20px;
+        }
+        ul {
+            padding-bottom: 0px;
+        }
+        li {
+            padding-bottom: 0px;
+            padding-left: 30px;
+            font-style: italic;
+        }
+        #eth {
+            font-style: oblique;
+            font-size: medium;
+            font-weight: 200
+        }
+        strong {
+            color:#9e8ff3;
+            font-weight: 800
+        }
+        #end{
+            padding: 0px;
+            margin: 0px;
+            border: 0px;
+            font-weight: 100;
+            font-size:small;
+            font-style: italic;
+            color: #9e8ff3;
+            padding-left:35%;
+        }
+        #demo{
+            padding-left: 20px;
+        }
+        #app{
+            color: #9e8ff3;
+            padding-bottom: 40px;
+        }
+        h7{
+            font-size:x-large;
+            font-weight: bold;
+            color: #8471f1;
+        }
+        .circle {
+            width: 70px;
+            height: 70px;
+            background-color:#9e8ff3;
+            border-radius: 50%; 
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .x {
+            display: flex;   
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+        .y {
+            margin: 0;
+            
+        }
+        .step {
+            padding-top: 0px;
+            border-top: 0px;
+            margin-top: 8px;
+        }
+        
+    </style>
+</head>
 <body>
 
 <header>
-    <h1>About This Research Project</h1>
-    <p>xAPI Learning Analytics Study</p>
+    <h4>About This Research Project</h4>
+    <h8>xAPI Learning Analytics</h8>
 </header>
 
-<main>
+<main: id="m">
 
     <section>
-        <h2>What Are We Researching?</h2>
+        <h4 class="h" >What Are We Researching?</h4>
         <p>
             This project explores the student learning process using 
             <strong>Experience API (xAPI)</strong>. xAPI allows researchers to capture 
             meaningful learning activities such as attempts, analyses, reflections, 
             and problem-solving behaviors across digital learning environments.
-        </p>
-
-        <p>
             Our goal is to better understand learning patterns, engagement, and how
             students approach complex academic tasks.
         </p>
     </section>
 
     <section>
-        <h2>Why Does This Matter?</h2>
+        <h4 class="h">Why Does This Matter?</h4>
         <p>
             Traditional grading systems only measure final outcomes. This research
-            focuses on the <em>learning process itself</em>, how students learn,
+            focuses on <strong> the learning process </strong>itself, how students learn,
             not just what score they receive.
-        </p>
 
-        <p>
+
             Insights from this study can help improve:
         </p>
         <ul>
-            <li>Learning analytics and feedback systems</li>
-            <li>Course design and teaching strategies</li>
-            <li>Student support and personalized learning tools</li>
-            <li>Future educational technologies</li>
+            <li>- Learning analytics and feedback systems</li>
+            <li>- Course design and teaching strategies</li>
+            <li>- Student support and personalized learning tools</li>
+            <li>- Future educational technologies</li>
         </ul>
     </section>
 
     <section>
-        <h2>What We Need From You</h2>
-        <p>
-            As a participant, you will simply use the learning system as part of
+        <h4 class="h">How Do You Contribute?</h4>
+        <p> As a participant, you will simply use the learning system as part of
             your normal academic activities. Certain interactions will be recorded
             as anonymous xAPI learning statements.
         </p>
-
-        <div class="highlight">
-            <strong>Your participation does NOT require extra work.</strong>
-            We are observing learning interactions, not evaluating you personally.
-        </div>
-    </section>
-
-    <section>
-        <h2>Your Contribution to the Research</h2>
         <p>
+            <strong> Your participation does not require extra work.</strong> 
+            We are observing learning interactions, not evaluating you personally.
             Every interaction you make helps researchers understand how students
             think, experiment, and improve over time. Your participation contributes
             to building smarter learning systems that can benefit future students.
         </p>
-
-        <p>
+        <p id="eth">
             Data collected is used strictly for academic research purposes and will
-            be analyzed in aggregated and anonymized form.
-        </p>
-    </section>
-
-    <section>
-        <h2>Privacy and Ethics</h2>
-        <p>
+            be analyzed in aggregated and anonymized form. 
             Student privacy is important to us. All collected data follows ethical
             research guidelines. Personal identities are not shared, and results
             are reported only at a group level.
         </p>
     </section>
 
+    <section id="demo">
+        <h4 id="app">App Guide</h4>
+        <div id="steps"> 
+            <div class="x">
+                <div class="circle">1</div>
+                <div class="y">
+                    <h7>
+                        Step 1
+                    </h7>
+                    <p class="step">
+                        Login using the provided credentials.
+                    </p>
+                </div>
+            </div>
+            <div class="x">
+                <div class="circle">2</div>
+                <div class="y">
+                    <h7>
+                        Step 2
+                    </h7>
+                    <p class="step">
+                        Change initial password for added security on the account page.
+                    </p>
+                </div>
+            </div>
+            <div class="x">
+                <div class="circle">3</div>
+                <div class="y">
+                    <h7>
+                        Step 3
+                    </h7>
+                    <p class="step">
+                        Join or create a team for your course project by clicking "Join a team now!".
+                    </p>
+                </div>
+            </div>
+            <div class="x">
+                <div class="circle">4</div>
+                <div class="y">
+                    <h7>
+                        Step 4
+                    </h7>
+                    <p class="step">
+                        Create a new log using the + icon. Follow instructions on logging modal to select object, verb, stage and step.
+                    </p>
+                </div>
+            </div>
+            <div class="x">
+                <div class="circle">5</div>
+                <div class="y">
+                    <h7>
+                        Step 5
+                    </h7>
+                    <p class="step">
+                        Submit log. You can also toggle between personal and group logs. Practise daily logging for the best progress tracking results.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer>
-    <p>2026 xAPI Learning Analytics Research Project - phishermen3</p>
+    <p id = "end">Phishermen3 - xAPI Learning Analytics Research Project - 2026</p>
 </footer>
 
 </body>

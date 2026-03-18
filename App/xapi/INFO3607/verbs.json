@@ -1,197 +1,137 @@
 {
     "analyzed": {
-        "id": "https://logstack.azurewebsites.net/verbs/analyzed",
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/analyzed",
         "display": { 
             "en-US": "analyzed" 
         },
         "definition": { 
             "en-US": "The learner systematically examined artefacts, configurations, outputs, or behaviors to identify patterns, relationships, inconsistencies, or causes of observed outcomes."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Exploration", "Reflection"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Requirement Analysis"
         }
     },
     "applied": {
-        "id": "https://logstack.azurewebsites.net/verbs/applied",
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/applied",
         "display": { 
             "en-US": "applied" 
         },
         "definition": { 
             "en-US": "The learner used previously acquired theoretical knowledge, principles, or procedures to perform a practical task within the project context."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Simulation"
         }
     },
-        "attempted": {
-        "id": "https://logstack.azurewebsites.net/verbs/attempted",
+    "attempted": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/attempted",
         "display": { 
             "en-US": "attempted" 
         },
         "definition": { 
             "en-US": "The learner initiated and made a deliberate effort to complete a task or solve a problem, regardless of outcome or correctness."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Exploration",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Simulation"
         }
     },
-        "calculated": {
-        "id": "https://logstack.azurewebsites.net/verbs/calculated",
+    "calculated": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/calculated",
         "display": { 
             "en-US": "calculated" 
         },
         "definition": { 
             "en-US": "The learner performed quantitative or logical computations to determine values required for planning, configuring, or validating project components."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Planning", "Exploration"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Requirement Analysis"
         }
     },
-        "configured": {
-        "id": "https://logstack.azurewebsites.net/verbs/configured",
+    "configured": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/configured",
         "display": { 
             "en-US": "configured" 
         },
         "definition": { 
             "en-US": "The learner set up or adjusted technical parameters, settings, or system attributes to achieve a specified functional outcome."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Simulation"
         }
     },
-        "debugged": {
-        "id": "https://logstack.azurewebsites.net/verbs/debugged",
+    "debugged": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/debugged",
         "display": { 
             "en-US": "debugged" 
         },
         "definition": { 
             "en-US": "The learner identified, isolated, and corrected faults, misconfigurations, or logical errors within the project artefact or system."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Testing",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Simulation"
         }
     },
-        "designed": {
-        "id": "https://logstack.azurewebsites.net/verbs/designed",
+    "designed": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/designed",
         "display": { 
             "en-US": "designed" 
         },
         "definition": { 
             "en-US": "The learner created a structured plan, architecture, model, or solution blueprint prior to or during system development."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Planning", "Construction"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Design"
         }
     },
-        "documented": {
-        "id": "https://logstack.azurewebsites.net/verbs/documented",
+    "documented": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/documented",
         "display": { 
             "en-US": "documented" 
         },
         "definition": { 
             "en-US": "The learner produced structured written, diagrammatic, or technical records describing processes, configurations, decisions, or outcomes related to the project."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Construction", "Reflection"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Documentation"
         }
     },
-        "evaluated": {
-        "id": "https://logstack.azurewebsites.net/verbs/evaluated",
+    "evaluated": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/evaluated",
         "display": { 
             "en-US": "evaluated" 
         },
         "definition": { 
             "en-US": "The learner assessed the quality, effectiveness, or relevance of a task, process, or outcome against defined criteria or objectives."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Exploration", "Testing", "Reflection"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Testing"
         }
     },
-        "implemented": {
-        "id": "https://logstack.azurewebsites.net/verbs/implemented",
+    "implemented": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/implemented",
         "display": { 
             "en-US": "implemented" 
         },
         "definition": { 
             "en-US": "The learner translated a design, plan, or specification into a functional system, configuration, or operational artefact."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Construction",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Simulation"
         }
     },
-        "mapped": {
-        "id": "https://logstack.azurewebsites.net/verbs/mapped",
+    "mapped": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/mapped",
         "display": { 
             "en-US": "mapped" 
         },
         "definition": { 
             "en-US": "The learner represented relationships, structures, or dependencies among components, concepts, or network elements."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Planning", "Construction"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Design"
         }
     },
-        "planned": {
-        "id": "https://logstack.azurewebsites.net/verbs/planned",
+    "planned": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/planned",
         "display": { 
             "en-US": "planned" 
         },
         "definition": { 
             "en-US": "The learner formulated objectives, strategies, task sequences, or resource allocations prior to executing project activities."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Planning",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Requirement Analysis"
         }
     },
-        "reflected": {
-        "id": "https://logstack.azurewebsites.net/verbs/reflected",
+    "reflected": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/reflected",
         "display": { 
             "en-US": "reflected" 
         },
         "definition": { 
             "en-US": "The learner critically examined their decisions, actions, performance, or learning processes to identify insights, strengths, weaknesses, or areas for improvement."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Reflection",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Documentation"
         }
     },
-        "revised": {
-        "id": "https://logstack.azurewebsites.net/verbs/revised",
+    "revised": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/revised",
         "display": { 
             "en-US": "revised" 
         },
         "definition": { 
             "en-US": "The learner modified an existing artefact, configuration, or approach in response to testing results, feedback, or reflective evaluation."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": ["Testing", "Reflection"],
-            "https://logstack.azurewebsites.net/extensions/problem-step": ["Testing", "Documentation"]
         }
     },
-        "tested": {
-        "id": "https://logstack.azurewebsites.net/verbs/tested",
+    "tested": {
+        "id": "https://logstack.azurewebsites.net/verbs/info3607/tested",
         "display": { 
             "en-US": "tested" 
         },
         "definition": { 
             "en-US": "The learner executed systematic procedures to determine whether a system, configuration, or artefact functioned as intended."
-        },
-        "extensions": {
-            "https://logstack.azurewebsites.net/extensions/pedagogical-stage": "Testing",
-            "https://logstack.azurewebsites.net/extensions/problem-step": "Testing"
         }
     }
 }

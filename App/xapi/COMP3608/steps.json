@@ -1,20 +1,17 @@
 {
     "Problem Definition": {
-        "definition": "Clearly identifying the task the intelligent system must perform, including the goals, constraints, and success criteria."
+        "definition": "Identifying and clearly describing the real-world problem, classifying its type, and formulating objectives, constraints, and functions for computational modelling."
     },
-    "Data Acquisition and Preparation": {
-        "definition": "Collecting relevant data and transforming it into a clean, structured format suitable for training machine learning models."
+    "Data Preparation": {
+        "definition": "Collecting, cleaning, transforming, and organizing datasets, including feature engineering, to make them ready for model use."
     },
     "Model Development and Training": {
-        "definition": "Selecting appropriate algorithms and training models so they can learn patterns from the prepared data."
+        "definition": "Implementing chosen algorithms in code, applying optimization techniques, and training models on prepared data."
     },
     "Model Evaluation and Refinement": {
-        "definition": "Assessing the model’s performance using validation techniques and improving it through tuning or additional data."
+        "definition": "Assessing model performance using appropriate metrics, tuning parameters, comparing approaches, and improving results."
     },
-    "Deployment": {
-        "definition": "Integrating the trained model into a system or application so it can generate predictions or assist users."
-    },
-    "Machine Learning Operations": {
-        "definition": "Monitoring, maintaining, and updating deployed models to ensure they continue performing effectively over time."
+    "Analysis and Reporting": {
+        "definition": "Interpreting results, explaining trade-offs and insights, and presenting findings in a clear, stakeholder-friendly manner."
     }
 }

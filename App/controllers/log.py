@@ -12,7 +12,6 @@ LOGSTACK_BASE = "https://logstack.azurewebsites.net"
 
 PEDAGOGICAL_STAGE_URL = f"{LOGSTACK_BASE}/extensions/pedagogical-stage"
 PROBLEM_STEP_URL = f"{LOGSTACK_BASE}/extensions/problem-step"
-LOGGING_MODE_URL = f"{LOGSTACK_BASE}/extensions/logging-mode"
 
 _cache = {}
 
@@ -215,8 +214,7 @@ def build_context(course_id, team_id, project_id, pedagogical_stage, problem_ste
         },
         "extensions": {
             PEDAGOGICAL_STAGE_URL: pedagogical_stage,
-            PROBLEM_STEP_URL: problem_step,
-            LOGGING_MODE_URL: "pedagogy"
+            PROBLEM_STEP_URL: problem_step
         }
     }
 

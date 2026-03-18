@@ -63,9 +63,9 @@ def get_statements():
         TeamMembership.user_id == current_user.id,
         Team.course_id == course_id
     ).first()
-    team_id = team_membership.team.id if team_membership else None
+    team_code = team_membership.team.team_code if team_membership else None
 
-    logs, code = get_logs(current_user.user_code, course_id, scope, team_id)
+    logs, code = get_logs(current_user.user_code, course_id, scope, team_code)
     return jsonify(logs), code
 
 @log_views.route('/api/data', methods=['GET'])

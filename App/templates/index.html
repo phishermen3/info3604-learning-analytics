@@ -168,17 +168,32 @@
 
         .course-dropdown input.select-dropdown {
             color: #fff;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        .select-dropdown.dropdown-trigger + .dropdown-content {
+            border-radius: 6px !important;
+            border-color: #27293d !important;
+            background-color: #27293d !important;
+            overflow: hidden;                  
         }
 
         .dropdown-content li > span {
-            color: #fff;          /* text color in dropdown */
-            background-color: #27293d; /* background of dropdown items */
+            color: #fff;
+            background-color: #27293d;
         }
 
-        .dropdown-content li.active > span {
-            background-color: #474964;
+        .dropdown-content li:hover > span {
+            background-color: #474964 !important;
             color: #fff;
+            transition: all 0.3s ease;
         }
+        
+        .select-wrapper .caret {
+            color: #9e8ff3 !important;   /* your purple */
+            fill: #9e8ff3 !important;    /* for SVG versions */
+        }
+
 
         .add-log-node{
             display: flex;

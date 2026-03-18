@@ -6,6 +6,7 @@ from flask_jwt_extended import (
     create_access_token,
     set_access_cookies,
     set_refresh_cookies,
+    get_jwt_identity,
     decode_token
 )
 
@@ -69,6 +70,20 @@ def login_action():
     response = redirect(url_for('log_views.dashboard'))
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
+    return response
+
+@auth_views.route('/refresh', methods=['GET', 'POST'])
+@jwt_required(refresh=True)
+def refresh_token_route():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+    
+    target_url = request.referrer
+    if '/refresh' in target_url:
+        target_url = url_for('log_views.dashboard')
+
+    response = redirect(target_url)
+    set_access_cookies(response, new_access_token)
     return response
 
 @auth_views.route('/logout', methods=['GET'])

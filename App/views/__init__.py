@@ -9,7 +9,8 @@ from .courseEnrollment import courseEnrollment_views
 from .team import team_views
 from .teamMembership import teamMembership_views
 from .admin import setup_admin
+from .about import about_views
 
 
-views = [user_views, index_views, auth_views, log_views, course_views, courseEnrollment_views, team_views, teamMembership_views] 
+views = [user_views, index_views, auth_views, log_views, course_views, courseEnrollment_views, team_views, teamMembership_views, about_views] 
 # blueprints must be added to this list

@@ -26,12 +26,12 @@ def login(user_code, password, remember=False):
   result = db.session.execute(db.select(User).filter_by(user_code=user_code))
   user = result.scalar_one_or_none()
   if user and user.check_password(password):
-    access_token = create_access_token(identity=str(user.id), expires_delta=timedelta(minutes=15))
+    access_token = create_access_token(identity=str(user.id), expires_delta=timedelta(minutes=15), additional_claims={"force_password_change": user.force_password_change})
     if remember:
       refresh_expires = timedelta(days=14)
     else:
       refresh_expires = timedelta(hours=2)
-    refresh_token = create_refresh_token(identity=str(user.id), expires_delta=refresh_expires)
+    refresh_token = create_refresh_token(identity=str(user.id), expires_delta=refresh_expires, additional_claims={"force_password_change": user.force_password_change})
     return access_token, refresh_token
   return None, None
 

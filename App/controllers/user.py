@@ -10,7 +10,7 @@ def create_user(user_code, password):
 def change_user_password(user, new_password):
     try:
         user.set_password(new_password)
-        db.session.add(user)
+        user.force_password_change = False
         db.session.commit()
         return True, None
     except Exception as e:

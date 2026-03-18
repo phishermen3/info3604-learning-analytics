@@ -1,6 +1,7 @@
 import os
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
+from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
@@ -32,6 +33,18 @@ def create_app(overrides={}):
     init_db(app)
     jwt = setup_jwt(app)
     setup_admin(app)
+    @app.before_request
+    def password_check():
+        allowed_routes = ['user_views.change_password_action', 'user_views.account_page', 'about_views.about', 'static', 'auth_views.login']
+        if request.endpoint in allowed_routes:
+            return
+        try:
+            verify_jwt_in_request()
+        except Exception:
+            return
+        claims = get_jwt()
+        if claims.get("force_password_change"):
+            return redirect(url_for('user_views.account_page'))
     @jwt.expired_token_loader
     def handle_auth_error(jwt_header, jwt_payload):
         if jwt_payload['type'] == 'access':

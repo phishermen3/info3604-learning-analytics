@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     set_access_cookies,
     set_refresh_cookies,
     get_jwt_identity,
+    get_jwt,
     decode_token
 )
 
@@ -76,7 +77,8 @@ def login_action():
 @jwt_required(refresh=True)
 def refresh_token_route():
     current_user = get_jwt_identity()
-    new_access_token = create_access_token(identity=current_user)
+    claims = get_jwt()
+    new_access_token = create_access_token(identity=current_user, additional_claims={"force_password_change": claims.get("force_password_change")})
     
     target_url = request.referrer
     if '/refresh' in target_url:

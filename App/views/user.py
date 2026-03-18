@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
-from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from .log import log_views
 from .auth import auth_views
 from App.models import User
@@ -48,6 +48,11 @@ def change_password_action():
     
     if success:
         flash("Password updated!")
-        return jsonify({"success": True})
+        new_access_token = create_access_token(identity=identity, additional_claims={"force_password_change": False})
+        new_refresh_token = create_refresh_token(identity=identity, additional_claims={"force_password_change": False})
+        response = jsonify({"success": True})
+        set_access_cookies(response, new_access_token)
+        set_refresh_cookies(response, new_access_token)
+        return response
     else:
         return jsonify({"success": False, "message": error}), 500

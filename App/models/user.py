@@ -9,6 +9,7 @@ class User(db.Model):
     user_code =  db.Column(db.String(10), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    force_password_change = db.Column(db.Boolean, default=True)
     
     memberships = db.relationship('TeamMembership', backref='user', lazy=True, cascade="all, delete-orphan")
     enrolled_courses = db.relationship('CourseEnrollment', backref='user', cascade="all, delete-orphan")

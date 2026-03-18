@@ -7,8 +7,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="icon" href="/static/logo-favicon.png" type="image/png">
+        <link rel="icon" href="/static/log-stack-logo.png" type="image/png">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta charset="UTF-8">
@@ -70,6 +71,7 @@
                 background-color: #27293d;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
                 border-radius: 15px;
+                font-family: 'Noto Sans', sans-serif;
                 color: #b8b9c3;
                 margin: 0 auto;
                 box-sizing: border-box;
@@ -91,6 +93,7 @@
 
             .login-form input[type="text"],
             .login-form input[type="password"]{
+                color: #b8b9c3;
                 background: #1e1e2f !important;
                 border: 1px solid #1e1e2f !important;
                 border-radius: 30px !important;
@@ -101,6 +104,10 @@
                 margin-bottom: 0 !important;
                 box-shadow: none !important;
                 transition: 0.3s ease;
+            }
+
+            .login-form input:focus {
+                color: #1e1e2f !important;
             }
 
             .login-form input::placeholder {
@@ -189,7 +196,7 @@
 
     <body>
         <div class="login-form">
-            <h1>Project <span class="logo-accent">Logger</span></h1>  
+            <h1>Log <span class="logo-accent">Stack</span></h1>  
             <div class="content">
                 {% block form_content %}{% endblock %}
             </div>

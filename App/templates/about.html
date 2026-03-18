@@ -41,7 +41,7 @@
         ul {
             padding-bottom: 0px;
         }
-        li {
+        #listx {
             padding-bottom: 0px;
             padding-left: 30px;
             font-style: italic;
@@ -90,6 +90,8 @@
             font-size: 28px;
             font-weight: bold;
             margin-right: 20px;
+
+            position: relative; 
         }
         .x {
             display: flex;   
@@ -105,7 +107,20 @@
             border-top: 0px;
             margin-top: 8px;
         }
-        
+        .circle::after {
+            content: "";
+            position: absolute;
+
+            top: 70px;     
+            left: 50%;
+            transform: translateX(-50%);
+
+            height: 50px;     
+            border-left: 4px dotted #9e8ff3;
+        }
+        .last .circle::after {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -133,13 +148,13 @@
         <h4 class="h">Why Does This Matter?</h4>
         <p>
             Traditional grading systems only measure final outcomes. This research
-            focuses on <strong> the learning process </strong>itself, how students learn,
+            focuses on <strong>observing the learning process</strong> itself, how students learn,
             not just what score they receive.
 
 
             Insights from this study can help improve:
         </p>
-        <ul>
+        <ul id = "listx">
             <li>- Learning analytics and feedback systems</li>
             <li>- Course design and teaching strategies</li>
             <li>- Student support and personalized learning tools</li>
@@ -149,9 +164,8 @@
 
     <section>
         <h4 class="h">How Do You Contribute?</h4>
-        <p> As a participant, you will simply use the learning system as part of
-            your normal academic activities. Certain interactions will be recorded
-            as anonymous xAPI learning statements.
+        <p> As a participant, you will simply record your actions on our logging system, <strong>LogStack</strong>, while working on your project - start to finish. 
+            Logs will be recorded as anonymous xAPI learning statements.
         </p>
         <p>
             <strong> Your participation does not require extra work.</strong> 
@@ -217,14 +231,16 @@
                 </div>
             </div>
             <div class="x">
-                <div class="circle">5</div>
-                <div class="y">
-                    <h7>
-                        Step 5
-                    </h7>
-                    <p class="step">
-                        Submit log. You can also toggle between personal and group logs. Practise daily logging for the best progress tracking results.
-                    </p>
+                <div class="x last">
+                    <div class="circle">5</div>
+                    <div class="y">
+                        <h7>
+                            Step 5
+                        </h7>
+                        <p class="step">
+                            Submit log. You can also toggle between personal and group logs. Practise daily logging for the best progress tracking results.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,7 +248,7 @@
 </main>
 
 <footer>
-    <p id = "end">Phishermen3 - xAPI Learning Analytics Research Project - 2026</p>
+    <p id = "end">LogStack - xAPI Learning Analytics Research Project</p>
 </footer>
 
 </body>

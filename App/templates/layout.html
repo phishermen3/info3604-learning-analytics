@@ -155,7 +155,7 @@
                 overflow: hidden;
                 width: 100%;
                 font-family: 'Noto Sans', sans-serif;
-                color: #e0e0e0;;
+                color: #e0e0e0;
             }
 
             .sidebar-wrapper{
@@ -241,9 +241,8 @@
                 background-color: #27293d !important;
                 overflow: hidden;    
                 padding: 10px !important;
-                width:fit-content !important;
+                width: fit-content !important;
                 height: fit-content !important;
-                color: #e0e0e0 !important;
             }
             .info:hover{
                 background-color: #27293d !important;
@@ -251,16 +250,24 @@
             .info{
                 color:#9e8ff3 !important;
                 text-align: center !important;
-                padding:0px;
+                padding:20px;
                 margin:0px;
                 border:0px;
             }
             .links{
                  color:#9e8ff3 !important;
+                 padding: 30px 30px 30px 30px!important;
             }
             .links:hover{
                 background-color: #9e8ff3!important;
                 color: black!important;
+            }
+            #first{
+                text-align: center;
+                align-content: center;
+                align-items: center;
+                align-self: center;
+                position:static;
             }
             
         </style>
@@ -281,13 +288,14 @@
                     <li>
                         <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Account</a>
                         <ul id='dropdown1' class='dropdown-content'>
-                            <li class="info">{{current_user.user_code}}'s Account</li>
+                            <li id= "first" class="info">Hello, {{current_user.user_code}}</li>
+                            <li class="divider" tabindex="-1"></li>
                             {% for membership in current_user.memberships %}
                                 <li class="info">{{membership.team.course_id}} - {{ membership.team.team_code }}</li>
                             {% endfor %}
                             <li class="divider" tabindex="-1"></li>
                             <li><a href="/account" class = "links"><i class="material-icons">account_circle</i>Change Password</a></li>
-                            <li><a href="/logout" class = "links"><i class="material-icons">logout</i>Logout</a></li>
+                            <li><a href="/logout" class = "links" class = "last"><i class="material-icons">logout</i>User Logout</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -168,10 +168,10 @@ def build_verb(verb_template):
         "display": verb_template["display"]
     }
 
-def build_activity(activity_template, course_id, team_id, project_id):
+def build_activity(activity_template, course_id, team_id, project_id, instance_id=None):
     activity_type = activity_template["id"].split("/")[-1]  
-    instance_id = str(uuid.uuid4())
     definition = activity_template.get("definition", {})
+    instance_id = str(uuid.uuid4()) if instance_id is None else instance_id
 
     return {
         "objectType": "Activity",
@@ -182,7 +182,6 @@ def build_activity(activity_template, course_id, team_id, project_id):
             "description": definition.get("description")
         }
     }
-
 
 def build_context(course_id, team_id, project_id, pedagogical_stage, problem_step):
     team = Team.query.get(team_id)

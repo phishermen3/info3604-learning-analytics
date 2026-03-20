@@ -577,7 +577,7 @@
         }
 
         p.col.s4 {
-            position: relative;         /* important for tooltip positioning */
+            position: relative;         
             cursor: pointer;
         }
 
@@ -589,6 +589,14 @@
         @keyframes spin {
             from { transform: rotate(0deg); }
             to   { transform: rotate(360deg); }
+        }
+
+        #instance-name {
+            border: 1px solid #9e8ff3 !important;
+            border-radius: 6px;
+            background-color: #242a3a !important;
+            padding: 0 10px;
+            box-sizing: border-box;
         }
     </style>
 {% endblock %}
@@ -721,6 +729,14 @@
                     <label for="object-search">Search activity</label>
                 </div>
 
+                <!-- INSTANCE NAME FIELD -->
+                <div id="instance-name-field" style="display:none;">
+                    <p class="helper-text">Name your selected item so you identify it later.</p>
+                    <div class="input-field">
+                        <input id="instance-name" type="text" placeholder="Enter a name for the item. E.g. 'Group presentation slides'">
+                    </div>
+                </div>
+
                 <div class="divider" style="margin:25px 0"></div>
                 
                 <!-- VERB SELECTION-->
@@ -846,6 +862,8 @@
             currentTeamId = infoData.team_id;
             currentProjectId = infoData.project_id;
 
+            await setupAutocomplete();
+
             loadLogs();
         }
 
@@ -870,7 +888,6 @@
             renderStages("peda-stage", stages);
             renderStages("step-stage", problem_steps);
 
-            // Reset selection and hide definitions when switching courses
             selectedPedagogicalStage = null;
             selectedProblemStep = null;
 
@@ -896,13 +913,11 @@
                 const pId = `verb-${index}`;
                 const definition = verb.definition?.["en-US"] || "";
 
-                // create <p> element
                 const p = document.createElement("p");
                 p.className = "col s4";
                 p.id = pId;
                 p.style.position = "relative";
 
-                // inner HTML
                 p.innerHTML = `
                     <label>
                         <input name="verb" type="radio" value="${key}">
@@ -960,26 +975,110 @@
             updateLivePreview();
         }
 
-        function setupAutocomplete(){
-            const data = {};
+        async function setupAutocomplete() {
+            console.log("hi hi!!!!");
+            if (!currentProjectId) return;
 
-            Object.entries(activities).forEach(([key, activity])=>{
-                data[activity.definition.name["en-US"]] = null;
+            const resp = await fetch(`/api/projects/${currentProjectId}/instances`, {
+                credentials: "include"
+            });
+            const instances = await resp.json();
+
+            const autocompleteData = {};
+            const lookupData = {};
+
+            // Static activity types
+            Object.entries(activities).forEach(([key, activity]) => {
+                const baseName = activity.definition.name["en-US"];
+                const label = `${baseName} (New)`;
+
+                autocompleteData[label] = null;
+                lookupData[label] = { 
+                    type: "static", 
+                    key: key,
+                    baseName: baseName
+                };
+            });
+
+            // Existing instances
+            instances.forEach(i => {
+                const activity = activities[i.activity_type];
+                const baseName = activity.definition.name["en-US"];
+                const label = `${baseName} - ${i.display_name}`;
+
+                autocompleteData[label] = null;
+                lookupData[label] = { 
+                    type: "instance", 
+                    id: i.id,
+                    typeKey: i.activity_type,
+                    baseName: baseName
+                };
             });
 
             const elem = document.getElementById("object-search");
+            const newNameDiv = document.getElementById("instance-name-field");
+            const newNameInput = document.getElementById("instance-name");
+
+            newNameDiv.style.display = "none";
+
+            const existing = M.Autocomplete.getInstance(elem);
+            if (existing) existing.destroy();
 
             M.Autocomplete.init(elem, {
-                data:data,
-                onAutocomplete:(selected)=>{
-                    const key = Object.keys(activities).find(k =>
-                        activities[k].definition.name["en-US"] === selected
-                    );
-
-                    elem.dataset.key=key;
-                    updateLivePreview();
-                }
+                data: autocompleteData,
+                minLength: 1,
+                onAutocomplete: (selected) =>
+                    handleAutocompleteSelection(selected, elem, newNameDiv, newNameInput, lookupData)
             });
+        }
+
+        // Handle selection logic
+        function handleAutocompleteSelection(selected, elem, newNameDiv, newNameInput, lookupData) {
+            const selectedObj = lookupData[selected];
+            if (!selectedObj) return;
+
+            elem.value = selectedObj.baseName;
+
+            if (selectedObj.type === "static") {
+                newNameDiv.style.display = "block";
+                newNameInput.value = "";
+                elem.dataset.activityType = selectedObj.key;
+                elem.dataset.instanceId = "";
+            } else {
+                newNameDiv.style.display = "none";
+                newNameInput.value = "";
+                elem.dataset.activityType = selectedObj.typeKey || selectedObj.key;
+                elem.dataset.instanceId = selectedObj.id; 
+            }
+
+            updateLivePreview();
+        }
+
+        async function createNewInstance(typeKey, instanceName) {
+            const csrf = getCookie("csrf_access_token");
+            const resp = await fetch(`/api/instances`, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "X-CSRF-TOKEN": csrf
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    activity_type: typeKey,
+                    display_name: instanceName,
+                    course_id: currentCourse,
+                    team_id: currentTeamId,
+                    project_id: currentProjectId,
+                    user_code: currentUserCode
+                })
+            });
+
+            if (!resp.ok) {
+                const text = await resp.text();
+                throw new Error(`Failed to create instance: ${resp.status}\n${text}`);
+            }
+
+            return await resp.json();
         }
 
         function getCookie(name) {
@@ -991,9 +1090,31 @@
         async function submitLog(){
             const elem = document.getElementById("object-search");
             const verb = document.querySelector('input[name="verb"]:checked')?.value;
-            const activity = document.getElementById("object-search").dataset.key;
 
-            if(!verb || !activity){
+            const activityType = elem.dataset.activityType;
+            let instanceId = elem.dataset.instanceId;
+
+            const newNameDiv = document.getElementById("instance-name-field");
+            const newNameInput = document.getElementById("instance-name");
+
+            if (!instanceId && newNameDiv.style.display !== "none") {
+                const instanceName = newNameInput.value.trim();
+
+                if (!instanceName) {
+                    M.toast({html: "Please name your item"});
+                    return;
+                }
+
+                try {
+                    const newInstance = await createNewInstance(activityType, instanceName);
+                    instanceId = newInstance.id;
+                } catch (err) {
+                    M.toast({html: "Failed to create instance"});
+                    return;
+                }
+            }
+
+            if(!verb || !activityType){
                 M.toast({html:"Select verb and object"});
                 return;
             }
@@ -1010,7 +1131,8 @@
                 body:JSON.stringify({
                     course_id: currentCourse,
                     verb_name: verb, 
-                    activity_name: activity,
+                    activity_name: activityType,
+                    instance_id: instanceId, // 👈 optional but useful
                     team_id: currentTeamId,
                     project_id: currentProjectId,
                     pedagogical_stage: selectedPedagogicalStage,
@@ -1021,16 +1143,22 @@
             if(response.ok){
                 M.toast({html: "Action logged successfully!"});
                 closeForm();
-                
-                document.querySelectorAll('input[name="verb"]').forEach(rb => rb.checked = false);
+
                 elem.value = "";
-                delete elem.dataset.key;
+                elem.dataset.instanceId = "";
+                elem.dataset.activityType = "";
+                document.querySelectorAll('input[name="verb"]').forEach(rb => rb.checked = false);
 
                 selectedPedagogicalStage = null;
                 selectedProblemStep = null;
 
                 document.querySelectorAll(".stage-btn").forEach(btn => btn.classList.remove("active"));
-                
+
+                newNameInput.value = "";
+                newNameDiv.style.display = "none";
+
+                await setupAutocomplete();
+
                 loadLogs(); 
             } else {
                 const data = await response.json();
@@ -1162,7 +1290,6 @@
             document.getElementById("live-log-preview").textContent = sentence;
         }
 
-
         function showJoinTeam(){
             document.getElementById("join-team-panel").style.display = "block";
             document.getElementById("create-team-panel").style.display = "none";
@@ -1275,14 +1402,13 @@
                 joinBtn.classList.add("active");
                 createBtn.classList.remove("active");
                 indicator.style.left = '0';
-                showJoinTeam();  // your existing function
+                showJoinTeam();
             } else {
                 createBtn.classList.add("active");
                 joinBtn.classList.remove("active");
                 indicator.style.left = '50%';
-                showCreateTeam(); // your existing function
+                showCreateTeam();
             }
         }
-
     </script>
 {% endblock %}

@@ -13,10 +13,10 @@
             border: 10%
         }
         .h {
-           font-size: 24px;
-           font-weight: 600;
-           color: #9e8ff3;
-           font-style:normal;
+            font-size: 24px;
+            font-weight: 600;
+            color: #9e8ff3;
+            font-style:normal;
         }
 
         section{
@@ -32,7 +32,6 @@
         p {
             font-size:medium;
             font-weight: 400;
-            padding-right: 200px;
             font-style:normal;
         }
         header{
@@ -57,16 +56,17 @@
         }
         #end{
             padding: 0px;
-            margin: 0px;
+            margin-bottom: 20px;
             border: 0px;
             font-weight: 100;
             font-size:small;
             font-style: italic;
             color: #9e8ff3;
-            padding-left:35%;
+            text-align: center;
         }
         #demo{
             padding-left: 20px;
+            padding-bottom: 20px;
         }
         #app{
             color: #9e8ff3;
@@ -84,6 +84,7 @@
             border-radius: 50%; 
             
             display: flex;
+            flex-shrink: 0;
             justify-content: center;
             align-items: center;
 
@@ -93,10 +94,16 @@
 
             position: relative; 
         }
+        #steps {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
         .x {
             display: flex;   
             align-items: flex-start;
-            margin-bottom: 40px;
+            gap: 40px;
+            position: relative;
         }
         .y {
             margin: 0;
@@ -107,19 +114,22 @@
             border-top: 0px;
             margin-top: 8px;
         }
-        .circle::after {
+        .x::after {
             content: "";
             position: absolute;
 
             top: 70px;     
-            left: 50%;
-            transform: translateX(-50%);
+            left: 35px;
+            bottom: -40px;  
 
-            height: 50px;     
+            transform: translateX(-50%);
             border-left: 4px dotted #9e8ff3;
         }
-        .last .circle::after {
-            display: none;
+        .x.last::after {
+            display: none; 
+        }
+        .x.last {
+            margin-bottom: 0px;
         }
     </style>
 </head>
@@ -137,8 +147,9 @@
         <p>
             This project explores the student learning process using 
             <strong>Experience API (xAPI)</strong>. xAPI allows researchers to capture 
-            meaningful learning activities such as attempts, analyses, reflections, 
+            meaningful learning activities such as attempts, analysis, reflection, 
             and problem-solving behaviors across digital learning environments.
+            <br><br>
             Our goal is to better understand learning patterns, engagement, and how
             students approach complex academic tasks.
         </p>
@@ -147,39 +158,33 @@
     <section>
         <h4 class="h">Why Does This Matter?</h4>
         <p>
-            Traditional grading systems only measure final outcomes. This research
-            focuses on <strong>observing the learning process</strong> itself, how students learn,
-            not just what score they receive.
+            Traditional grading systems focus only on final outcomes. This research instead examines
+            <strong>the learning process</strong> itself: how students learn,
+            not just the scores they receive.
 
-
+            <br><br>
             Insights from this study can help improve:
         </p>
         <ul id = "listx">
-            <li>- Learning analytics and feedback systems</li>
-            <li>- Course design and teaching strategies</li>
-            <li>- Student support and personalized learning tools</li>
-            <li>- Future educational technologies</li>
+            <li>• Learning analytics and feedback systems</li>
+            <li>• Course design and teaching strategies</li>
+            <li>• Student support and personalized learning tools</li>
+            <li>• Future educational technologies</li>
         </ul>
     </section>
 
     <section>
         <h4 class="h">How Do You Contribute?</h4>
-        <p> As a participant, you will simply record your actions on our logging system, <strong>LogStack</strong>, while working on your project - start to finish. 
-            Logs will be recorded as anonymous xAPI learning statements.
+        <p> As a participant, you will simply record your actions while working on your course project - from start to finish - using our logging system, <strong>LogStack</strong>. 
+            Logs are recorded as anonymous xAPI learning statements.
         </p>
         <p>
-            <strong> Your participation does not require extra work.</strong> 
+            Logging is a <strong>quick process</strong> that you complete while working on your course project.
             We are observing learning interactions, not evaluating you personally.
-            Every interaction you make helps researchers understand how students
-            think, experiment, and improve over time. Your participation contributes
-            to building smarter learning systems that can benefit future students.
-        </p>
-        <p id="eth">
-            Data collected is used strictly for academic research purposes and will
-            be analyzed in aggregated and anonymized form. 
-            Student privacy is important to us. All collected data follows ethical
-            research guidelines. Personal identities are not shared, and results
-            are reported only at a group level.
+            Every interaction you log helps us understand how students
+            think, experiment, and improve over time. 
+            <br><br>
+            Your participation contributes to building smarter learning systems that can benefit future students.
         </p>
     </section>
 
@@ -204,7 +209,7 @@
                         Step 2
                     </h7>
                     <p class="step">
-                        Change initial password for added security on the account page.
+                        Change your initial password on the account page for added security.
                     </p>
                 </div>
             </div>
@@ -226,11 +231,11 @@
                         Step 4
                     </h7>
                     <p class="step">
-                        Create a new log using the + icon. Follow instructions on logging modal to select object, verb, stage and step.
+                        Create a new log using the + icon. Follow the instructions in the logging modal to select the object, verb, step and stage.
                     </p>
                 </div>
             </div>
-            <div class="x">
+            <div class="x last">
                 <div class="x last">
                     <div class="circle">5</div>
                     <div class="y">
@@ -238,12 +243,23 @@
                             Step 5
                         </h7>
                         <p class="step">
-                            Submit log. You can also toggle between personal and group logs. Practise daily logging for the best progress tracking results.
+                            Submit your log. Regular and consistent logging is recommended for better progress tracking.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section>
+        <h4 class="h">Privacy and Data Usage</h4>
+        <p id="eth">
+            All collected data is used strictly for academic research purposes and will
+            be analyzed in aggregated and anonymized form. Personal identities are not shared, and all results are reported 
+            only at a group level in accordance with ethical research guidelines.
+            <br><br>
+            Student privacy is our priority. 
+        </p>
     </section>
 </main>
 

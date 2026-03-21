@@ -731,7 +731,7 @@
 
                 <!-- INSTANCE NAME FIELD -->
                 <div id="instance-name-field" style="display:none;">
-                    <p class="helper-text">Name your selected item so you identify it later.</p>
+                    <p class="helper-text">Name your selected item so you and your team can identify it later.</p>
                     <div class="input-field">
                         <input id="instance-name" type="text" placeholder="Enter a name for the item. E.g. 'Group presentation slides'">
                     </div>
@@ -914,7 +914,7 @@
                 const definition = verb.definition?.["en-US"] || "";
 
                 const p = document.createElement("p");
-                p.className = "col s4";
+                p.className = "col s12 m6 l4";
                 p.id = pId;
                 p.style.position = "relative";
 
@@ -1132,7 +1132,7 @@
                     course_id: currentCourse,
                     verb_name: verb, 
                     activity_name: activityType,
-                    instance_id: instanceId, // 👈 optional but useful
+                    instance_id: instanceId,
                     team_id: currentTeamId,
                     project_id: currentProjectId,
                     pedagogical_stage: selectedPedagogicalStage,
@@ -1253,7 +1253,7 @@
                     </div>
                     <div class="timeline-body">
                         <h6 class="timeline-title">
-                            ${actor} ${verb} ${article} ${activity}
+                            ${actor} ${verb} ${article} ${activityDisplay}
                             ${step ? `during ${step}` : ""}
                             ${stage ? `in the <b>${stage}</b> stage` : ""}.
                         </h6>

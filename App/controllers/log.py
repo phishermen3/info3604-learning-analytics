@@ -1,5 +1,8 @@
 import json, uuid, os, base64
-from App.models import Course, Project, Team
+
+from flask_jwt_extended import current_user
+from App.models import Course, Project, Team, ActivityInstance
+from App.controllers.activityInstance import create_activity_instance
 from tincan import RemoteLRS, Statement, Agent
 from dotenv import load_dotenv
 
@@ -72,7 +75,11 @@ def send_to_lrs(statement):
 # Log Functions
 # -----------------------------------
 
-def create_log(user_code, course_id, verb_name, activity_name, team_id, project_id, pedagogical_stage, problem_step):
+def create_log(
+        user_code, course_id, verb_name, activity_name, 
+        team_id, project_id, pedagogical_stage, problem_step, 
+        activity_instance_id=None, display_name=None):
+
     registry = load_course_registry(course_id)
     
     verbs = registry.get("verbs", {})
@@ -96,7 +103,22 @@ def create_log(user_code, course_id, verb_name, activity_name, team_id, project_
     verb = build_verb(verb_template)
 
     activity_template = activities[activity_name]
-    activity = build_activity(activity_template, course_id, team_id, project_id)
+    if activity_instance_id is None:
+        if not display_name:
+            return {"error": "display_name required for new activity"}, 400
+
+        instance = create_activity_instance(
+            activity_type=activity_template["id"].split("/")[-1],
+            display_name=display_name,
+            course_id=course_id,
+            team_id=team_id,
+            project_id=project_id,
+            created_by=current_user.id
+        )
+        activity_instance_id = instance.id
+    
+
+    activity = build_activity(activity_template, course_id, team_id, project_id, activity_instance_id)
     
     actor = build_actor(user_code)
     context = build_context(course_id, team_id, project_id, pedagogical_stage, problem_step)
@@ -146,6 +168,28 @@ def get_logs(user_code, course_id, scope="individual", team_code=None):
         if not response.success:
             return response.content, 500
         
+    instance_ids = set()
+    for log in results:
+        raw_activity_id = log.get("object_id")
+        if raw_activity_id and "/" in raw_activity_id:
+            instance_ids.add(raw_activity_id.split("/")[-1])
+
+    if instance_ids:
+        instances = ActivityInstance.query.filter(
+            ActivityInstance.id.in_(instance_ids)
+        ).all()
+        instance_map = {inst.id: inst.display_name for inst in instances}
+    else:
+        instance_map = {}
+
+    for log in results:
+        raw_activity_id = log.get("object_id")
+        if raw_activity_id and "/" in raw_activity_id:
+            instance_id = raw_activity_id.split("/")[-1]
+            log["display_name"] = instance_map.get(instance_id)
+        else:
+            log["display_name"] = None
+        
     return results, 200
 
 
@@ -171,7 +215,6 @@ def build_verb(verb_template):
 def build_activity(activity_template, course_id, team_id, project_id, instance_id=None):
     activity_type = activity_template["id"].split("/")[-1]  
     definition = activity_template.get("definition", {})
-    instance_id = str(uuid.uuid4()) if instance_id is None else instance_id
 
     return {
         "objectType": "Activity",
@@ -287,6 +330,7 @@ def format_statement(stmt):
     return {
         "user_code": actor_code,
         "verb_name": stmt.verb.display["en-US"],
+        "object_id": getattr(stmt.object, "id", None),
         "activity_name": stmt.object.definition.name["en-US"],
         "stage": exts.get(f'{LOGSTACK_BASE}/extensions/pedagogical-stage'),
         "step": exts.get(f'{LOGSTACK_BASE}/extensions/problem-step'),

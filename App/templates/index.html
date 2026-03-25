@@ -731,7 +731,7 @@
 
                 <!-- INSTANCE NAME FIELD -->
                 <div id="instance-name-field" style="display:none;">
-                    <p class="helper-text">Name your selected item so you identify it later.</p>
+                    <p class="helper-text">Name your selected item so you and your team can identify it later.</p>
                     <div class="input-field">
                         <input id="instance-name" type="text" placeholder="Enter a name for the item. E.g. 'Group presentation slides'">
                     </div>
@@ -914,7 +914,7 @@
                 const definition = verb.definition?.["en-US"] || "";
 
                 const p = document.createElement("p");
-                p.className = "col s4";
+                p.className = "col s12 m6 l4";
                 p.id = pId;
                 p.style.position = "relative";
 
@@ -1234,6 +1234,16 @@
                 </p>`;
                 return;
             }
+
+            // Fetch display names for all instance_ids in logs
+            const instanceIds = logs.filter(l => l.instance_id).map(l => l.instance_id);
+            let instanceMap = {};
+            if (instanceIds.length > 0) {
+                const instanceResp = await fetch(`/api/instances?ids=${instanceIds.join(",")}`);
+                const instances = await instanceResp.json();
+                // map instance_id => display_name
+                instances.forEach(i => instanceMap[i.id] = i.display_name);
+            }
             
             // Render logs
             container.innerHTML = logs.map(l => {
@@ -1246,6 +1256,9 @@
                 const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
                 const article = articleFor(activity);
                 const icon = stageIcons[stage] || "edit";
+
+                const displayName = l.instance_id ? instanceMap[l.instance_id] : null;
+                const activityDisplay = displayName ? `${activity} - ${displayName}` : activity;
 
                 return `
                 <div class="timeline-container">

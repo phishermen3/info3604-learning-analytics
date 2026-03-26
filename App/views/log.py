@@ -35,7 +35,9 @@ def send_statement():
         data.get("team_id"),
         data.get("project_id"),
         data.get("pedagogical_stage"),
-        data.get("problem_step")
+        data.get("problem_step"),
+        data.get("activity_instance_id"),
+        data.get("display_name")
     )
 
     if code != 201:

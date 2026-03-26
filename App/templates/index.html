@@ -976,7 +976,6 @@
         }
 
         async function setupAutocomplete() {
-            console.log("hi hi!!!!");
             if (!currentProjectId) return;
 
             const resp = await fetch(`/api/projects/${currentProjectId}/instances`, {
@@ -1132,11 +1131,12 @@
                     course_id: currentCourse,
                     verb_name: verb, 
                     activity_name: activityType,
-                    instance_id: instanceId,
                     team_id: currentTeamId,
                     project_id: currentProjectId,
                     pedagogical_stage: selectedPedagogicalStage,
-                    problem_step: selectedProblemStep
+                    problem_step: selectedProblemStep,
+                    activity_instance_id: instanceId,
+                    display_name: newNameInput.value.trim()
                 })
             });
 
@@ -1250,6 +1250,7 @@
                 const actor = showGroupLogs ? `<b>${l.user_code}</b>` : "I";
                 const verb = l.verb_name?.toLowerCase() || "";
                 const activity = l.activity_name || "";
+                const activityDisplayName = l.display_name || "";
                 const step = l.step?.toLowerCase() || "";
                 const stage = l.stage?.toLowerCase() || "";
                 const timestamp = l.timestamp ? formatDate(l.timestamp) : "";
@@ -1266,7 +1267,8 @@
                     </div>
                     <div class="timeline-body">
                         <h6 class="timeline-title">
-                            ${actor} ${verb} ${article} ${activityDisplay}
+                            ${actor} ${verb} ${article} ${activity} 
+                            ${activityDisplayName ? `"${activityDisplayName}"` : ""}
                             ${step ? `during ${step}` : ""}
                             ${stage ? `in the <b>${stage}</b> stage` : ""}.
                         </h6>

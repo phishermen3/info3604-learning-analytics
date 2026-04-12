@@ -81,7 +81,7 @@ To address this, the project introduces this data collection instrument based on
 - **Frontend:** HTML, CSS, Jinja2
 - **Database:** PostgreSQL, psycopg2
 - **Learning Analytics:** xAPI (Experience API), Yet Analytics SQL LRS (Learning Record Store)
-- **Deployment & Tools:** App Service, Azure Database for PostgreSQL flexible server, Gunicorn, python-dotenv
+- **Deployment & Tools:** Azure App Service, Azure Database for PostgreSQL flexible server, Gunicorn, python-dotenv
 - **Testing & Utilities:** pytest, Werkzeug, click, rich
 
 <p align="right">(<a href="#top">back to top</a>)</p>

@@ -1,4 +1,4 @@
-from .user import create_user
+from .user import create_user, cancel_password_change
 from App.models import Course, Team, TeamMembership, Project, CourseEnrollment
 from App.database import db
 
@@ -8,6 +8,7 @@ def initialize():
 
     # Create Bob
     bob = create_user('bob', 'bobpass')
+    cancel_password_change(bob)
 
     # Create courses
     course = Course(id="INFO3607", name="Fundamentals of WAN Technologies")
@@ -39,22 +40,25 @@ def initialize():
 
     db.session.commit()
 
-
-
+    # Create Steve
     steve = create_user('steve', 'stevepass')
+    cancel_password_change(steve)
+    
+    # Enroll Steve in course
     enrollment = CourseEnrollment(user_id=steve.id, course_id="COMP3608")
     db.session.add(enrollment)
 
+    # Create a team for the course
     team = Team(course_id="COMP3608", team_code="teamteam", created_by=steve.id)
     db.session.add(team)
     db.session.flush()
 
+    # Add Steve to the team
     membership = TeamMembership(user_id=steve.id, team_id=team.id)
     db.session.add(membership)
 
+    # Create a project for the team
     project = Project(team_id=team.id)
     db.session.add(project)
 
     db.session.commit()
-
-

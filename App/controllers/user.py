@@ -7,6 +7,11 @@ def create_user(user_code, password):
     db.session.commit()
     return newuser
 
+# Disable force password change on first login
+def cancel_password_change(user):
+    user.force_password_change = False
+    db.session.commit()
+
 def change_user_password(user, new_password):
     try:
         user.set_password(new_password)

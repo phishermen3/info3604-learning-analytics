@@ -143,7 +143,7 @@ class UsersIntegrationTests(unittest.TestCase):
 
         create_log(
             user_code=user.user_code,
-            course_id=1,
+            course_id=str(1),
             verb_name="analyzed",
             activity_name="test-case",
             team_id=1,

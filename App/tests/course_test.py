@@ -20,6 +20,7 @@ def client():
 def test_list_all_courses(client): 
     response = client.get("/courses")
     assert response.status_code == 200
+    assert response.content_type == "application/json"
     data = response.get_json()
     assert isinstance(data, list)
     assert len(data) == 2
@@ -34,9 +35,29 @@ def test_get_course_success(client):
     assert data["course id"] == "COMP3608"
     assert data["course name"] == "Intelligent Systems"
 
-
 def test_get_course_not_found(client):
     response = client.get("/courses/9999")
     assert response.status_code == 404
     data = response.get_json()
     assert data["message"] == "Error: Course code invalid"
+
+def test_integration_get_courses_payload_format(client):
+    response = client.get("/courses")
+    data = response.get_json()
+    
+    # Ensure the returned body is a list
+    assert isinstance(data, list)
+    
+    # If the list isn't empty, check the schema of the first item
+    if len(data) > 0:
+        assert "id" in data[0]
+        assert "name" in data[0]
+
+def test_integration_get_course_by_id_invalid_method(client):
+    # Attempting to POST to a GET-only route
+    response_post = client.post("/courses/1")
+    assert response_post.status_code == 405
+    
+    # Attempting to DELETE on a GET-only route
+    response_delete = client.delete("/courses/1")
+    assert response_delete.status_code == 405

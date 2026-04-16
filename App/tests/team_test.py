@@ -151,3 +151,42 @@ def test_join_team_unauthenticated(client):
     )
 
     assert response.status_code == 401
+
+def test_create_team_invalid_method(client, app):
+    login_cookie(client, app)
+    
+    # Attempt to GET instead of POST
+    response = client.get("/courses/INFO2602/teams")
+    
+    assert response.status_code == 405
+
+def test_join_team_invalid_method(client, app):
+    login_cookie(client, app)
+    
+    # Attempt to GET instead of POST
+    response = client.get("/api/join-team")
+    
+    assert response.status_code == 405
+
+def test_join_team_empty_team_code(client, app):
+    login_cookie(client, app)
+
+    # Payload exists, but the code is an empty string
+    response = client.post(
+        "/api/join-team",
+        json={"team_code": ""} 
+    )
+
+    assert response.status_code == 400
+    assert response.get_json()["error"] == "team_code is required"
+
+def test_create_team_invalid_token(client):
+    # Set a completely invalid/fake token
+    client.set_cookie(
+        key="access_token_cookie",
+        value="this_is_not_a_valid_jwt_token"
+    )
+
+    response = client.post("/courses/INFO2602/teams")
+
+    assert response.status_code in [401, 422]

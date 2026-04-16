@@ -1,16 +1,22 @@
+from flask_jwt_extended import JWTManager
 import pytest
-from flask import Flask
+from flask import Flask, app
 from App.views.course import course_views
 
 #PyTest fixture
 @pytest.fixture
 def client():
     app = Flask(__name__)
+    app.config["JWT_SECRET_KEY"] = "super-secret-test-key-maximum-length"
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    jwt = JWTManager(app)
+    app.config["JWT_HEADER_NAME"] = "Authorization"
+    app.config["JWT_HEADER_TYPE"] = "Bearer"
+    app.config["JWT_ACCESS_CSRF_HEADER_NAME"] = "X-CSRF-TOKEN"
     app.register_blueprint(course_views)
     with app.test_client() as client:
         yield client
 
-#Tests
 def test_list_all_courses(client): 
     response = client.get("/courses")
     assert response.status_code == 200

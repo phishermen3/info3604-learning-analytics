@@ -80,7 +80,7 @@ def create_log(
         team_id, project_id, pedagogical_stage, problem_step, 
         activity_instance_id=None, display_name=None):
 
-    registry = load_course_registry(course_id)
+    registry = load_course_registry(str(course_id))
     
     verbs = registry.get("verbs", {})
     activities = registry.get("activities", {})

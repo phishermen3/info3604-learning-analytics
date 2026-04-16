@@ -1,3 +1,5 @@
+from flask import app
+from flask_jwt_extended import JWTManager
 import os, tempfile, pytest, logging, unittest
 from datetime import datetime, timezone
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -17,7 +19,7 @@ from App.controllers import (
 
 
 LOGGER = logging.getLogger(__name__)
-
+#jwt = JWTManager(app)
 '''
     Unit Tests
 '''
@@ -47,40 +49,53 @@ class UserUnitTests(unittest.TestCase):
         assert user.check_password(password)
         
     def test_create_log(self):
-        test_verbs = {
-            "analyzed": {
-                "id": "https://yourdomain.com/verbs/analyzed",
-                "display": { 
-                    "en-US": "analyzed" 
-                },
-                "extensions": {
-                    "https://yourdomain.com/xapi/extensions/pedagogical-stage": "Analyze"
+
+        mock_registry = {
+            "verbs": {
+                "analyzed": {
+                    "id": "https://logstack.azurewebsites.net/verbs/info3607/analyzed",
+                    "display": {"en-US": "analyzed"}
                 }
-            }
-        }
-        
-        test_activities = {
-            "test-case": {
-                "objectType": "Activity",
-                "id": "https://yourapp/activity-types/test-case",
-                "definition": {
-                    "type": "https://yourapp/taxonomy/assessment",
-                    "name": { "en-US": "Test Case" },
-                    "description": { "en-US": "A test case created during project work" }
+            },
+            "activities": {
+                "test-case": {
+                    "objectType": "Activity",
+                    "id": "https://logstack.azurewebsites.net/activity-types/info3607/test-case",
+                    "definition": {
+                        "name": {"en-US": "test case"}
+                    }
                 }
-            }
+            },
+            "stages": {"Analyze": {}},
+            "problem_steps": {"Testing": {}}
         }
-        
-        with patch("App.controllers.log.load_json") as mock_load:
-            mock_load.side_effect = [test_verbs, test_activities]
+
+        with patch("App.controllers.log.load_course_registry") as mock_registry_loader, \
+            patch("App.controllers.log.build_context") as mock_build_context:
+
+            mock_registry_loader.return_value = mock_registry
+            mock_build_context.return_value = {"contextActivities": {}}
+
+            user = create_user("temp_user", "temppass")
+
+            test_log, test_code = create_log(
+                user_code=user.user_code,
+                course_id=1,
+                verb_name="analyzed",
+                activity_name="test-case",
+                team_id=1,
+                project_id=1,
+                pedagogical_stage="Analyze",
+                problem_step="Testing",
+                activity_instance_id="test-instance-123",
+                display_name="Test Log Entry"
+            )
+
+            assert test_code == 201
+            assert test_log["verb"]["display"]["en-US"] == "analyzed"
+            assert test_log["actor"]["account"]["name"] == "temp_user"
+
             
-        user = create_user("temp_user", "temppass")
-        
-        test_log, test_code = create_log(user.user_code, "analyzed", "test-case")
-        assert test_code == 201
-        assert test_log["verb"]["display"]["en-US"] == "analyzed"
-        assert test_log["actor"]["account"]["name"] == "temp_user"
-        
         
 '''
     Integration Tests
@@ -91,6 +106,12 @@ class UserUnitTests(unittest.TestCase):
 @pytest.fixture(autouse=True, scope="module")
 def empty_db():
     app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db', 'SECRET_KEY': 'test-secret-key'})
+    app.config["JWT_SECRET_KEY"] = "super-secret-test-key-maximum-length"
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    jwt = JWTManager(app)
+    app.config["JWT_HEADER_NAME"] = "Authorization"
+    app.config["JWT_HEADER_TYPE"] = "Bearer"
+    app.config["JWT_ACCESS_CSRF_HEADER_NAME"] = "X-CSRF-TOKEN"
     create_db()
     yield app.test_client()
     db.drop_all()
@@ -100,6 +121,7 @@ def test_authenticate():
     user = create_user("b000000b", "bobpass")
     access, refresh = login("b000000b", "bobpass", remember=False)
     assert access is not None
+
 
 class UsersIntegrationTests(unittest.TestCase):
 
@@ -118,5 +140,25 @@ class UsersIntegrationTests(unittest.TestCase):
     # Tests retrieving statements from LRS
     def test_get_logs(self):
         user = create_user("newuser123", "supersecure")
-        test_logs, test_code = get_logs(user.user_code)
+
+        create_log(
+            user_code=user.user_code,
+            course_id=1,
+            verb_name="analyzed",
+            activity_name="test-case",
+            team_id=1,
+            project_id=1,
+            pedagogical_stage="Analyze",
+            problem_step="Testing",
+            activity_instance_id="test-instance-123",
+            display_name="Test Log Entry"
+        )
+
+        test_logs, test_code = get_logs(
+            user_code=user.user_code,
+            course_id=1,
+            scope="course",
+            team_code=1
+        )
+
         assert test_code == 200

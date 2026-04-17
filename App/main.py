@@ -5,6 +5,7 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
+import App
 from App.database import init_db
 from App.config import load_config
 
@@ -14,12 +15,12 @@ from App.controllers import (
     add_auth_context
 )
 
-from App.views import views, setup_admin
+from App.views import all_views, setup_admin
 
 
 
 def add_views(app):
-    for view in views:
+    for view in all_views:
         app.register_blueprint(view)
 
 def create_app(overrides={}):

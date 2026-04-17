@@ -13,7 +13,7 @@ from .about import about_views
 from .activityInstance import instance_views
 
 # blueprints must be added to this list
-views = [
+all_views = [
     user_views, 
     index_views, 
     auth_views, 
